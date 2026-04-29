@@ -24,8 +24,50 @@
 <meta name="twitter:description" content="You know that feeling when your face just feels heavy? Jaw tension release and nervous system regulation in Edgewater Miami.">
 <meta name="twitter:image" content="https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg">
 
-<!-- Canonical -->
-<link rel="canonical" href="https://www.undertoneskn.com">
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png">
+<link rel="apple-touch-icon" sizes="128x128" href="/favicon_128.png">
+
+<!-- Schema Markup — Local Business -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  "name": "Undertone SKN",
+  "description": "Jaw tension release, nervous system regulation, and facial sculpting in Edgewater Miami.",
+  "url": "https://www.undertoneskn.com",
+  "telephone": "+13059650145",
+  "priceRange": "$$",
+  "image": "https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "2915 Biscayne Blvd Suite 200-29",
+    "addressLocality": "Miami",
+    "addressRegion": "FL",
+    "postalCode": "33137",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 25.7982,
+    "longitude": -80.1920
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "description": "By appointment only"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "110"
+  },
+  "sameAs": [
+    "https://www.instagram.com/undertoneskn"
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Epilogue:wght@300;400;500&family=Syne+Mono&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1138,7 +1180,51 @@
     .faq-hero, .faq-body { padding: 48px 24px; }
   }
 
-  /* ===================== ANIMATIONS ===================== */
+  /* ===================== FLOATING TEXT ME ===================== */
+  .floating-cta {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .floating-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--brown-darkest);
+    border: 1px solid var(--taupe);
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  }
+
+  .floating-btn:hover {
+    background: var(--brown-dark);
+    transform: translateY(-2px);
+  }
+
+  .floating-btn span {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--cream-1);
+    text-transform: uppercase;
+  }
+
+  .floating-btn .float-icon {
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    .floating-cta { bottom: 20px; right: 16px; }
+    .floating-btn { padding: 10px 16px; }
+  }
   .fade-up {
     opacity: 0;
     transform: translateY(24px);
@@ -1376,6 +1462,14 @@
     </div>
   </div>
 </footer>
+
+<!-- FLOATING TEXT ME BUTTON -->
+<div class="floating-cta">
+  <a href="sms:3059650145" class="floating-btn">
+    <span class="float-icon">💬</span>
+    <span>Text Me</span>
+  </a>
+</div>
 
 <script>
   // =================== DATA ===================
