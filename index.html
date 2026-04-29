@@ -613,6 +613,11 @@
   .work-right {
     display: flex;
     align-items: center;
+    width: 100%;
+  }
+
+  .work-right .accordion {
+    width: 100%;
   }
 
   /* ACCORDION */
@@ -704,13 +709,19 @@
     margin: 0 auto;
   }
 
-  .cta-left { }
+  .cta-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+  }
 
   .cta-quote-box {
     background: var(--taupe);
     padding: 24px 32px;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     display: inline-block;
+    max-width: 400px;
   }
 
   .cta-quote-box p {
@@ -722,11 +733,21 @@
 
   .cta-word {
     font-family: 'Lato', sans-serif;
-    font-size: 15px;
+    font-size: clamp(48px, 7vw, 96px);
     font-weight: 300;
-    color: var(--text-secondary);
-    letter-spacing: 2px;
-    margin-bottom: 32px;
+    color: var(--text-primary);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 40px;
+  }
+
+  .cta-book-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 12px;
   }
 
   .cta-right {
@@ -1169,7 +1190,6 @@
   <!-- SECTION 4: GOOGLE REVIEWS — ELFSIGHT -->
   <section class="section-reviews fade-up">
     <div class="container" style="padding: 0;">
-      <h2 class="reviews-title">What our customers say</h2>
       <script src="https://apps.elfsight.com/p/platform.js" defer></script>
       <div class="elfsight-app-4023f64f-0abf-4ffb-9a65-83ac0dac58db"></div>
     </div>
@@ -1264,6 +1284,7 @@
           <p>This is where the shift happens.</p>
         </div>
         <p class="cta-word">Unclench.</p>
+        <p class="cta-book-label">Ready to release it?</p>
         <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="btn-outline">Book Appointment</a>
       </div>
       <div class="cta-right">
