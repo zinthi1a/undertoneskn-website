@@ -1188,6 +1188,144 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .faq-hero, .faq-body { padding: 48px 24px; }
   }
 
+  /* ===================== SERVICES PAGE ===================== */
+  .services-hero {
+    background: var(--brown-darkest);
+    padding: 80px 60px 60px;
+    margin-top: 56px;
+  }
+
+  .services-hero h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 300;
+    color: var(--cream-1);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  .services-hero p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--taupe);
+    max-width: 500px;
+    line-height: 1.7;
+  }
+
+  .services-body {
+    background: var(--cream-1);
+    padding: 60px;
+  }
+
+  .services-category {
+    margin-bottom: 64px;
+  }
+
+  .services-category-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(185,165,144,0.3);
+  }
+
+  .service-card {
+    background: var(--cream-2);
+    border: 1px solid rgba(87,76,63,0.1);
+    padding: 32px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .service-card:hover {
+    border-color: var(--taupe);
+  }
+
+  .service-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+
+  .service-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .service-meta {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-light);
+  }
+
+  .service-price {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .service-desc p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 10px;
+  }
+
+  .service-ideal {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 12px;
+    color: var(--taupe);
+    font-style: italic;
+    margin-top: 16px !important;
+  }
+
+  .service-book-btn {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--cream-1);
+    background: var(--brown-darkest);
+    padding: 12px 28px;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background 0.2s;
+  }
+
+  .service-book-btn:hover { background: var(--brown-dark); }
+
+  .services-bottom-cta {
+    background: var(--cream-2);
+    padding: 60px;
+    text-align: center;
+    border-top: 1px solid rgba(185,165,144,0.3);
+  }
+
+  .services-bottom-cta p {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .services-hero, .services-body, .services-bottom-cta { padding: 48px 24px; }
+    .service-header { flex-direction: column; gap: 8px; }
+  }
+
   /* ===================== FLOATING TEXT ME ===================== */
   .floating-cta {
     position: fixed;
@@ -1257,6 +1395,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="#" class="nav-logo" onclick="showPage('home')">UNDERTONE SKN</a>
   <ul class="nav-links">
     <li><a href="#" class="active" onclick="showPage('home'); setActive(this)">Home</a></li>
+    <li><a href="#" onclick="showPage('services'); setActive(this)">Services</a></li>
     <li><a href="#" onclick="showPage('blog'); setActive(this)">Blog</a></li>
     <li><a href="#about-section" onclick="showPage('home')">About</a></li>
     <li><a href="#" onclick="showPage('faq'); setActive(this)">FAQs</a></li>
@@ -1270,6 +1409,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="#" onclick="showPage('home'); closeMobileMenu()">Home</a>
+  <a href="#" onclick="showPage('services'); closeMobileMenu()">Services</a>
   <a href="#" onclick="showPage('blog'); closeMobileMenu()">Blog</a>
   <a href="#" onclick="showPage('faq'); closeMobileMenu()">FAQs</a>
   <a href="sms:3059650145">TEXT ME</a>
@@ -1423,6 +1563,102 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
+</div>
+
+<!-- =================== SERVICES PAGE =================== -->
+<div id="page-services" class="page">
+  <div class="services-hero">
+    <h1>THE WORK</h1>
+    <p>Every session is designed around one principle — release what the face is holding, restore what it's been missing.</p>
+  </div>
+  <div class="services-body">
+
+    <!-- RELEASE -->
+    <div class="services-category">
+      <p class="services-category-label">Release</p>
+
+      <div class="service-card">
+        <div class="service-header">
+          <div>
+            <p class="service-title">Unclench</p>
+            <p class="service-meta">1 hour</p>
+          </div>
+          <p class="service-price">$185</p>
+        </div>
+        <div class="service-desc">
+          <p>Designed for jaw tension, clenching, grinding, facial tightness, migraines, head pressure, and tension held through the face, neck, and traps.</p>
+          <p>This session helps shift the face and nervous system holding patterns by restoring circulation, reducing muscular restriction, and supporting natural facial movement and sculpt.</p>
+          <p class="service-ideal">Ideal if your face feels tight, heavy, overstimulated, or constantly "on."</p>
+        </div>
+        <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="service-book-btn">Book This Session</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-header">
+          <div>
+            <p class="service-title">Facial Alchemy | Deep Reset</p>
+            <p class="service-meta">1 hour 20 minutes</p>
+          </div>
+          <p class="service-price">$235</p>
+        </div>
+        <div class="service-desc">
+          <p>An extended reset for deeper facial tension, nervous system overload, and skin recovery.</p>
+          <p>Builds on the Unclench method with extended circulation work, fluid movement support, and skin barrier restoration.</p>
+          <p class="service-ideal">Ideal for burnout states, chronic facial heaviness, or when both muscle and skin need deeper repair and regulation.</p>
+        </div>
+        <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="service-book-btn">Book This Session</a>
+      </div>
+    </div>
+
+    <!-- SCULPT -->
+    <div class="services-category">
+      <p class="services-category-label">Sculpt</p>
+
+      <div class="service-card">
+        <div class="service-header">
+          <div>
+            <p class="service-title">Contour + Define | Sculpt Method</p>
+            <p class="service-meta">1 hour 30 minutes</p>
+          </div>
+          <p class="service-price">$245</p>
+        </div>
+        <div class="service-desc">
+          <p>A precision sculpting session designed to enhance facial structure, lift definition, and improve visible contour.</p>
+          <p>Built on fascia release and circulation activation to support muscle tone and structural clarity.</p>
+          <p class="service-ideal">Ideal for facial sculpting maintenance, event prep, or when definition, lift, and facial structure are the primary goal.</p>
+        </div>
+        <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="service-book-btn">Book This Session</a>
+      </div>
+    </div>
+
+    <!-- SKIN -->
+    <div class="services-category">
+      <p class="services-category-label">Skin</p>
+
+      <div class="service-card">
+        <div class="service-header">
+          <div>
+            <p class="service-title">Monthly | Barrier + Circulation</p>
+            <p class="service-meta">1 hour 30 minutes</p>
+          </div>
+          <p class="service-price">$235</p>
+        </div>
+        <div class="service-desc">
+          <p>Supports barrier repair, skin resilience, circulation, and lymphatic detoxification.</p>
+          <p>Helps reinforce the skin barrier, improve facial puffiness, and maintain long term skin function while keeping skin calm, balanced, and performing optimally between advanced or corrective treatments.</p>
+          <p class="service-ideal">Ideal for redness, dryness, dullness, congestion, and reactive skin.</p>
+        </div>
+        <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="service-book-btn">Book This Session</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="services-bottom-cta">
+    <p>Not sure which session is right for you?</p>
+    <a href="sms:3059650145" class="btn-outline">Text Zinthia</a>
+  </div>
 </div>
 
 <!-- =================== BLOG PAGE =================== -->
