@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undertone SKN | Miami Facial Sculpting Studio</title>
+<meta name="description" content="Jaw tension release, nervous system regulation, and facial sculpting in Edgewater Miami. Where the face meets the nervous system.">
+<meta name="keywords" content="jaw tension relief Miami, somatic facial Miami, buccal massage Edgewater, facial sculpting Miami, TMJ facial massage, nervous system facial">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Epilogue:wght@300;400;500&family=Syne+Mono&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream-1: #F6F3EC;
+    --cream-2: #ECE4DA;
+    --taupe: #B9A590;
+    --brown-dark: #574C3F;
+    --brown-darkest: #36302A;
+    --text-primary: #36302A;
+    --text-secondary: #574C3F;
+    --text-light: #B9A590;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream-1);
+    color: var(--text-primary);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===================== NAV ===================== */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--cream-1);
+    border-bottom: 1px solid rgba(87,76,63,0.1);
+    padding: 0 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--taupe); }
+
+  .nav-links a.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .nav-cta {
+    font-family: 'Syne Mono', monospace;
+    font-size: 12px;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--text-primary);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .nav-cta:hover { color: var(--taupe); border-color: var(--taupe); }
+
+  .nav-mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+  }
+
+  .nav-mobile-toggle span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--text-primary);
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: var(--cream-1);
+    border-bottom: 1px solid rgba(87,76,63,0.1);
+    padding: 24px 40px;
+    z-index: 99;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: flex; }
+    .mobile-menu { padding: 24px; }
+  }
+
+  /* ===================== HERO VIDEO ===================== */
+  .hero-video {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    overflow: hidden;
+    margin-top: 56px;
+    background: var(--brown-darkest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Vertical 9:16 short — fills height on desktop, centered with dark sides */
+  .hero-video iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100vh;
+    width: calc(100vh * 9 / 16);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    /* On mobile fills full width naturally */
+    .hero-video iframe {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  .hero-video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brown-darkest);
+  }
+
+  .hero-video-placeholder p {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* ===================== SECTION BASE ===================== */
+  section { width: 100%; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+  }
+
+  /* ===================== SECTION 2 — HEADLINE ===================== */
+  .section-headline {
+    background: var(--cream-2);
+    padding: 100px 60px;
+    text-align: center;
+  }
+
+  .section-headline h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.2;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+
+  .btn-outline {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    border: 1px solid var(--text-primary);
+    padding: 14px 32px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover {
+    background: var(--text-primary);
+    color: var(--cream-1);
+  }
+
+  @media (max-width: 768px) {
+    .section-headline { padding: 80px 24px; }
+  }
+
+  /* ===================== SECTION 3 — COPY ===================== */
+  .section-copy {
+    background: var(--cream-2);
+    padding: 0 60px 100px;
+  }
+
+  .section-copy .subline {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 15px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .quote-block {
+    background: var(--taupe);
+    padding: 36px 48px;
+    margin: 0 auto 48px;
+    max-width: 860px;
+  }
+
+  .quote-block p {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 300;
+    color: var(--cream-1);
+    line-height: 1.4;
+  }
+
+  .copy-body {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .copy-body p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .copy-body .emphasis {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-top: 24px;
+  }
+
+  .copy-tagline {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 768px) {
+    .section-copy { padding: 0 24px 80px; }
+    .quote-block { padding: 28px 24px; }
+  }
+
+  /* ===================== SECTION 4 — REVIEWS ===================== */
+  .section-reviews {
+    background: var(--cream-2);
+    padding: 80px 60px;
+  }
+
+  .reviews-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 40px;
+  }
+
+  .reviews-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .reviews-summary {
+    background: var(--cream-1);
+    border: 1px solid rgba(87,76,63,0.15);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .reviews-summary .google-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .reviews-summary .google-label span {
+    color: #4285F4;
+  }
+
+  .reviews-summary .score {
+    font-family: 'Lato', sans-serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stars {
+    color: #F5A623;
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .review-count {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .btn-review {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    background: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-review:hover { opacity: 0.85; }
+
+  .reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .review-card {
+    background: var(--cream-1);
+    border: 1px solid rgba(87,76,63,0.1);
+    padding: 20px 24px;
+  }
+
+  .review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .review-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--taupe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: var(--cream-1);
+    flex-shrink: 0;
+  }
+
+  .review-meta { flex: 1; }
+
+  .review-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .review-time {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .review-stars {
+    color: #F5A623;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .review-text {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .review-source {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .review-source .g-icon {
+    width: 16px;
+    height: 16px;
+    background: #4285F4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+
+  .review-source span {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 900px) {
+    .reviews-layout { grid-template-columns: 1fr; }
+    .section-reviews { padding: 60px 24px; }
+  }
+
+  /* ===================== SECTION 5 — ZINTHIA ===================== */
+  .section-zinthia {
+    background: var(--brown-darkest);
+    padding: 100px 60px;
+  }
+
+  .zinthia-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 80px;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .zinthia-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .zinthia-title {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    color: var(--cream-1);
+    margin-bottom: 32px;
+    line-height: 1.1;
+  }
+
+  .zinthia-copy p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--taupe);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .zinthia-copy p strong {
+    color: var(--cream-2);
+    font-weight: 400;
+  }
+
+  .zinthia-photo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .zinthia-photo-frame {
+    width: 320px;
+    height: 380px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    overflow: hidden;
+    background: var(--brown-dark);
+    border: 1px solid rgba(185,165,144,0.2);
+  }
+
+  .zinthia-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .zinthia-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brown-dark);
+  }
+
+  .zinthia-photo-placeholder span {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--taupe);
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .zinthia-layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .zinthia-photo { order: -1; }
+    .zinthia-photo-frame { width: 240px; height: 280px; }
+    .section-zinthia { padding: 80px 24px; }
+  }
+
+  /* ===================== SECTION 6 — THE WORK ===================== */
+  .section-work {
+    background: var(--cream-1);
+    padding: 100px 60px;
+  }
+
+  .work-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .work-left h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    line-height: 1;
+  }
+
+  .work-left p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .work-right { padding-top: 8px; }
+
+  /* ACCORDION */
+  .accordion { border-top: 1px solid rgba(87,76,63,0.2); }
+
+  .accordion-item { border-bottom: 1px solid rgba(87,76,63,0.2); }
+
+  .accordion-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .accordion-trigger span {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .accordion-icon {
+    font-size: 18px;
+    color: var(--text-secondary);
+    transition: transform 0.3s;
+    line-height: 1;
+  }
+
+  .accordion-item.open .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion-content {
+    display: none;
+    padding: 0 0 24px;
+  }
+
+  .accordion-item.open .accordion-content { display: block; }
+
+  .accordion-content p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    padding-left: 12px;
+    line-height: 1.7;
+  }
+
+  .accordion-content p::before {
+    content: '› ';
+    color: var(--taupe);
+  }
+
+  .accordion-content .accordion-note {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 16px;
+    padding-left: 0;
+    font-style: italic;
+  }
+
+  .accordion-content .accordion-note::before { content: ''; }
+
+  @media (max-width: 900px) {
+    .work-layout { grid-template-columns: 1fr; gap: 40px; }
+    .section-work { padding: 80px 24px; }
+  }
+
+  /* ===================== SECTION 7 — CTA ===================== */
+  .section-cta {
+    background: var(--cream-2);
+    padding: 100px 60px;
+  }
+
+  .cta-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .cta-left { }
+
+  .cta-quote-box {
+    background: var(--taupe);
+    padding: 24px 32px;
+    margin-bottom: 40px;
+    display: inline-block;
+  }
+
+  .cta-quote-box p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--cream-1);
+    font-style: italic;
+  }
+
+  .cta-word {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+
+  .cta-right {
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+  }
+
+  .cta-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cta-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--brown-darkest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-image-placeholder span {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--taupe);
+    opacity: 0.4;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .cta-layout { grid-template-columns: 1fr; }
+    .cta-right { height: 320px; order: -1; }
+    .section-cta { padding: 80px 24px; }
+  }
+
+  /* ===================== SECTION 8 — GALLERY ===================== */
+  .section-gallery {
+    background: var(--cream-1);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .gallery-strip {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-strip::-webkit-scrollbar { display: none; }
+
+  .gallery-item {
+    flex: 0 0 calc(100% / 3);
+    min-width: 240px;
+    height: 320px;
+    background: var(--brown-darkest);
+    scroll-snap-align: start;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .gallery-item:hover img { transform: scale(1.03); }
+
+  .gallery-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--brown-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--taupe);
+    opacity: 0.3;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-item { flex: 0 0 80vw; height: 260px; }
+  }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    background: var(--brown-darkest);
+    padding: 60px;
+  }
+
+  .footer-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .footer-brand h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--cream-1);
+    margin-bottom: 16px;
+  }
+
+  .footer-brand p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--taupe);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+
+  .footer-brand .appt {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--cream-2);
+  }
+
+  .footer-contact { text-align: right; }
+
+  .footer-cta {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--cream-1);
+    text-decoration: none;
+    border-bottom: 1px solid var(--taupe);
+    padding-bottom: 4px;
+    margin-bottom: 32px;
+  }
+
+  .footer-address {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 12px;
+    color: var(--taupe);
+    line-height: 1.8;
+  }
+
+  .footer-address a {
+    color: var(--taupe);
+    text-decoration: none;
+  }
+
+  .footer-bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(185,165,144,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-bottom p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px;
+    color: rgba(185,165,144,0.4);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px;
+    color: rgba(185,165,144,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--taupe); }
+
+  @media (max-width: 768px) {
+    footer { padding: 48px 24px; }
+    .footer-layout { grid-template-columns: 1fr; }
+    .footer-contact { text-align: left; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  /* ===================== BLOG PAGE ===================== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .blog-hero {
+    background: var(--cream-2);
+    padding: 80px 60px 60px;
+    margin-top: 56px;
+  }
+
+  .blog-hero h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .blog-hero p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .blog-grid {
+    background: var(--cream-1);
+    padding: 60px;
+  }
+
+  .blog-posts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .blog-card {
+    background: var(--cream-2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .blog-card:hover { transform: translateY(-3px); }
+
+  .blog-card-image {
+    width: 100%;
+    height: 200px;
+    background: var(--brown-dark);
+    object-fit: cover;
+  }
+
+  .blog-card-image-placeholder {
+    width: 100%;
+    height: 200px;
+    background: var(--brown-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blog-card-body { padding: 24px; }
+
+  .blog-card-date {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .blog-card-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .blog-card-link {
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--taupe);
+    padding-bottom: 1px;
+  }
+
+  @media (max-width: 900px) {
+    .blog-posts { grid-template-columns: 1fr 1fr; }
+    .blog-grid, .blog-hero { padding: 48px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    .blog-posts { grid-template-columns: 1fr; }
+  }
+
+  /* ===================== FAQ PAGE ===================== */
+  .faq-hero {
+    background: var(--cream-2);
+    padding: 80px 60px 60px;
+    margin-top: 56px;
+  }
+
+  .faq-hero h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    color: var(--text-primary);
+  }
+
+  .faq-body {
+    background: var(--cream-1);
+    padding: 60px;
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(87,76,63,0.2);
+  }
+
+  .faq-item { border-bottom: 1px solid rgba(87,76,63,0.2); }
+
+  .faq-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .faq-trigger span {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .faq-icon {
+    font-size: 20px;
+    color: var(--text-secondary);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(180deg); }
+
+  .faq-answer {
+    display: none;
+    padding: 0 0 24px;
+  }
+
+  .faq-item.open .faq-answer { display: block; }
+
+  .faq-answer p {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .faq-hero, .faq-body { padding: 48px 24px; }
+  }
+
+  /* ===================== ANIMATIONS ===================== */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home')">UNDERTONE SKN</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="showPage('home'); setActive(this)">Home</a></li>
+    <li><a href="#" onclick="showPage('blog'); setActive(this)">Blog</a></li>
+    <li><a href="#about-section" onclick="showPage('home')">About</a></li>
+    <li><a href="#" onclick="showPage('faq'); setActive(this)">FAQs</a></li>
+    <li><a href="sms:3059650145" class="nav-cta">TEXT ME</a></li>
+  </ul>
+  <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home'); closeMobileMenu()">Home</a>
+  <a href="#" onclick="showPage('blog'); closeMobileMenu()">Blog</a>
+  <a href="#" onclick="showPage('faq'); closeMobileMenu()">FAQs</a>
+  <a href="sms:3059650145">TEXT ME</a>
+</div>
+
+<!-- =================== HOME PAGE =================== -->
+<div id="page-home" class="page active">
+
+  <!-- SECTION 1: HERO VIDEO -->
+  <section class="hero-video">
+    <iframe src="https://www.youtube.com/embed/L6fqUXKNRh4?autoplay=1&mute=1&loop=1&playlist=L6fqUXKNRh4&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </section>
+
+  <!-- SECTION 2: HEADLINE -->
+  <section class="section-headline fade-up">
+    <h1>You Know That Feeling When Your Face Just Feels Heavy?</h1>
+    <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="btn-outline">Book Session</a>
+  </section>
+
+  <!-- SECTION 3: COPY -->
+  <section class="section-copy fade-up">
+    <p class="subline">Your face holds everything you've been carrying. We release it.</p>
+    <div class="quote-block">
+      <p>"I've been chasing this feeling for years. It felt like finally."</p>
+    </div>
+    <div class="copy-body">
+      <p>This is for you if your face feels heavy when you wake up. If you clench your jaw without realizing it. If you've had treatments that never quite hit the right place. If you look tired but you're not tired. If something feels stuck and you can't name it.</p>
+      <p class="emphasis">You're not aging. You're holding.<br>There's a difference.</p>
+    </div>
+    <p class="copy-tagline">Because living in tension shouldn't be a thing.</p>
+  </section>
+
+  <!-- SECTION 4: GOOGLE REVIEWS — LIVE API -->
+  <section class="section-reviews fade-up">
+    <div class="container" style="padding: 0;">
+      <h2 class="reviews-title">What our customers say</h2>
+      <div class="reviews-layout">
+        <div class="reviews-summary" id="reviewsSummary">
+          <p class="google-label"><span>Google</span> Reviews</p>
+          <p class="score" id="ratingScore">—</p>
+          <p class="stars" id="ratingStars">★★★★★</p>
+          <p class="review-count" id="ratingCount">Loading...</p>
+          <a href="https://search.google.com/local/writereview?placeid=ChIJKxZZHFex2YgRY8JE-TMw1eU" target="_blank" class="btn-review">Review us on Google</a>
+        </div>
+        <div class="reviews-list" id="reviewsList">
+          <div class="review-card" style="display:flex;align-items:center;justify-content:center;min-height:120px;">
+            <p style="font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-light);text-transform:uppercase;">Loading reviews...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: MEET ZINTHIA -->
+  <section class="section-zinthia fade-up" id="about-section">
+    <div class="zinthia-layout">
+      <div class="zinthia-text">
+        <p class="zinthia-label">Meet Zinthia</p>
+        <h2 class="zinthia-title">The Facial Sculptor</h2>
+        <div class="zinthia-copy">
+          <p>I don't treat the face like a surface.<br>I treat it like a <strong>signal</strong>.</p>
+          <p>Jaw tension, tightness behind the eyes, headaches, clenching, that "stuck" feeling in the neck and face — these aren't random. They're patterns the nervous system repeats until someone helps the body interrupt them.</p>
+          <p>My work is designed to unwind what the face is holding and restore what it's been missing: circulation, softness, and mobility. When the system downshifts, structure returns on its own. I call this <strong>the sculpt</strong>.</p>
+          <p>This is where people come when a regular facial, a bodywork session, or "just relax" hasn't been enough.</p>
+        </div>
+      </div>
+      <div class="zinthia-photo">
+        <div class="zinthia-photo-frame">
+          <!-- Replace with: <img src="zinthia.jpg" alt="Zinthia Garcia - The Facial Sculptor"> -->
+          <div class="zinthia-photo-placeholder">
+            <span>Zinthia photo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: THE WORK -->
+  <section class="section-work fade-up">
+    <div class="work-layout">
+      <div class="work-left">
+        <h2>The Work</h2>
+        <p>The face is not isolated.</p>
+        <p>It reflects posture, breath, emotional holding, and the state of the nervous system.</p>
+        <p>At Undertone Skn, sessions focus on releasing deep facial and jaw tension, restoring circulation, and supporting nervous system regulation through hands on, fascia release work.</p>
+        <p>It is a functional, hands on approach to supporting facial mobility, comfort, and structural balance with visible lifting often occurring as a secondary outcome.</p>
+      </div>
+      <div class="work-right">
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+              <span>WHAT BRINGS PEOPLE HERE</span>
+              <span class="accordion-icon">∨</span>
+            </button>
+            <div class="accordion-content">
+              <p>TMJ & jaw tension discomfort</p>
+              <p>Facial holding patterns</p>
+              <p>Neck and shoulder tension held in the face</p>
+              <p>Stress related facial pain & migraines</p>
+              <p>Nervous system overload</p>
+              <p class="accordion-note">Sessions also support skin barrier function and circulation as part of the overall work.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+              <span>WHAT CHANGES</span>
+              <span class="accordion-icon">∨</span>
+            </button>
+            <div class="accordion-content">
+              <p>Improved jaw mobility and facial openness</p>
+              <p>Reduced facial and head tension</p>
+              <p>Restored circulation and visible facial contour</p>
+              <p>A calmer, more regulated nervous system</p>
+              <p>A feeling of peace and relief that finally lands</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+              <span>WHO IT'S FOR</span>
+              <span class="accordion-icon">∨</span>
+            </button>
+            <div class="accordion-content">
+              <p>Patients referred for facial, jaw, or tension related concerns</p>
+              <p>Individuals experiencing chronic stress held in the face or jaw</p>
+              <p>People who have not found relief through surface level treatments</p>
+              <p>Modern humans navigating high level of stress and nervous system load</p>
+              <p class="accordion-note">Suitable for those looking beyond traditional facials or standard bodywork.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CTA -->
+  <section class="section-cta fade-up">
+    <div class="cta-layout">
+      <div class="cta-left">
+        <div class="cta-quote-box">
+          <p>This is where the shift happens.</p>
+        </div>
+        <p class="cta-word">Unclench.</p>
+        <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank" class="btn-outline">Book Appointment</a>
+      </div>
+      <div class="cta-right">
+        <!-- Replace with: <img src="studio.jpg" alt="Zinthia at work" class="cta-image"> -->
+        <div class="cta-image-placeholder">
+          <span>Studio photo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: GALLERY -->
+  <section class="section-gallery">
+    <div class="gallery-strip">
+      <!-- Replace placeholders with actual images -->
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 1</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 2</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 3</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 4</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 5</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">Photo 6</div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- =================== BLOG PAGE =================== -->
+<div id="page-blog" class="page">
+  <div class="blog-hero" style="margin-top: 56px;">
+    <h1>Journal</h1>
+    <p>Insights on jaw tension, nervous system regulation, and functional beauty.</p>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-posts" id="blogPosts">
+      <!-- Posts rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- =================== FAQ PAGE =================== -->
+<div id="page-faq" class="page">
+  <div class="faq-hero">
+    <h1>FAQ</h1>
+  </div>
+  <div class="faq-body">
+    <div class="faq-list" id="faqList">
+      <!-- FAQs rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER (shared) -->
+<footer>
+  <div class="footer-layout">
+    <div class="footer-brand">
+      <h3>Undertone Skn</h3>
+      <p>Serving clients seeking jaw tension release, facial sculpting, and nervous system regulation in Edgewater Miami.</p>
+      <p class="appt">By appointment only.</p>
+    </div>
+    <div class="footer-contact">
+      <a href="sms:3059650145" class="footer-cta">TEXT ME</a>
+      <div class="footer-address">
+        <p>2915 Biscayne Blvd Suite 200-29</p>
+        <p>Edgewater Miami, FL 33137</p>
+        <p><a href="tel:3059650145">305-965-0145</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Undertone SKN. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // =================== DATA ===================
+  const blogPosts = [
+    { date: "Jan 9, 2025", title: "How Face Sculpting Transforms Your Skin: A Complete Guide", slug: "how-face-sculpting-transforms-your-skin" },
+    { date: "Jan 9, 2025", title: "Why Face Sculpting is the Ultimate Cheat Code for a Sculpted Look", slug: "why-face-sculpting-is-the-ultimate-cheat-code" },
+    { date: "Jan 9, 2025", title: "Who Needs Botox When You Have Face Sculpting?", slug: "who-needs-botox-when-you-have-face-sculpting" },
+    { date: "Jan 9, 2025", title: "Who Benefits Most from Buccal Massage? Spoiler: It's Not Just Celebs – It's You Too", slug: "who-benefits-most-from-buccal-massage" },
+    { date: "Jan 9, 2025", title: "Why You're Seriously Missing Out If You Haven't Tried Buccal Massage Yet", slug: "why-youre-seriously-missing-out-if-you-havent-tried-buccal-massage-yet" },
+    { date: "Jan 9, 2025", title: "Unlock the Secret to a Natural Facelift with Buccal Massage", slug: "unlock-the-secret-to-a-natural-facelift-with-buccal-massage" },
+    { date: "Jan 9, 2025", title: "Discover Miami's Finest Facial Experience at Undertone Skn Facial Studio", slug: "undertone-skn-miami-facial-sculpting-studio" },
+    { date: "Apr 25, 2024", title: "How a professional facial can remove blackheads!", slug: "how-do-facials-help-with-blackheads" },
+    { date: "Apr 18, 2024", title: "Top 3 Benefits of DMK Enzyme Therapy for Acne Management", slug: "top-3-benefits-of-dmk-enzyme-therapy-for-acne-management" },
+    { date: "Apr 8, 2024", title: "Why Facial Peels Are Safe?", slug: "why-facial-peels-are-safe" },
+    { date: "Apr 3, 2024", title: "Overcoming Acne with Consistency and Targeted Treatments", slug: "overcoming-acne-with-consistency-and-targeted-treatments" },
+    { date: "Mar 6, 2024", title: "My Journey Beyond Acne Treatments", slug: "my-journey-beyond-acne-treatments" }
+  ];
+
+  const faqs = [
+    { q: "What services do you offer?", a: "Sessions focus on jaw tension release, facial sculpting, and nervous system regulation through hands-on fascia release work. Every session is tailored to what your face and nervous system needs that day." },
+    { q: "How often should I come in?", a: "We recommend once a month for maintenance, but many clients come more frequently when working through chronic tension. During your first session Zinthia will recommend a personalized cadence." },
+    { q: "What types of products do you use in your treatments?", a: "Only high-quality skincare products free from harmful chemicals, safe for all skin types. Products are carefully selected to support the work being done in session." },
+    { q: "How long do the treatments take?", a: "Sessions typically last 60–90 minutes depending on the treatment. Zinthia will advise on timing when you book." },
+    { q: "Will the treatments be painful?", a: "Fascia release work involves intentional pressure — some clients describe it as intense but deeply relieving. Zinthia adjusts throughout based on your feedback and comfort." },
+    { q: "How soon can I expect to see results?", a: "Many clients feel results immediately — jaw mobility, reduced pressure, a sense of calm. Structural and visible changes build over multiple sessions." },
+    { q: "Can I wear makeup after a treatment?", a: "We recommend avoiding makeup for at least 24 hours after any session to allow your skin to fully benefit from the work." },
+    { q: "How much do your services cost?", a: "Pricing varies by service. Please reach out via text or the booking link for current rates and packages." },
+    { q: "How do I book an appointment?", a: "Book online through our booking link or text us at 305-965-0145. By appointment only." },
+    { q: "What happens during a consultation?", a: "Zinthia evaluates your face, jaw, and neck tension patterns, discusses your history and goals, and recommends a session plan. This is your opportunity to ask everything." },
+    { q: "Do you offer services for men?", a: "Absolutely. Jaw tension and nervous system overload don't discriminate. Sessions are tailored to every individual." },
+    { q: "What if I need to cancel my appointment?", a: "Please give at least 24 hours notice to avoid fees. We understand things come up — just reach out as soon as you know." },
+    { q: "Are your services safe during pregnancy?", a: "We recommend consulting your doctor before booking during pregnancy. Pregnancy-safe options may be available — reach out to discuss." },
+    { q: "How can I maintain my results at home?", a: "Zinthia will provide personalized at-home recommendations after your session — exercises, tools, and habits that support the work done in studio." },
+    { q: "How often should I come in for a follow-up?", a: "Follow-up cadence depends on your needs and goals. Zinthia will recommend a schedule that works for you." },
+    { q: "What if I have specific skin concerns or allergies?", a: "Let us know before your session. We work with what your skin needs — no pressure, no products that don't serve you." },
+    { q: "Do you work with people experiencing TMJ or chronic tension?", a: "Yes. Many people who come to Undertone SKN are experiencing TMJ discomfort, facial holding patterns, stress-related jaw and facial pain, and nervous system overload. This work is designed to support the face and nervous system — not replace medical care. We always recommend working alongside your healthcare provider." }
+  ];
+
+  // =================== RENDER BLOG ===================
+  function renderBlog() {
+    const container = document.getElementById('blogPosts');
+    container.innerHTML = blogPosts.map(post => `
+      <div class="blog-card">
+        <div class="blog-card-image-placeholder"></div>
+        <div class="blog-card-body">
+          <p class="blog-card-date">${post.date}</p>
+          <h3 class="blog-card-title">${post.title}</h3>
+          <a href="https://www.undertoneskn.com/blog/${post.slug}" target="_blank" class="blog-card-link">Read More</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // =================== RENDER FAQ ===================
+  function renderFAQ() {
+    const container = document.getElementById('faqList');
+    container.innerHTML = faqs.map((faq, i) => `
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span>${faq.q}</span>
+          <span class="faq-icon">∨</span>
+        </button>
+        <div class="faq-answer">
+          <p>${faq.a}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // =================== PAGE ROUTING ===================
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo(0, 0);
+    if (page === 'blog') renderBlog();
+    if (page === 'faq') renderFAQ();
+  }
+
+  function setActive(el) {
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // =================== ACCORDION ===================
+  function toggleAccordion(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // =================== MOBILE MENU ===================
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // =================== SCROLL ANIMATIONS ===================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // =================== GOOGLE REVIEWS ===================
+  const PLACE_ID = 'ChIJKxZZHFex2YgRY8JE-TMw1eU';
+  const MAPS_KEY = 'AIzaSyBzcVPSlDjrWlGy2feW0__S7k0qjahZzuo';
+
+  function loadGoogleReviews() {
+    // Load Maps JS API with Places library
+    if (window.google && window.google.maps) {
+      initPlacesRequest();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places&callback=initPlacesRequest`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  window.initPlacesRequest = function() {
+    const mapDiv = document.createElement('div');
+    mapDiv.style.display = 'none';
+    document.body.appendChild(mapDiv);
+
+    const map = new google.maps.Map(mapDiv, {
+      center: { lat: 25.7982, lng: -80.1920 },
+      zoom: 15
+    });
+
+    const service = new google.maps.places.PlacesService(map);
+
+    service.getDetails({
+      placeId: PLACE_ID,
+      fields: ['name', 'rating', 'user_ratings_total', 'reviews']
+    }, function(place, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        renderGoogleReviews(place);
+      } else {
+        renderReviewsFallback();
+      }
+    });
+  };
+
+  function renderGoogleReviews(place) {
+    // Update summary card
+    const score = place.rating ? place.rating.toFixed(1) : '5.0';
+    const count = place.user_ratings_total || 110;
+    const stars = ratingToStars(place.rating || 5);
+
+    document.getElementById('ratingScore').textContent = score;
+    document.getElementById('ratingStars').textContent = stars;
+    document.getElementById('ratingCount').textContent = `(${count} reviews)`;
+
+    // Render reviews
+    const reviews = place.reviews || [];
+    const container = document.getElementById('reviewsList');
+
+    if (reviews.length === 0) {
+      renderReviewsFallback();
+      return;
+    }
+
+    container.innerHTML = reviews.slice(0, 4).map(review => `
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar" style="background:var(--taupe);">
+            ${review.author_name ? review.author_name.charAt(0).toUpperCase() : '?'}
+          </div>
+          <div class="review-meta">
+            <p class="review-name">${review.author_name || 'Google Reviewer'}</p>
+            <p class="review-time">${review.relative_time_description || ''}</p>
+          </div>
+        </div>
+        <p class="review-stars">${ratingToStars(review.rating)}</p>
+        <p class="review-text">${review.text || ''}</p>
+        <div class="review-source">
+          <div class="g-icon">G</div>
+          <span>Posted on Google</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function ratingToStars(rating) {
+    const full = Math.round(rating || 5);
+    return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  function renderReviewsFallback() {
+    // Fallback — show static reviews if API fails
+    document.getElementById('ratingScore').textContent = '5.0';
+    document.getElementById('ratingCount').textContent = '(110 reviews)';
+    document.getElementById('reviewsList').innerHTML = `
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">Y</div>
+          <div class="review-meta">
+            <p class="review-name">Yenesis Alvarez</p>
+            <p class="review-time">3 days ago</p>
+          </div>
+        </div>
+        <p class="review-stars">★★★★★</p>
+        <p class="review-text">I was having TMJ pain and Zinthia was very caring since I arrived. She did everything she can within her expertise to release my jaw and truly made a difference.</p>
+        <div class="review-source"><div class="g-icon">G</div><span>Posted on Google</span></div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">P</div>
+          <div class="review-meta">
+            <p class="review-name">Paige Picquet</p>
+            <p class="review-time">1 week ago</p>
+          </div>
+        </div>
+        <p class="review-stars">★★★★★</p>
+        <p class="review-text">Absolutely incredible experience. Zinthia has a gift. I came in with chronic jaw tension and left feeling completely different — lighter, open, regulated.</p>
+        <div class="review-source"><div class="g-icon">G</div><span>Posted on Google</span></div>
+      </div>
+    `;
+  }
+
+  // Kick off reviews load
+  loadGoogleReviews();
+</script>
+</body>
+</html>
