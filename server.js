@@ -7,6 +7,18 @@ const PORT = process.env.PORT || 8080;
 // Serve static files
 app.use(express.static(path.join(__dirname)));
 
+// Sitemap
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+
+// Robots
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
 // All routes serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
