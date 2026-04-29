@@ -4,6 +4,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// Allow all hosts
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname)));
 
@@ -24,6 +30,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Undertone SKN running on port ${PORT}`);
 });
