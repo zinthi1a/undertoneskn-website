@@ -713,15 +713,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 0;
+    text-align: center;
   }
 
   .cta-quote-box {
     background: var(--taupe);
     padding: 24px 32px;
     margin-bottom: 48px;
-    display: inline-block;
-    max-width: 400px;
+    display: block;
+    width: 100%;
   }
 
   .cta-quote-box p {
@@ -729,16 +731,18 @@
     font-size: 14px;
     color: var(--cream-1);
     font-style: italic;
+    text-align: center;
   }
 
   .cta-word {
     font-family: 'Lato', sans-serif;
-    font-size: clamp(48px, 7vw, 96px);
+    font-size: clamp(64px, 10vw, 120px);
     font-weight: 300;
     color: var(--text-primary);
-    letter-spacing: 4px;
+    letter-spacing: 8px;
     line-height: 1;
     margin-bottom: 40px;
+    text-align: center;
   }
 
   .cta-book-label {
@@ -748,6 +752,7 @@
     color: var(--text-light);
     text-transform: uppercase;
     margin-bottom: 12px;
+    text-align: center;
   }
 
   .cta-right {
