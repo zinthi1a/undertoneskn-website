@@ -1,12 +1,13 @@
 {
   "name": "undertoneskn-website",
-  "version": "1.0.0",
-  "description": "Undertone SKN Website",
+  "version": "2.0.0",
+  "description": "Undertone SKN Website + Blog Engine",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
   }
 }

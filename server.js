@@ -1,35 +1,102 @@
+// ============================================================
+// UNDERTONE SKN — MAIN SERVER
+// Railway deployment — Node.js + Express
+// ============================================================
+
 const express = require('express');
 const path = require('path');
+const { getAllPosts, getPostBySlug, renderPostHTML, renderBlogListHTML } = require('./blog-engine');
+const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Allow all hosts
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-// Serve static files
+app.use(express.json());
+app.use((req, res, next) => { res.setHeader('Access-Control-Allow-Origin', '*'); next(); });
 app.use(express.static(path.join(__dirname)));
 
-// Sitemap
+// SITEMAP — dynamic
 app.get('/sitemap.xml', (req, res) => {
+  const posts = getAllPosts();
+  const postUrls = posts.map(post => `
+  <url>
+    <loc>https://www.undertoneskn.com/blog/${post.slug}</loc>
+    <lastmod>${post.date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('');
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.undertoneskn.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.undertoneskn.com/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.undertoneskn.com/blog</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.undertoneskn.com/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  ${postUrls}
+</urlset>`;
+
   res.setHeader('Content-Type', 'application/xml');
-  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+  res.send(sitemap);
 });
 
-// Robots
+// ROBOTS
 app.get('/robots.txt', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  res.sendFile(path.join(__dirname, 'robots.txt'));
+  res.send(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.undertoneskn.com/sitemap.xml`);
 });
 
-// All routes serve index.html
+// BLOG ROUTES
+app.get('/blog', (req, res) => {
+  const posts = getAllPosts();
+  res.send(renderBlogListHTML(posts));
+});
+
+app.get('/blog/:slug', (req, res) => {
+  const post = getPostBySlug(req.params.slug);
+  if (!post) return res.status(404).send('<html><body><h1>Post not found</h1><a href="/blog">Back to Journal</a></body></html>');
+  res.send(renderPostHTML(post));
+});
+
+// API
+app.get('/api/posts', (req, res) => {
+  const posts = getAllPosts();
+  res.json(posts.map(p => ({ slug: p.slug, title: p.title, excerpt: p.excerpt, date: p.date, cluster: p.cluster })));
+});
+
+app.post('/api/generate-post', async (req, res) => {
+  const { secret } = req.body;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const { generateNow } = require('./blog-agent');
+    const post = await generateNow();
+    res.json({ success: true, post: { slug: post.slug, title: post.title } });
+  } catch (error) { res.status(500).json({ error: error.message }); }
+});
+
+app.post('/api/seed-posts', async (req, res) => {
+  const { secret } = req.body;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  res.json({ success: true, message: 'Seeding started' });
+  seedExistingPosts();
+});
+
+// ALL OTHER ROUTES
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// START
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Undertone SKN running on port ${PORT}`);
+  console.log(`✅ Undertone SKN running on port ${PORT}`);
+
+  // Scheduled agent — check every 6 hours, run at 8AM Mon/Wed/Fri
+  setInterval(async () => {
+    const hour = new Date().getHours();
+    if (hour === 8) {
+      try { await runScheduledAgent(); }
+      catch (e) { console.error('[SCHEDULER] Error:', e.message); }
+    }
+  }, 6 * 60 * 60 * 1000);
+
+  console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM');
 });
