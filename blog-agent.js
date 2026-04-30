@@ -19,13 +19,13 @@ const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET || 'blog_i
 async function generateBlogImage(title, cluster) {
 
   const promptMap = {
-    'jaw-tension': 'Close up of skilled hands performing gentle jaw massage on a woman, warm studio lighting, dark moody background, cinematic editorial photography, soft focus, natural skin texture, professional wellness spa, no text',
-    'nervous-system': 'Peaceful woman receiving facial treatment, eyes closed, warm candlelight studio, dark moody atmosphere, cinematic close up, professional spa setting, natural skin, editorial photography, no text',
-    'fascia': 'Close up hands gently working on facial tissue, warm studio lighting, dark background, cinematic photography, soft natural skin texture, professional wellness treatment, editorial style, no text',
-    'stress-face': 'Woman relaxing during facial treatment, tension releasing from face, warm moody studio lighting, cinematic editorial photography, dark background, natural skin, professional spa, no text',
-    'functional-beauty': 'Elegant studio facial treatment setup, arch mirror with warm light, dark moody atmosphere, professional skincare tools on wooden surface, cinematic editorial photography, no text',
-    'miami-local': 'Luxury facial studio interior, arch mirror warm lighting, dark moody atmosphere, professional wellness space, cinematic photography, Edgewater Miami spa aesthetic, no text',
-    'wellness': 'Professional facial treatment close up, warm studio lighting, dark moody background, cinematic editorial photography, natural skin texture, skilled hands, professional spa, no text'
+    'jaw-tension': 'Abstract anatomical illustration of jaw and facial muscles, warm earth tones, dark background, editorial medical art style, minimalist, no people, no faces, conceptual wellness artwork',
+    'nervous-system': 'Abstract illustration of nervous system pathways in face and neck, warm golden lines on dark background, editorial art style, minimalist conceptual, no people, no faces',
+    'fascia': 'Abstract anatomical illustration of facial fascia tissue layers, warm earth tones, dark moody background, minimalist editorial art, conceptual wellness, no people, no faces',
+    'stress-face': 'Abstract conceptual illustration of tension and release, flowing lines, warm amber tones on dark background, editorial minimalist art, wellness concept, no people, no faces',
+    'functional-beauty': 'Abstract minimalist illustration of facial structure and beauty, geometric forms, warm gold tones on dark background, editorial art style, luxury wellness concept, no people',
+    'miami-local': 'Abstract minimal illustration of tropical wellness spa, warm earth tones, dark moody background, editorial art style, luxury concept, architectural elements, no people',
+    'wellness': 'Abstract anatomical illustration of skin and tissue layers, warm earth tones, dark background, minimalist editorial medical art style, conceptual wellness, no people, no faces'
   };
 
   const prompt = promptMap[cluster] || promptMap['wellness'];
