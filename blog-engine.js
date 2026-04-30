@@ -19,6 +19,45 @@ if (!fs.existsSync(POSTS_DIR)) {
 }
 
 // ============================================================
+// BLOG POST IMAGE POOL — Cloudinary images by cluster
+// ============================================================
+const BLOG_IMAGES = {
+  'jaw-tension': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/2.jpeg_vbx2mu.webp',
+  ],
+  'nervous-system': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428425/3.jpeg_tgmryi.webp',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428459/studio_photo_exyuoh.jpg',
+  ],
+  'fascia': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428425/5.jpeg_ycnvzu.webp',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp',
+  ],
+  'stress-face': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428426/6.jpeg_hqpsvt.webp',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/2.jpeg_vbx2mu.webp',
+  ],
+  'functional-beauty': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428459/studio_photo_exyuoh.jpg',
+  ],
+  'miami-local': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428425/3.jpeg_tgmryi.webp',
+  ],
+  'wellness': [
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428462/oval_photo_uhbc5i.jpg',
+    'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp',
+  ]
+};
+
+function getPostImage(cluster) {
+  const images = BLOG_IMAGES[cluster] || BLOG_IMAGES['wellness'];
+  return images[Math.floor(Math.random() * images.length)];
+}
+
+// ============================================================
 // TOPIC CLUSTERS
 // ============================================================
 const TOPIC_CLUSTERS = [
@@ -229,7 +268,7 @@ function renderPostHTML(post) {
 function renderBlogListHTML(posts) {
   const postCards = posts.map(post => `
     <a href="/blog/${post.slug}" class="blog-card">
-      <div class="blog-card-img" style="background:var(--brown-darkest);"></div>
+      <div class="blog-card-img" style="background-image:url('${post.image || getPostImage(post.cluster)}');background-size:cover;background-position:center;"></div>
       <div class="blog-card-body">
         <p class="blog-card-cat">${post.cluster || 'Wellness'}</p>
         <h3 class="blog-card-title">${post.title}</h3>
@@ -296,6 +335,6 @@ function renderBlogListHTML(posts) {
 
 module.exports = {
   getAllPosts, getPostBySlug, savePost, getNextTopic,
-  slugify, renderPostHTML, renderBlogListHTML,
+  slugify, renderPostHTML, renderBlogListHTML, getPostImage,
   TOPIC_CLUSTERS, EXISTING_POSTS, POSTS_DIR
 };
