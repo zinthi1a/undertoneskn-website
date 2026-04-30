@@ -295,7 +295,7 @@ async function runScheduledAgent() {
   }
 
   console.log('[BLOG AGENT] Publishing day — generating new post...');
-  const topic = getNextTopic();
+  const topic = await getNextTopic();
   await publishPost(topic, true);
 }
 
@@ -303,7 +303,7 @@ async function runScheduledAgent() {
 // MANUAL TRIGGER — generate one post immediately
 // ============================================================
 async function generateNow(topicOverride = null) {
-  const topic = topicOverride || getNextTopic();
+  const topic = topicOverride || await getNextTopic();
   return await publishPost(topic, true);
 }
 
