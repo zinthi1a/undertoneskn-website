@@ -1,11 +1,6 @@
-// ============================================================
-// UNDERTONE SKN — MAIN SERVER
-// Railway deployment — Node.js + Express
-// ============================================================
-
 const express = require('express');
 const path = require('path');
-const { getAllPosts, getPostBySlug, renderPostHTML, renderBlogListHTML } = require('./blog-engine');
+const { getAllPosts, getPostBySlug, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
 
 const app = express();
@@ -16,8 +11,8 @@ app.use((req, res, next) => { res.setHeader('Access-Control-Allow-Origin', '*');
 app.use(express.static(path.join(__dirname)));
 
 // SITEMAP — dynamic
-app.get('/sitemap.xml', (req, res) => {
-  const posts = getAllPosts();
+app.get('/sitemap.xml', async (req, res) => {
+  const posts = await getAllPosts();
   const postUrls = posts.map(post => `
   <url>
     <loc>https://www.undertoneskn.com/blog/${post.slug}</loc>
@@ -46,21 +41,21 @@ app.get('/robots.txt', (req, res) => {
 });
 
 // BLOG ROUTES
-app.get('/blog', (req, res) => {
-  const posts = getAllPosts();
+app.get('/blog', async (req, res) => {
+  const posts = await getAllPosts();
   res.send(renderBlogListHTML(posts));
 });
 
-app.get('/blog/:slug', (req, res) => {
-  const post = getPostBySlug(req.params.slug);
-  if (!post) return res.status(404).send('<html><body><h1>Post not found</h1><a href="/blog">Back to Journal</a></body></html>');
+app.get('/blog/:slug', async (req, res) => {
+  const post = await getPostBySlug(req.params.slug);
+  if (!post) return res.status(404).send('<html><body style="font-family:sans-serif;padding:60px;"><h1>Post not found</h1><a href="/blog">← Back to Journal</a></body></html>');
   res.send(renderPostHTML(post));
 });
 
 // API
-app.get('/api/posts', (req, res) => {
-  const posts = getAllPosts();
-  res.json(posts.map(p => ({ slug: p.slug, title: p.title, excerpt: p.excerpt, date: p.date, cluster: p.cluster })));
+app.get('/api/posts', async (req, res) => {
+  const posts = await getAllPosts();
+  res.json(posts.map(p => ({ slug: p.slug, title: p.title, excerpt: p.excerpt, date: p.date, cluster: p.cluster, image: p.image })));
 });
 
 app.post('/api/generate-post', async (req, res) => {
@@ -69,7 +64,7 @@ app.post('/api/generate-post', async (req, res) => {
   try {
     const { generateNow } = require('./blog-agent');
     const post = await generateNow();
-    res.json({ success: true, post: { slug: post.slug, title: post.title } });
+    res.json({ success: true, post: { slug: post.slug, title: post.title, image: post.image } });
   } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
@@ -86,17 +81,24 @@ app.get('*', (req, res) => {
 });
 
 // START
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Undertone SKN running on port ${PORT}`);
+async function start() {
+  // Initialize database first
+  await initDB();
+  
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Undertone SKN running on port ${PORT}`);
 
-  // Scheduled agent — check every 6 hours, run at 8AM Mon/Wed/Fri
-  setInterval(async () => {
-    const hour = new Date().getHours();
-    if (hour === 8) {
-      try { await runScheduledAgent(); }
-      catch (e) { console.error('[SCHEDULER] Error:', e.message); }
-    }
-  }, 6 * 60 * 60 * 1000);
+    // Scheduled agent — check every 6 hours, run at 8AM Mon/Wed/Fri
+    setInterval(async () => {
+      const hour = new Date().getHours();
+      if (hour === 8) {
+        try { await runScheduledAgent(); }
+        catch (e) { console.error('[SCHEDULER] Error:', e.message); }
+      }
+    }, 6 * 60 * 60 * 1000);
 
-  console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM');
-});
+    console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM');
+  });
+}
+
+start().catch(console.error);
