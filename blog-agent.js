@@ -107,7 +107,7 @@ Zinthia's voice: warm, direct, science-informed, never generic. She treats the f
 
 Write a complete, SEO-optimized blog post on this topic: "${topicData.topic}"
 
-Target keywords to include naturally: ${topicData.keywords.join(', ')}
+Target keywords to include naturally: ${(topicData.keywords || []).join(', ')}
 
 REQUIREMENTS:
 - 800-1200 words
@@ -242,7 +242,7 @@ async function publishPost(topicData, isNew = true) {
       topic: topicData.topic || topicData.title,
       cluster,
       keywords: topicData.keywords || [],
-      image,
+      image: getPostImage(cluster),
       date: new Date().toISOString().split('T')[0],
       published: true,
       enhanced: !isNew
