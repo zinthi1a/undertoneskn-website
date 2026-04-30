@@ -120,8 +120,7 @@ async function savePost(post) {
         meta_description = EXCLUDED.meta_description,
         content = EXCLUDED.content,
         excerpt = EXCLUDED.excerpt,
-        image = EXCLUDED.image,
-        updated_at = NOW()
+        image = EXCLUDED.image
     `, [
       post.slug, post.title, post.metaDescription, post.content,
       post.excerpt, post.topic, post.cluster,
