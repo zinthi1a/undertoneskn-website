@@ -90,13 +90,15 @@ async function uploadToCloudinary(base64Image, publicId) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           file: `data:image/webp;base64,${base64Image}`,
-          upload_preset: CLOUDINARY_UPLOAD_PRESET,
-          public_id: `blog/${publicId}`,
-          folder: 'undertone-blog'
+          upload_preset: CLOUDINARY_UPLOAD_PRESET
         })
       }
     );
     const data = await response.json();
+    if (data.error) {
+      console.error('[CLOUDINARY] Upload error:', data.error.message);
+      return null;
+    }
     return data.secure_url || null;
   } catch (error) {
     console.error('[CLOUDINARY] Upload error:', error.message);
