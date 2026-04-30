@@ -5,7 +5,7 @@
 // ============================================================
 
 const fetch = require('node-fetch');
-const { getNextTopic, savePost, slugify, getAllPosts, EXISTING_POSTS } = require('./blog-engine');
+const { getNextTopic, savePost, slugify, getAllPosts, EXISTING_POSTS, getPostImage } = require('./blog-engine');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
@@ -135,6 +135,7 @@ async function publishPost(topicData, isNew = true) {
     }
 
     const slug = slugify(generated.title);
+    const cluster = topicData.cluster || 'wellness';
     const post = {
       slug,
       title: generated.title,
@@ -142,8 +143,9 @@ async function publishPost(topicData, isNew = true) {
       content: generated.content,
       excerpt: generated.excerpt,
       topic: topicData.topic || topicData.title,
-      cluster: topicData.cluster || 'wellness',
+      cluster,
       keywords: topicData.keywords || [],
+      image: getPostImage(cluster),
       date: new Date().toISOString().split('T')[0],
       published: true,
       enhanced: !isNew
