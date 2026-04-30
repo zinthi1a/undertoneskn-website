@@ -8,6 +8,92 @@ const fetch = require('node-fetch');
 const { getNextTopic, savePost, slugify, getAllPosts, EXISTING_POSTS, getPostImage } = require('./blog-engine');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
+const CLOUDINARY_CLOUD = process.env.CLOUDINARY_CLOUD || 'dera3kj2v';
+const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET || 'blog_images';
+
+// ============================================================
+// GENERATE IMAGE VIA STABILITY AI
+// ============================================================
+async function generateBlogImage(title, cluster) {
+
+  // Build prompt based on cluster
+  const promptMap = {
+    'jaw-tension': 'Close up of skilled hands performing gentle jaw massage on a woman, warm studio lighting, dark moody background, cinematic editorial photography, soft focus, natural skin texture, professional wellness spa, no text',
+    'nervous-system': 'Peaceful woman receiving facial treatment, eyes closed, warm candlelight studio, dark moody atmosphere, cinematic close up, professional spa setting, natural skin, editorial photography, no text',
+    'fascia': 'Close up hands gently working on facial tissue, warm studio lighting, dark background, cinematic photography, soft natural skin texture, professional wellness treatment, editorial style, no text',
+    'stress-face': 'Woman relaxing during facial treatment, tension releasing from face, warm moody studio lighting, cinematic editorial photography, dark background, natural skin, professional spa, no text',
+    'functional-beauty': 'Elegant studio facial treatment setup, arch mirror with warm light, dark moody atmosphere, professional skincare tools on wooden surface, cinematic editorial photography, no text',
+    'miami-local': 'Luxury facial studio interior, arch mirror warm lighting, dark moody atmosphere, professional wellness space, cinematic photography, Edgewater Miami spa aesthetic, no text',
+    'wellness': 'Professional facial treatment close up, warm studio lighting, dark moody background, cinematic editorial photography, natural skin texture, skilled hands, professional spa, no text'
+  };
+
+  const prompt = promptMap[cluster] || promptMap['wellness'];
+
+  try {
+    console.log(`[IMAGE GEN] Generating image for cluster: ${cluster}`);
+
+    const formData = new URLSearchParams();
+
+    const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
+      method: 'POST',
+      headers: {
+        'authorization': `Bearer ${STABILITY_API_KEY}`,
+        'accept': 'application/json',
+      },
+      body: (() => {
+        const { FormData } = require('formdata-node');
+        const fd = new FormData();
+        fd.append('prompt', prompt);
+        fd.append('negative_prompt', 'cartoon, illustration, text, watermark, logo, bright colors, white background, plastic skin, fake, AI looking, ugly, deformed');
+        fd.append('aspect_ratio', '16:9');
+        fd.append('output_format', 'webp');
+        return fd;
+      })()
+    });
+
+    const data = await response.json();
+
+    if (data.image) {
+      // Upload to Cloudinary
+      const imageUrl = await uploadToCloudinary(data.image, slugify(title));
+      console.log(`[IMAGE GEN] ✅ Image generated and uploaded: ${imageUrl}`);
+      return imageUrl;
+    } else {
+      console.error('[IMAGE GEN] No image in response:', data);
+      return null;
+    }
+  } catch (error) {
+    console.error('[IMAGE GEN] Error generating image:', error.message);
+    return null;
+  }
+}
+
+// ============================================================
+// UPLOAD IMAGE TO CLOUDINARY
+// ============================================================
+async function uploadToCloudinary(base64Image, publicId) {
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          file: `data:image/webp;base64,${base64Image}`,
+          upload_preset: CLOUDINARY_UPLOAD_PRESET,
+          public_id: `blog/${publicId}`,
+          folder: 'undertone-blog'
+        })
+      }
+    );
+    const data = await response.json();
+    return data.secure_url || null;
+  } catch (error) {
+    console.error('[CLOUDINARY] Upload error:', error.message);
+    return null;
+  }
+}
 
 // ============================================================
 // GENERATE A NEW BLOG POST
@@ -136,6 +222,17 @@ async function publishPost(topicData, isNew = true) {
 
     const slug = slugify(generated.title);
     const cluster = topicData.cluster || 'wellness';
+
+    // Try to generate AI image — fall back to Cloudinary pool if it fails
+    let image = null;
+    if (STABILITY_API_KEY) {
+      image = await generateBlogImage(generated.title, cluster);
+    }
+    if (!image) {
+      image = getPostImage(cluster);
+      console.log('[IMAGE GEN] Using fallback Cloudinary image');
+    }
+
     const post = {
       slug,
       title: generated.title,
@@ -145,7 +242,7 @@ async function publishPost(topicData, isNew = true) {
       topic: topicData.topic || topicData.title,
       cluster,
       keywords: topicData.keywords || [],
-      image: getPostImage(cluster),
+      image,
       date: new Date().toISOString().split('T')[0],
       published: true,
       enhanced: !isNew
