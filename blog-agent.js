@@ -254,7 +254,7 @@ async function publishPost(topicData, isNew = true) {
       topic: topicData.topic || topicData.title,
       cluster,
       keywords: topicData.keywords || [],
-      image: getPostImage(cluster),
+      image: image,
       date: new Date().toISOString().split('T')[0],
       published: true,
       enhanced: !isNew
