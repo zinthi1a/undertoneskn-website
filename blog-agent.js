@@ -14,10 +14,10 @@ const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET || 'blog_i
 
 // ============================================================
 // GENERATE IMAGE VIA STABILITY AI
+// Uses raw multipart/form-data — no external packages needed
 // ============================================================
 async function generateBlogImage(title, cluster) {
 
-  // Build prompt based on cluster
   const promptMap = {
     'jaw-tension': 'Close up of skilled hands performing gentle jaw massage on a woman, warm studio lighting, dark moody background, cinematic editorial photography, soft focus, natural skin texture, professional wellness spa, no text',
     'nervous-system': 'Peaceful woman receiving facial treatment, eyes closed, warm candlelight studio, dark moody atmosphere, cinematic close up, professional spa setting, natural skin, editorial photography, no text',
@@ -29,38 +29,47 @@ async function generateBlogImage(title, cluster) {
   };
 
   const prompt = promptMap[cluster] || promptMap['wellness'];
+  const negativePrompt = 'cartoon, illustration, text, watermark, logo, bright colors, white background, plastic skin, fake, AI looking, ugly, deformed';
 
   try {
     console.log(`[IMAGE GEN] Generating image for cluster: ${cluster}`);
 
-    const formData = new URLSearchParams();
+    // Build multipart form data manually
+    const boundary = '----FormBoundary' + Math.random().toString(36).substring(2);
+
+    const fields = {
+      prompt,
+      negative_prompt: negativePrompt,
+      aspect_ratio: '16:9',
+      output_format: 'webp'
+    };
+
+    let body = '';
+    for (const [key, value] of Object.entries(fields)) {
+      body += `--${boundary}\r\n`;
+      body += `Content-Disposition: form-data; name="${key}"\r\n\r\n`;
+      body += `${value}\r\n`;
+    }
+    body += `--${boundary}--\r\n`;
 
     const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
       method: 'POST',
       headers: {
         'authorization': `Bearer ${STABILITY_API_KEY}`,
         'accept': 'application/json',
+        'content-type': `multipart/form-data; boundary=${boundary}`
       },
-      body: (() => {
-        const { FormData } = require('formdata-node');
-        const fd = new FormData();
-        fd.append('prompt', prompt);
-        fd.append('negative_prompt', 'cartoon, illustration, text, watermark, logo, bright colors, white background, plastic skin, fake, AI looking, ugly, deformed');
-        fd.append('aspect_ratio', '16:9');
-        fd.append('output_format', 'webp');
-        return fd;
-      })()
+      body
     });
 
     const data = await response.json();
 
     if (data.image) {
-      // Upload to Cloudinary
       const imageUrl = await uploadToCloudinary(data.image, slugify(title));
       console.log(`[IMAGE GEN] ✅ Image generated and uploaded: ${imageUrl}`);
       return imageUrl;
     } else {
-      console.error('[IMAGE GEN] No image in response:', data);
+      console.error('[IMAGE GEN] No image in response:', JSON.stringify(data));
       return null;
     }
   } catch (error) {
