@@ -65,7 +65,7 @@ async function generateBlogImage(title, cluster) {
     const data = await response.json();
 
     if (data.image) {
-      const imageUrl = await uploadToCloudinary(data.image, slugify(title));
+      const imageUrl = await uploadToCloudinary(data.image);
       console.log(`[IMAGE GEN] ✅ Image generated and uploaded: ${imageUrl}`);
       return imageUrl;
     } else {
@@ -81,7 +81,7 @@ async function generateBlogImage(title, cluster) {
 // ============================================================
 // UPLOAD IMAGE TO CLOUDINARY
 // ============================================================
-async function uploadToCloudinary(base64Image, publicId) {
+async function uploadToCloudinary(base64Image) {
   try {
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
@@ -99,6 +99,7 @@ async function uploadToCloudinary(base64Image, publicId) {
       console.error('[CLOUDINARY] Upload error:', data.error.message);
       return null;
     }
+    console.log('[CLOUDINARY] ✅ Uploaded:', data.secure_url);
     return data.secure_url || null;
   } catch (error) {
     console.error('[CLOUDINARY] Upload error:', error.message);
