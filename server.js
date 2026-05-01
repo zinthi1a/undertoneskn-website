@@ -163,7 +163,7 @@ h1{font-family:'Lato',sans-serif;font-size:28px;font-weight:300;color:#F6F3EC;ma
     <label>Excerpt</label>
     <textarea id="excerpt" style="min-height:80px">${post.excerpt||''}</textarea>
   </div>
-  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px">
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px" data-slug="${post.slug}" data-secret="${secret}">
     <button class="btn-save" onclick="savePost()">Save Changes</button>
     <a href="/admin/blog?secret=${secret}" class="btn-back">← Back</a>
     <a href="/blog/${post.slug}" target="_blank" class="preview-link">Preview →</a>
@@ -172,28 +172,36 @@ h1{font-family:'Lato',sans-serif;font-size:28px;font-weight:300;color:#F6F3EC;ma
 <script>
 async function savePost() {
   const btn = document.querySelector('.btn-save');
+  const container = document.querySelector('[data-slug]');
+  const slug = container.dataset.slug;
+  const secret = container.dataset.secret;
   btn.textContent = 'Saving...';
-  const res = await fetch('/api/update-post', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      slug: '${post.slug}',
-      secret: '${secret}',
-      title: document.getElementById('title').value,
-      metaDescription: document.getElementById('metaDescription').value,
-      content: document.getElementById('content').value,
-      excerpt: document.getElementById('excerpt').value
-    })
-  });
-  const data = await res.json();
-  if (data.success) {
+  try {
+    const res = await fetch('/api/update-post', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        slug,
+        secret,
+        title: document.getElementById('title').value,
+        metaDescription: document.getElementById('metaDescription').value,
+        content: document.getElementById('content').value,
+        excerpt: document.getElementById('excerpt').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      btn.textContent = 'Save Changes';
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    } else {
+      btn.textContent = 'Save Changes';
+      alert('Error: ' + data.error);
+    }
+  } catch(e) {
     btn.textContent = 'Save Changes';
-    const msg = document.getElementById('successMsg');
-    msg.style.display = 'block';
-    setTimeout(() => msg.style.display = 'none', 3000);
-  } else {
-    btn.textContent = 'Save Changes';
-    alert('Error: ' + data.error);
+    alert('Network error — try again');
   }
 }
 </script>
