@@ -43,6 +43,195 @@ app.get('/robots.txt', (req, res) => {
   res.send(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.undertoneskn.com/sitemap.xml`);
 });
 
+// BLOG ADMIN — list all posts
+app.get('/admin/blog', async (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).send('<h1>Unauthorized</h1>');
+  const posts = await getAllPosts();
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Admin — Undertone SKN</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#F6F3EC;font-family:'Lato',sans-serif;padding:40px 24px;min-height:100vh}
+.container{max-width:800px;margin:0 auto}
+.label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:#B9A590;text-transform:uppercase;margin-bottom:8px}
+h1{font-family:'Lato',sans-serif;font-size:32px;font-weight:300;color:#F6F3EC;margin-bottom:32px}
+.post-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #1a1a1a;gap:16px}
+.post-row:hover{background:#111}
+.post-title{font-size:14px;color:#ECE4DA;line-height:1.4;flex:1}
+.post-date{font-family:'Syne Mono',monospace;font-size:10px;color:#444;white-space:nowrap}
+.post-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-edit{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2px;color:#B9A590;border:1px solid #333;padding:6px 14px;text-decoration:none;text-transform:uppercase;transition:border-color 0.2s}
+.btn-edit:hover{border-color:#B9A590;color:#F6F3EC}
+.btn-delete{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:2px;color:#444;border:1px solid #1a1a1a;padding:6px 14px;background:none;cursor:pointer;text-transform:uppercase;transition:color 0.2s,border-color 0.2s}
+.btn-delete:hover{color:#ff4444;border-color:#ff4444}
+.empty{padding:40px;text-align:center;color:#444;font-size:14px}
+.nav-admin{display:flex;gap:16px;margin-bottom:32px}
+.nav-admin a{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:#B9A590;text-decoration:none;border:1px solid #222;padding:8px 16px;transition:border-color 0.2s}
+.nav-admin a:hover{border-color:#B9A590;color:#F6F3EC}
+</style>
+</head>
+<body>
+<div class="container">
+  <p class="label">Admin · Content</p>
+  <h1>Blog Posts (${posts.length})</h1>
+  <div class="nav-admin">
+    <a href="/admin/gbp?secret=${secret}">GBP Content</a>
+    <a href="/blog" target="_blank">View Blog</a>
+  </div>
+  ${posts.length === 0 ? '<div class="empty">No posts yet.</div>' : posts.map(p => `
+  <div class="post-row">
+    <div>
+      <p class="post-title">${p.title}</p>
+      <p class="post-date">${p.cluster} · ${new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
+    </div>
+    <div class="post-actions">
+      <a href="/admin/blog/edit/${p.slug}?secret=${secret}" class="btn-edit">Edit</a>
+      <button class="btn-delete" onclick="deletePost('${p.slug}','${secret}')">Delete</button>
+    </div>
+  </div>`).join('')}
+</div>
+<script>
+async function deletePost(slug, secret) {
+  if (!confirm('Delete this post?')) return;
+  const res = await fetch('/api/delete-post', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,secret})});
+  const data = await res.json();
+  if (data.success) location.reload();
+  else alert('Error: ' + data.error);
+}
+</script>
+</body>
+</html>`);
+});
+
+// BLOG ADMIN — edit single post
+app.get('/admin/blog/edit/:slug', async (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).send('<h1>Unauthorized</h1>');
+  const post = await getPostBySlug(req.params.slug);
+  if (!post) return res.status(404).send('<h1>Post not found</h1>');
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Post — Undertone SKN</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#F6F3EC;font-family:'Lato',sans-serif;padding:40px 24px;min-height:100vh}
+.container{max-width:800px;margin:0 auto}
+.label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:#B9A590;text-transform:uppercase;margin-bottom:8px}
+h1{font-family:'Lato',sans-serif;font-size:28px;font-weight:300;color:#F6F3EC;margin-bottom:32px}
+.field{margin-bottom:24px}
+.field label{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;color:#B9A590;text-transform:uppercase;display:block;margin-bottom:8px}
+.field input,.field textarea{width:100%;background:#111;border:1px solid #222;color:#F6F3EC;padding:12px 16px;font-family:'Lato',sans-serif;font-size:14px;line-height:1.6;outline:none;transition:border-color 0.2s}
+.field input:focus,.field textarea:focus{border-color:#B9A590}
+.field textarea{min-height:400px;resize:vertical;font-family:'Lato',monospace;font-size:13px}
+.btn-save{background:#B9A590;color:#0a0a0a;border:none;padding:14px 32px;font-family:'Syne Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-right:12px}
+.btn-save:hover{background:#D4AF37}
+.btn-back{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:#B9A590;text-decoration:none;border:1px solid #333;padding:13px 24px;transition:border-color 0.2s}
+.btn-back:hover{border-color:#B9A590;color:#F6F3EC}
+.success{background:#1a2a1a;border:1px solid #2a4a2a;color:#4aaa4a;padding:12px 16px;font-family:'Syne Mono',monospace;font-size:11px;margin-bottom:24px;display:none}
+.preview-link{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:1px;color:#444;text-decoration:none;margin-left:16px}
+.preview-link:hover{color:#B9A590}
+</style>
+</head>
+<body>
+<div class="container">
+  <p class="label">Admin · Edit Post</p>
+  <h1>${post.title}</h1>
+  <div class="success" id="successMsg">✓ Post saved successfully</div>
+  <div class="field">
+    <label>Title</label>
+    <input type="text" id="title" value="${post.title.replace(/"/g,'&quot;')}">
+  </div>
+  <div class="field">
+    <label>Meta Description</label>
+    <input type="text" id="metaDescription" value="${(post.metaDescription||'').replace(/"/g,'&quot;')}">
+  </div>
+  <div class="field">
+    <label>Content (HTML) — Remove fake links, edit text directly</label>
+    <textarea id="content">${post.content||''}</textarea>
+  </div>
+  <div class="field">
+    <label>Excerpt</label>
+    <textarea id="excerpt" style="min-height:80px">${post.excerpt||''}</textarea>
+  </div>
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px">
+    <button class="btn-save" onclick="savePost()">Save Changes</button>
+    <a href="/admin/blog?secret=${secret}" class="btn-back">← Back</a>
+    <a href="/blog/${post.slug}" target="_blank" class="preview-link">Preview →</a>
+  </div>
+</div>
+<script>
+async function savePost() {
+  const btn = document.querySelector('.btn-save');
+  btn.textContent = 'Saving...';
+  const res = await fetch('/api/update-post', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      slug: '${post.slug}',
+      secret: '${secret}',
+      title: document.getElementById('title').value,
+      metaDescription: document.getElementById('metaDescription').value,
+      content: document.getElementById('content').value,
+      excerpt: document.getElementById('excerpt').value
+    })
+  });
+  const data = await res.json();
+  if (data.success) {
+    btn.textContent = 'Save Changes';
+    const msg = document.getElementById('successMsg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+  } else {
+    btn.textContent = 'Save Changes';
+    alert('Error: ' + data.error);
+  }
+}
+</script>
+</body>
+</html>`);
+});
+
+// API — update post
+app.post('/api/update-post', async (req, res) => {
+  const { slug, secret, title, metaDescription, content, excerpt } = req.body;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const { Client } = require('pg');
+    const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: false });
+    await client.connect();
+    await client.query(
+      'UPDATE blog_posts SET title=$1, meta_description=$2, content=$3, excerpt=$4 WHERE slug=$5',
+      [title, metaDescription, content, excerpt, slug]
+    );
+    await client.end();
+    res.json({ success: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// API — delete post
+app.post('/api/delete-post', async (req, res) => {
+  const { slug, secret } = req.body;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const { Client } = require('pg');
+    const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: false });
+    await client.connect();
+    await client.query('DELETE FROM blog_posts WHERE slug=$1', [slug]);
+    await client.end();
+    res.json({ success: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // GBP ADMIN PAGE
 app.get('/admin/gbp', async (req, res) => {
   const secret = req.query.secret;
