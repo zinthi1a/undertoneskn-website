@@ -34,15 +34,15 @@ app.get('/sitemap.xml', async (req, res) => {
   res.send(sitemap);
 });
 
-// THANK YOU PAGE — booking confirmation
-app.get('/thank-you', (req, res) => {
-  res.sendFile(path.join(__dirname, 'thank-you.html'));
-});
-
 // ROBOTS
 app.get('/robots.txt', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
   res.send(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.undertoneskn.com/sitemap.xml`);
+});
+
+// THANK YOU PAGE
+app.get('/thank-you', (req, res) => {
+  res.sendFile(path.join(__dirname, 'thank-you.html'));
 });
 
 // BLOG ROUTES
@@ -53,7 +53,7 @@ app.get('/blog', async (req, res) => {
 
 app.get('/blog/:slug', async (req, res) => {
   const post = await getPostBySlug(req.params.slug);
-  if (!post) return res.status(404).send('<html><body style="font-family:sans-serif;padding:60px;"><h1>Post not found</h1><a href="/blog">← Back to Journal</a></body></html>');
+  if (!post) return res.status(404).send('<html><body style="font-family:sans-serif;padding:60px;"><h1>Post not found</h1><a href="/blog">Back to Journal</a></body></html>');
   res.send(renderPostHTML(post));
 });
 
@@ -87,13 +87,9 @@ app.get('*', (req, res) => {
 
 // START
 async function start() {
-  // Initialize database first
   await initDB();
-  
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Undertone SKN running on port ${PORT}`);
-
-    // Scheduled agent — check every 6 hours, run at 8AM Mon/Wed/Fri
     setInterval(async () => {
       const hour = new Date().getHours();
       if (hour === 8) {
@@ -101,7 +97,6 @@ async function start() {
         catch (e) { console.error('[SCHEDULER] Error:', e.message); }
       }
     }, 6 * 60 * 60 * 1000);
-
     console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM');
   });
 }
