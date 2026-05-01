@@ -435,58 +435,6 @@ footer a:hover{color:var(--cream-1)}
 </html>`;
 }
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Journal | Undertone SKN Miami</title>
-<meta name="description" content="Insights on jaw tension, nervous system regulation, and functional beauty from Undertone SKN in Edgewater Miami.">
-<link rel="canonical" href="https://www.undertoneskn.com/blog">
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Epilogue:wght@300;400;500&family=Syne+Mono&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--cream-1:#F6F3EC;--cream-2:#ECE4DA;--taupe:#B9A590;--brown-dark:#574C3F;--brown-darkest:#36302A;--text-primary:#36302A;--text-secondary:#574C3F;--text-light:#B9A590}
-body{background:var(--cream-1);color:var(--text-primary);font-family:'Epilogue',sans-serif}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--cream-1);border-bottom:1px solid rgba(87,76,63,0.1);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-primary);text-decoration:none}
-.blog-hero{background:var(--brown-darkest);padding:100px 60px 60px;margin-top:56px}
-.blog-hero h1{font-family:'Lato',sans-serif;font-size:clamp(40px,6vw,80px);font-weight:300;color:var(--cream-1);letter-spacing:4px;margin-bottom:12px}
-.blog-hero p{font-family:'Epilogue',sans-serif;font-size:14px;color:var(--taupe)}
-.blog-grid{padding:60px;background:var(--cream-1)}
-.blog-posts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1080px;margin:0 auto}
-.blog-card{text-decoration:none;background:var(--cream-2);transition:transform 0.2s;display:block}
-.blog-card:hover{transform:translateY(-3px)}
-.blog-card-img{height:200px}
-.blog-card-body{padding:20px}
-.blog-card-cat{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--taupe);text-transform:uppercase;margin-bottom:8px}
-.blog-card-title{font-family:'Lato',sans-serif;font-size:16px;font-weight:400;color:var(--text-primary);line-height:1.4;margin-bottom:12px}
-.blog-card-date{font-family:'Syne Mono',monospace;font-size:10px;color:var(--text-light);margin-bottom:12px}
-.blog-card-link{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-secondary)}
-footer{background:var(--brown-darkest);padding:40px 60px;text-align:center}
-footer p{font-family:'Epilogue',sans-serif;font-size:12px;color:var(--taupe)}
-footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
-@media(max-width:900px){.blog-posts{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.blog-posts{grid-template-columns:1fr}.blog-grid,.blog-hero{padding:48px 24px}nav{padding:0 24px}}
-</style>
-</head>
-<body>
-<nav><a href="/" class="nav-logo">UNDERTONE SKN</a></nav>
-<div class="blog-hero">
-  <h1>JOURNAL</h1>
-  <p>Insights on jaw tension, nervous system regulation, and functional beauty.</p>
-</div>
-<div class="blog-grid">
-  <div class="blog-posts">${postCards.length > 0 ? postCards : '<p style="font-family:Epilogue,sans-serif;color:#B9A590;grid-column:1/-1;text-align:center;padding:40px;">Posts coming soon.</p>'}</div>
-</div>
-<footer>
-  <p><a href="/">Home</a><a href="/services">Services</a><a href="sms:3059650145">Text Us</a></p>
-  <p style="margin-top:16px;">© 2026 Undertone SKN · Edgewater Miami FL</p>
-</footer>
-</body>
-</html>`;
-}
-
 module.exports = {
   getAllPosts, getPostBySlug, savePost, getNextTopic,
   slugify, renderPostHTML, renderBlogListHTML, getPostImage,
