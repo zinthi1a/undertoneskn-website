@@ -294,17 +294,146 @@ footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
 }
 
 function renderBlogListHTML(posts) {
-  const postCards = posts.map(post => `
-    <a href="/blog/${post.slug}" class="blog-card">
-      <div class="blog-card-img" style="background-image:url('${post.image || getPostImage(post.cluster)}');background-size:cover;background-position:center;"></div>
-      <div class="blog-card-body">
-        <p class="blog-card-cat">${post.cluster || 'Wellness'}</p>
-        <h3 class="blog-card-title">${post.title}</h3>
-        <p class="blog-card-date">${new Date(post.date).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}</p>
-        <span class="blog-card-link">Read →</span>
+  const postCards = posts.map((post, i) => `
+    <a href="/blog/${post.slug}" class="blog-card ${i === 0 ? 'blog-card-featured' : ''}">
+      <div class="blog-card-img" style="background-image:url('${post.image || getPostImage(post.cluster)}');background-size:cover;background-position:center;">
+        <div class="blog-card-overlay"></div>
+        <div class="blog-card-content">
+          <p class="blog-card-cat">${(post.cluster || 'wellness').replace(/-/g, ' ')}</p>
+          <h3 class="blog-card-title">${post.title}</h3>
+          <p class="blog-card-date">${new Date(post.date).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}</p>
+          <span class="blog-card-link">Read →</span>
+        </div>
       </div>
     </a>
   `).join('');
+
+  const emptyState = `
+    <div style="grid-column:1/-1;text-align:center;padding:80px 24px;">
+      <p style="font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:3px;color:#B9A590;text-transform:uppercase;margin-bottom:16px;">Coming Soon</p>
+      <p style="font-family:'Lato',sans-serif;font-size:24px;font-weight:300;color:#F6F3EC;">Posts are being prepared.</p>
+    </div>
+  `;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal | Undertone SKN Miami</title>
+<meta name="description" content="Insights on jaw tension, nervous system regulation, and functional beauty from Undertone SKN in Edgewater Miami.">
+<link rel="canonical" href="https://www.undertoneskn.com/blog">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TTZ4VVK');</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Epilogue:wght@300;400;500&family=Syne+Mono&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--cream-1:#F6F3EC;--cream-2:#ECE4DA;--taupe:#B9A590;--brown-dark:#574C3F;--brown-darkest:#36302A;--text-primary:#36302A;--text-secondary:#574C3F;--text-light:#B9A590}
+html{scroll-behavior:smooth}
+body{background:var(--brown-darkest);color:var(--cream-1);font-family:'Epilogue',sans-serif}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--brown-darkest);border-bottom:1px solid rgba(185,165,144,0.1);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--cream-1);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-family:'Epilogue',sans-serif;font-size:13px;color:var(--taupe);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--cream-1)}
+.nav-links a.active{color:var(--cream-1);text-decoration:underline;text-underline-offset:4px}
+.nav-cta{font-family:'Syne Mono',monospace;font-size:12px;color:var(--cream-1)!important;letter-spacing:1px;border-bottom:1px solid var(--taupe);padding-bottom:2px}
+
+/* HERO */
+.blog-hero{background:var(--brown-darkest);padding:100px 60px 60px;margin-top:56px;border-bottom:1px solid rgba(185,165,144,0.1)}
+.blog-hero-label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--taupe);text-transform:uppercase;margin-bottom:16px}
+.blog-hero h1{font-family:'Lato',sans-serif;font-size:clamp(48px,7vw,96px);font-weight:300;color:var(--cream-1);letter-spacing:6px;margin-bottom:16px;line-height:1}
+.blog-hero p{font-family:'Epilogue',sans-serif;font-size:14px;color:var(--taupe);max-width:440px;line-height:1.8}
+
+/* GRID */
+.blog-grid{padding:48px 60px 80px;background:var(--brown-darkest)}
+.blog-posts{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1200px;margin:0 auto}
+
+/* CARD */
+.blog-card{text-decoration:none;display:block;position:relative;overflow:hidden}
+.blog-card-img{height:320px;position:relative;overflow:hidden}
+.blog-card:hover .blog-card-img img{transform:scale(1.04)}
+.blog-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(36,30,26,0.95) 0%,rgba(36,30,26,0.3) 60%,transparent 100%);transition:background 0.3s}
+.blog-card:hover .blog-card-overlay{background:linear-gradient(to top,rgba(36,30,26,0.98) 0%,rgba(36,30,26,0.5) 60%,rgba(36,30,26,0.1) 100%)}
+.blog-card-content{position:absolute;bottom:0;left:0;right:0;padding:24px}
+.blog-card-cat{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--taupe);text-transform:uppercase;margin-bottom:8px}
+.blog-card-title{font-family:'Lato',sans-serif;font-size:17px;font-weight:300;color:var(--cream-1);line-height:1.3;margin-bottom:10px}
+.blog-card-date{font-family:'Syne Mono',monospace;font-size:9px;color:rgba(185,165,144,0.6);letter-spacing:1px;margin-bottom:8px}
+.blog-card-link{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--taupe);text-transform:uppercase;opacity:0;transform:translateY(4px);transition:opacity 0.2s,transform 0.2s}
+.blog-card:hover .blog-card-link{opacity:1;transform:translateY(0)}
+
+/* FEATURED CARD */
+.blog-card-featured .blog-card-img{height:480px}
+.blog-card-featured .blog-card-title{font-size:22px}
+
+/* FOOTER */
+footer{background:var(--brown-darkest);border-top:1px solid rgba(185,165,144,0.1);padding:40px 60px;text-align:center}
+footer p{font-family:'Epilogue',sans-serif;font-size:12px;color:var(--taupe)}
+footer a{color:var(--taupe);text-decoration:none;margin:0 12px;transition:color 0.2s}
+footer a:hover{color:var(--cream-1)}
+
+/* FLOATING TEXT ME */
+.floating-btn{position:fixed;bottom:28px;right:28px;z-index:999;display:flex;align-items:center;gap:10px;background:var(--brown-darkest);border:1px solid var(--taupe);padding:12px 20px;text-decoration:none;transition:background 0.2s;box-shadow:0 4px 24px rgba(0,0,0,0.3)}
+.floating-btn span{font-family:'Syne Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--cream-1);text-transform:uppercase}
+.floating-btn:hover{background:var(--brown-dark)}
+
+@media(max-width:900px){.blog-posts{grid-template-columns:1fr 1fr}.blog-card-featured .blog-card-img{height:320px}}
+@media(max-width:600px){.blog-posts{grid-template-columns:1fr}.blog-grid,.blog-hero{padding:48px 24px}nav{padding:0 24px}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<!-- GTM noscript -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTZ4VVK" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav>
+  <a href="/" class="nav-logo">UNDERTONE SKN</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/blog" class="active">Journal</a></li>
+    <li><a href="sms:3059650145" class="nav-cta">TEXT ME</a></li>
+  </ul>
+</nav>
+
+<div class="blog-hero">
+  <p class="blog-hero-label">Undertone SKN · Edgewater Miami</p>
+  <h1>JOURNAL</h1>
+  <p>Insights on jaw tension, nervous system regulation, and functional beauty.</p>
+</div>
+
+<div class="blog-grid">
+  <div class="blog-posts">
+    ${posts.length > 0 ? postCards : emptyState}
+  </div>
+</div>
+
+<footer>
+  <p style="margin-bottom:16px;">
+    <a href="/">Home</a>
+    <a href="/services">Services</a>
+    <a href="/blog">Journal</a>
+    <a href="sms:3059650145">Text Us</a>
+  </p>
+  <p>© 2026 Undertone SKN · 2915 Biscayne Blvd Suite 200-29 · Edgewater Miami FL 33137</p>
+</footer>
+
+<a href="sms:3059650145" class="floating-btn">
+  <span>💬</span><span>Text Me</span>
+</a>
+
+</body>
+</html>`;
+}
 
   return `<!DOCTYPE html>
 <html lang="en">
