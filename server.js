@@ -339,7 +339,27 @@ app.get('/blog/:slug', async (req, res) => {
 // API
 app.get('/api/posts', async (req, res) => {
   const posts = await getAllPosts();
-  res.json(posts.map(p => ({ slug: p.slug, title: p.title, excerpt: p.excerpt, date: p.date, cluster: p.cluster, image: p.image })));
+  res.json(posts.map(p => ({ slug: p.slug, title: p.title, metaDescription: p.metaDescription, excerpt: p.excerpt, date: p.date, cluster: p.cluster, image: p.image })));
+});
+
+// API — get single post by slug (for CRM editor)
+app.get('/api/post/:slug', async (req, res) => {
+  const post = await getPostBySlug(req.params.slug);
+  if (!post) return res.status(404).json({ error: 'Not found' });
+  res.json(post);
+});
+
+// GBP JSON endpoint — for CRM integration
+app.get('/admin/gbp-json', async (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!getWeeklyGBPPost) return res.status(500).json({ error: 'GBP agent not available' });
+  try {
+    const posts = await getAllPosts();
+    if (posts.length === 0) return res.status(404).json({ error: 'No posts' });
+    const gbpPost = await getWeeklyGBPPost(posts[0]);
+    res.json(gbpPost);
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/generate-post', async (req, res) => {
