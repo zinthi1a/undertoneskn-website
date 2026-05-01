@@ -108,10 +108,75 @@ async function uploadToCloudinary(base64Image) {
 }
 
 // ============================================================
+// PUBMED CITATION SEARCH — finds real relevant studies
+// Uses free NCBI E-utilities API — no key needed
+// ============================================================
+async function searchPubMedCitations(topic, count = 2) {
+  try {
+    console.log(`[PUBMED] Searching for citations on: ${topic}`);
+
+    // Build search query from topic
+    const query = encodeURIComponent(topic.replace(/['"]/g, ''));
+
+    // Step 1 — Search for article IDs
+    const searchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${query}&retmax=${count * 3}&retmode=json&sort=relevance`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+    const ids = searchData.esearchresult?.idlist || [];
+
+    if (ids.length === 0) {
+      console.log('[PUBMED] No results found');
+      return [];
+    }
+
+    // Step 2 — Fetch article details
+    const summaryUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.slice(0, count * 2).join(',')}&retmode=json`;
+    const summaryRes = await fetch(summaryUrl);
+    const summaryData = await summaryRes.json();
+
+    const citations = [];
+    const articles = summaryData.result || {};
+
+    for (const id of ids.slice(0, count * 2)) {
+      const article = articles[id];
+      if (!article || !article.title) continue;
+
+      const title = article.title.replace(/<[^>]*>/g, '').trim();
+      const authors = article.authors?.slice(0, 2).map(a => a.name).join(', ') || 'et al';
+      const year = article.pubdate?.split(' ')[0] || '';
+      const journal = article.source || '';
+      const pmcid = article.articleids?.find(a => a.idtype === 'pmc')?.value;
+      const url = pmcid
+        ? `https://pmc.ncbi.nlm.nih.gov/articles/${pmcid}/`
+        : `https://pubmed.ncbi.nlm.nih.gov/${id}/`;
+
+      citations.push({ title, authors, year, journal, url, pmid: id });
+
+      if (citations.length >= count) break;
+    }
+
+    console.log(`[PUBMED] ✅ Found ${citations.length} citations`);
+    return citations;
+
+  } catch (error) {
+    console.error('[PUBMED] Search error:', error.message);
+    return [];
+  }
+}
+
+// ============================================================
 // GENERATE A NEW BLOG POST
 // ============================================================
 async function generateBlogPost(topicData) {
   console.log(`[BLOG AGENT] Generating post: ${topicData.topic}`);
+
+  // Search for real PubMed citations first
+  const citations = await searchPubMedCitations(topicData.topic, 2);
+
+  const citationContext = citations.length > 0
+    ? `Use these REAL citations in the post — link to these exact URLs:
+${citations.map((c, i) => `${i + 1}. "${c.title}" by ${c.authors} (${c.year}), ${c.journal}. URL: ${c.url}`).join('\n')}`
+    : 'No citations found — write without citations rather than fabricating them.';
 
   const prompt = `You are writing a blog post for Undertone SKN, a somatic facial studio in Edgewater Miami run by Zinthia Garcia. 
 
@@ -121,10 +186,13 @@ Write a complete, SEO-optimized blog post on this topic: "${topicData.topic}"
 
 Target keywords to include naturally: ${(topicData.keywords || []).join(', ')}
 
+CITATION INSTRUCTIONS:
+${citationContext}
+NEVER fabricate or invent citation URLs. Only use the URLs provided above.
+
 REQUIREMENTS:
 - 800-1200 words
 - Write in Zinthia's voice — first person where appropriate
-- Include at least 2 real citations from PubMed, scientific journals, or credible experts
 - Structure with H2 headings
 - Include a clear intro that hooks the reader immediately
 - End with a soft CTA connecting to jaw tension release or booking
@@ -136,7 +204,7 @@ OUTPUT FORMAT — return valid JSON only, no markdown, no backticks:
 {
   "title": "SEO-optimized title under 60 characters",
   "metaDescription": "Meta description under 155 characters with primary keyword",
-  "content": "Full HTML content with <h2>, <p>, <ul>, <li> tags only. No divs. Include real citation links as <a href='URL' target='_blank' rel='noopener'>Author, Year</a>",
+  "content": "Full HTML content with <h2>, <p>, <ul>, <li> tags only. No divs. Citation links formatted as <a href='URL' target='_blank' rel='noopener'>Author et al, Year</a>",
   "excerpt": "2-3 sentence summary for blog listing"
 }`;
 
