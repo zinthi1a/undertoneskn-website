@@ -19,21 +19,20 @@ const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET || 'blog_i
 async function generateBlogImage(title, cluster) {
 
   const promptMap = {
-    'jaw-tension': 'Abstract anatomical illustration of human jaw bone and masseter muscle structure, warm amber tones on deep dark background, X-ray editorial art style, minimalist medical illustration, no people, no faces, conceptual wellness',
-    'nervous-system': 'Abstract illustration of glowing neural pathways and nervous system energy flowing through dark space, electric gold and warm amber lines, dynamic and flowing, editorial science art, no people, no faces',
-    'fascia': 'Abstract layered tissue texture illustration, translucent warm golden layers overlapping like fabric or silk, editorial anatomical art, dark moody background, no people, no faces',
-    'stress-face': 'Abstract dramatic contrast illustration of tension and release, dark deep shadows with warm amber light breaking through, editorial art, conceptual, no people, no faces',
-    'functional-beauty': 'Abstract minimalist luxury wellness illustration, clean geometric forms in warm gold on dark background, editorial high-end brand aesthetic, architectural feeling, no people',
-    'miami-local': 'Abstract tropical architectural illustration, warm golden light through dark palm shadows, editorial Miami luxury aesthetic, geometric and clean, no people',
-    'symptoms': 'Abstract conceptual illustration of pressure and release, fluid dark forms with warm amber highlights, editorial medical art, tension and relief contrast, no people, no faces',
-    'buccal-modality': 'Abstract editorial wellness illustration, warm earth tones and gold on dark background, minimalist anatomical concept art, luxury spa aesthetic, no people, no faces',
-    'after-session': 'Abstract illustration of calm and openness, soft warm golden light expanding through dark space, editorial wellness art, peaceful and expansive feeling, no people',
-    'stress-face': 'Abstract dramatic tension and release, deep shadows with warm breaking light, editorial conceptual art, no people, no faces',
-    'wellness': 'Abstract anatomical illustration of skin and tissue layers, warm earth tones, dark background, minimalist editorial medical art, conceptual wellness, no people, no faces'
+    'jaw-tension': 'Detailed medical anatomy illustration of human jaw and temporomandibular joint, warm sepia and gold tones on dark background, vintage anatomy atlas style, cross-section view, fine ink detail, no full face, no complete person, editorial scientific art',
+    'nervous-system': 'Detailed medical illustration of human nervous system pathways, glowing neural network branches in warm amber and gold on deep dark background, vintage anatomy atlas meets bioluminescence, fine detail, no face, no complete person',
+    'fascia': 'Detailed medical illustration of fascial tissue layers, translucent warm golden connective tissue webs, cross-section anatomy, vintage scientific illustration style, warm earth tones on dark background, fine detail, no face, no complete person',
+    'stress-face': 'Detailed medical anatomy illustration of facial muscle groups, warm sepia tones on dark background, vintage anatomy atlas style, fine ink lines showing muscular tension patterns, partial anatomical view, no complete face, editorial scientific',
+    'functional-beauty': 'Detailed medical illustration of facial circulation and lymphatic pathways, warm golden flowing lines on dark background, vintage anatomy atlas style, beautiful and scientific, no complete face, no complete person, fine detail',
+    'miami-local': 'Detailed medical anatomy illustration of facial structure and bone, warm amber and sepia tones on deep dark background, vintage scientific atlas style, architectural and precise, no complete face, editorial luxury scientific',
+    'symptoms': 'Detailed medical illustration of pressure points and tension pathways in the head and jaw, warm amber tones on dark background, vintage anatomy atlas style, cross-section view, fine ink detail, no complete face, no complete person',
+    'buccal-modality': 'Detailed medical illustration of jaw musculature and oral anatomy, warm sepia and gold tones on dark background, vintage anatomy atlas style, fine ink cross-section, no complete face, editorial scientific art',
+    'after-session': 'Detailed medical illustration of relaxed facial musculature and open circulation, warm golden tones on dark background, vintage anatomy atlas style, before and after tension concept, soft fine detail, no complete face, no complete person',
+    'wellness': 'Detailed medical illustration of skin layers and tissue anatomy, warm earth tones cross-section on dark background, vintage scientific atlas style, fine ink detail, beautiful and precise, no face, no complete person'
   };
 
   const prompt = promptMap[cluster] || promptMap['wellness'];
-  const negativePrompt = 'cartoon, illustration, text, watermark, logo, bright colors, white background, plastic skin, fake, AI looking, ugly, deformed';
+  const negativePrompt = 'complete face, full portrait, realistic person, photo of person, woman, man, AI face, plastic skin, cartoon, text, watermark, logo, bright colors, white background, ugly, deformed, CGI render, 3D render';
 
   try {
     console.log(`[IMAGE GEN] Generating image for cluster: ${cluster}`);
