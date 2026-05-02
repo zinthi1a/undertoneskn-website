@@ -163,6 +163,9 @@ const BLOG_IMAGES = {
   'stress-face': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428426/6.jpeg_hqpsvt.webp','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/2.jpeg_vbx2mu.webp'],
   'functional-beauty': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428459/studio_photo_exyuoh.jpg'],
   'miami-local': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428425/3.jpeg_tgmryi.webp'],
+  'symptoms': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428426/6.jpeg_hqpsvt.webp'],
+  'buccal-modality': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/2.jpeg_vbx2mu.webp','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428425/5.jpeg_ycnvzu.webp'],
+  'after-session': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428459/studio_photo_exyuoh.jpg','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg'],
   'wellness': ['https://res.cloudinary.com/dera3kj2v/image/upload/v1777428462/oval_photo_uhbc5i.jpg','https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp']
 };
 
@@ -172,31 +175,127 @@ function getPostImage(cluster) {
 }
 
 // ============================================================
-// TOPIC CLUSTERS
+// TOPIC CLUSTERS — 107 topics = 35+ weeks of content
 // ============================================================
 const TOPIC_CLUSTERS = [
-  { topic: "Why your jaw holds tension even when you think you're relaxed", cluster: "jaw-tension", keywords: ["jaw tension Miami", "TMJ relief", "jaw clenching"] },
-  { topic: "The connection between TMJ and chronic headaches", cluster: "jaw-tension", keywords: ["TMJ headaches", "jaw tension headaches Miami"] },
+
+  // ── JAW TENSION (14)
+  { topic: "Why your jaw holds tension even when you think you're relaxed", cluster: "jaw-tension", keywords: ["jaw tension Miami", "jaw clenching relief", "jaw tension release"] },
+  { topic: "The connection between jaw tension and chronic headaches", cluster: "jaw-tension", keywords: ["jaw tension headaches Miami", "jaw clenching headaches"] },
   { topic: "Why grinding your teeth at night is a nervous system signal", cluster: "jaw-tension", keywords: ["bruxism nervous system", "teeth grinding jaw tension"] },
   { topic: "What happens to your face when you clench your jaw for years", cluster: "jaw-tension", keywords: ["jaw clenching face", "jaw tension facial changes"] },
+  { topic: "Why your jaw clenches during sleep without you knowing", cluster: "jaw-tension", keywords: ["jaw clenching sleep", "nighttime jaw tension"] },
+  { topic: "Why stress goes straight to your jaw before anywhere else", cluster: "jaw-tension", keywords: ["stress jaw tension", "jaw stress response"] },
+  { topic: "What a tight masseter muscle actually feels like from the inside", cluster: "jaw-tension", keywords: ["masseter muscle tension", "tight masseter Miami"] },
+  { topic: "Why jaw tension gets worse during work deadlines", cluster: "jaw-tension", keywords: ["jaw tension stress work", "clenching at work"] },
+  { topic: "The difference between jaw clenching and jaw grinding", cluster: "jaw-tension", keywords: ["clenching vs grinding", "bruxism vs clenching"] },
+  { topic: "Why women clench their jaws more than men", cluster: "jaw-tension", keywords: ["women jaw tension", "jaw clenching women Miami"] },
+  { topic: "What your jaw tension is trying to tell you", cluster: "jaw-tension", keywords: ["jaw tension meaning", "jaw holding patterns"] },
+  { topic: "Why releasing the jaw changes the whole face", cluster: "jaw-tension", keywords: ["jaw release facial change", "jaw tension facial sculpting"] },
+  { topic: "Why one side of your jaw is tighter than the other", cluster: "jaw-tension", keywords: ["jaw asymmetry tension", "one side jaw tight"] },
+  { topic: "What intraoral jaw work is and how it releases deep tension", cluster: "jaw-tension", keywords: ["intraoral jaw work Miami", "jaw tension release inside"] },
+
+  // ── NERVOUS SYSTEM (14)
   { topic: "How stress lives in your face and what to do about it", cluster: "nervous-system", keywords: ["stress face nervous system", "facial tension stress Miami"] },
   { topic: "What nervous system regulation actually feels like in your body", cluster: "nervous-system", keywords: ["nervous system regulation", "somatic nervous system Miami"] },
   { topic: "Why your face feels tight when you're anxious", cluster: "nervous-system", keywords: ["anxiety facial tension", "face tight anxiety"] },
   { topic: "The vagus nerve and facial tension", cluster: "nervous-system", keywords: ["vagus nerve facial tension", "vagus nerve somatic work"] },
+  { topic: "What happens to your face when you finally feel safe", cluster: "nervous-system", keywords: ["nervous system safety face", "face relaxation nervous system"] },
+  { topic: "Why the nervous system holds tension in the face specifically", cluster: "nervous-system", keywords: ["nervous system face tension", "face nervous system signal"] },
+  { topic: "The connection between shallow breathing and facial tension", cluster: "nervous-system", keywords: ["breathing facial tension", "shallow breath face tight"] },
+  { topic: "Why screen time is making your face tighter", cluster: "nervous-system", keywords: ["screen time facial tension", "tech neck jaw tension Miami"] },
+  { topic: "The link between poor sleep and facial holding patterns", cluster: "nervous-system", keywords: ["sleep facial tension", "poor sleep face Miami"] },
+  { topic: "Why your face relaxes during vacation but tightens back up at home", cluster: "nervous-system", keywords: ["vacation face relax", "stress return face tension"] },
+  { topic: "What happens neurologically when facial tension releases", cluster: "nervous-system", keywords: ["neuroscience facial release", "nervous system facial Miami"] },
+  { topic: "Why some people hold tension in their forehead and others in their jaw", cluster: "nervous-system", keywords: ["forehead tension vs jaw tension", "where stress lives face"] },
+  { topic: "Why deep breathing alone doesn't release facial tension", cluster: "nervous-system", keywords: ["breathing not enough facial tension", "somatic facial work Miami"] },
+  { topic: "The fight or flight response and what it does to your face", cluster: "nervous-system", keywords: ["fight or flight face tension", "stress response facial holding"] },
+
+  // ── FASCIA (11)
   { topic: "What is facial fascia and why does it get stuck", cluster: "fascia", keywords: ["facial fascia Miami", "fascia release face"] },
   { topic: "How fascia holds emotional stress in the face", cluster: "fascia", keywords: ["fascia emotional stress face", "somatic fascia Miami"] },
   { topic: "The science behind fascia release and visible facial changes", cluster: "fascia", keywords: ["fascia release facial sculpting", "fascia Miami"] },
+  { topic: "Why facial fascia tightens with age and stress", cluster: "fascia", keywords: ["fascia aging face", "facial fascia tightening Miami"] },
+  { topic: "The difference between tight skin and tight fascia", cluster: "fascia", keywords: ["tight skin vs tight fascia", "fascia vs skin face"] },
+  { topic: "Why fascia release feels emotional sometimes", cluster: "fascia", keywords: ["emotional fascia release", "fascia emotional release Miami"] },
+  { topic: "How fascia connects your jaw to your scalp", cluster: "fascia", keywords: ["jaw fascia scalp connection", "facial fascia network"] },
+  { topic: "Why your face feels puffy when fascia is restricted", cluster: "fascia", keywords: ["facial puffiness fascia", "fascia restriction face Miami"] },
+  { topic: "What fascia hydration actually means for the face", cluster: "fascia", keywords: ["fascia hydration face", "hydrated fascia facial Miami"] },
+  { topic: "Why scar tissue in the face affects fascia everywhere", cluster: "fascia", keywords: ["scar tissue face fascia", "facial scar tissue release"] },
+  { topic: "Myofascial release for the face — what the research says", cluster: "fascia", keywords: ["myofascial release face Miami", "facial myofascial release"] },
+
+  // ── STRESS FACE (11)
   { topic: "Why high-achieving women hold stress in their faces", cluster: "stress-face", keywords: ["stress face women Miami", "facial tension high stress"] },
   { topic: "What chronic stress does to your facial structure over time", cluster: "stress-face", keywords: ["chronic stress face", "stress facial aging Miami"] },
   { topic: "Why your face looks tired even when you slept well", cluster: "stress-face", keywords: ["tired face not tired", "facial heaviness stress Miami"] },
+  { topic: "Why your face holds the memory of every hard year", cluster: "stress-face", keywords: ["stress face aging", "face holds stress Miami"] },
+  { topic: "Why ambitious people have tighter faces", cluster: "stress-face", keywords: ["ambitious women face tension", "high achiever jaw tension"] },
+  { topic: "The face you make at your desk and what it costs you", cluster: "stress-face", keywords: ["desk face tension", "work facial tension Miami"] },
+  { topic: "Why your face looks different in photos than in the mirror", cluster: "stress-face", keywords: ["face asymmetry photos", "face tension asymmetry"] },
+  { topic: "What burnout looks like on the face", cluster: "stress-face", keywords: ["burnout face Miami", "burnout facial tension"] },
+  { topic: "Why the face ages faster under chronic stress", cluster: "stress-face", keywords: ["stress facial aging Miami", "chronic stress face aging"] },
+  { topic: "Why you look angry even when you're not", cluster: "stress-face", keywords: ["resting tension face", "angry face resting tension Miami"] },
+  { topic: "What grief does to facial structure over time", cluster: "stress-face", keywords: ["grief face holding", "emotional stress facial structure"] },
+
+  // ── FUNCTIONAL BEAUTY (11)
   { topic: "What is functional beauty and why it's different from skincare", cluster: "functional-beauty", keywords: ["functional beauty Miami", "somatic facial beauty"] },
   { topic: "Why visible lift happens when the nervous system releases", cluster: "functional-beauty", keywords: ["facial lift nervous system", "natural facial lift Miami"] },
   { topic: "Why your skin looks better when your face is less tense", cluster: "functional-beauty", keywords: ["skin tension release", "skin nervous system Miami"] },
-  { topic: "Where to find jaw tension release therapy in Edgewater Miami", cluster: "miami-local", keywords: ["jaw tension release Edgewater Miami", "somatic facial Edgewater"] },
+  { topic: "Why Botox doesn't fix what tension created", cluster: "functional-beauty", keywords: ["Botox alternative Miami", "facial tension vs Botox"] },
+  { topic: "The difference between looking rested and looking treated", cluster: "functional-beauty", keywords: ["natural facial results Miami", "rested vs treated face"] },
+  { topic: "Why structural facial changes outlast any product", cluster: "functional-beauty", keywords: ["facial structure changes Miami", "lasting facial results"] },
+  { topic: "What real facial lift looks like vs filler lift", cluster: "functional-beauty", keywords: ["natural facial lift vs filler Miami", "facial lift without filler"] },
+  { topic: "The role of circulation in natural facial radiance", cluster: "functional-beauty", keywords: ["facial circulation radiance Miami", "natural facial glow"] },
+  { topic: "Why your skincare stops working when you're stressed", cluster: "functional-beauty", keywords: ["skincare stress Miami", "stress skincare ineffective"] },
+  { topic: "What happens to collagen when the face is chronically tense", cluster: "functional-beauty", keywords: ["collagen facial tension", "tension collagen face Miami"] },
+  { topic: "Why functional beauty is the future of skincare", cluster: "functional-beauty", keywords: ["functional beauty future", "somatic skincare Miami"] },
+
+  // ── MIAMI LOCAL (10)
+  { topic: "Where to find jaw tension release in Edgewater Miami", cluster: "miami-local", keywords: ["jaw tension release Edgewater Miami", "somatic facial Edgewater"] },
   { topic: "The best somatic facial studio in Miami", cluster: "miami-local", keywords: ["somatic facial Miami", "best facial studio Miami"] },
   { topic: "Facial sculpting in Edgewater Miami — what to expect", cluster: "miami-local", keywords: ["facial sculpting Edgewater Miami", "facial sculpting Miami"] },
   { topic: "Jaw tension release near Brickell and Wynwood Miami", cluster: "miami-local", keywords: ["jaw tension release Brickell", "jaw tension release Wynwood Miami"] },
+  { topic: "Why Miami women are choosing somatic facial work over Botox", cluster: "miami-local", keywords: ["Miami somatic facial Botox alternative", "Miami facial tension release"] },
+  { topic: "What to expect at your first session at Undertone SKN", cluster: "miami-local", keywords: ["Undertone SKN first session", "jaw tension release Miami first time"] },
+  { topic: "Why Brickell professionals are booking jaw tension release", cluster: "miami-local", keywords: ["Brickell jaw tension", "Miami professionals facial tension"] },
+  { topic: "Somatic facial work in Miami — what makes it different", cluster: "miami-local", keywords: ["somatic facial Miami difference", "Miami facial sculpting unique"] },
+  { topic: "Why Wynwood creatives are choosing nervous system facials", cluster: "miami-local", keywords: ["Wynwood facial Miami", "creative professionals jaw tension Miami"] },
+  { topic: "The best facial for jaw tension in Miami in 2026", cluster: "miami-local", keywords: ["best jaw tension facial Miami 2026", "Miami facial 2026"] },
+
+  // ── SYMPTOMS (10)
+  { topic: "Why does my face feel heavy when I wake up", cluster: "symptoms", keywords: ["face feels heavy morning", "facial heaviness waking up Miami"] },
+  { topic: "Why do I always look tired even when I'm not", cluster: "symptoms", keywords: ["always look tired face", "tired looking face Miami"] },
+  { topic: "Why does my jaw hurt when I wake up", cluster: "symptoms", keywords: ["jaw hurts morning", "jaw pain waking up Miami"] },
+  { topic: "Why does my face feel tight all the time", cluster: "symptoms", keywords: ["face feels tight all the time", "chronic facial tightness Miami"] },
+  { topic: "Why does one side of my face look different than the other", cluster: "symptoms", keywords: ["face asymmetry", "one side face different Miami"] },
+  { topic: "Why do I clench my jaw at night", cluster: "symptoms", keywords: ["jaw clenching night", "nocturnal jaw clenching Miami"] },
+  { topic: "Why does my face feel puffy in the morning", cluster: "symptoms", keywords: ["morning face puffiness", "facial puffiness morning Miami"] },
+  { topic: "Why do I feel pressure in my face and head", cluster: "symptoms", keywords: ["face head pressure", "facial pressure tension Miami"] },
+  { topic: "Why does my jaw click or pop", cluster: "symptoms", keywords: ["jaw clicking popping", "jaw click release Miami"] },
+  { topic: "Why do I get headaches that start in my jaw", cluster: "symptoms", keywords: ["jaw headaches", "headaches from jaw tension Miami"] },
+
+  // ── BUCCAL & MODALITY KEYWORDS (11)
+  { topic: "What is buccal massage and how does jaw tension release compare", cluster: "buccal-modality", keywords: ["buccal massage Miami", "buccal facial Miami", "buccal massage vs jaw release"] },
+  { topic: "Buccal facial in Miami — what to know before you book", cluster: "buccal-modality", keywords: ["buccal facial Miami", "buccal massage Edgewater"] },
+  { topic: "Why people searching for buccal massage end up choosing somatic work", cluster: "buccal-modality", keywords: ["buccal massage alternative Miami", "somatic vs buccal facial"] },
+  { topic: "What is intraoral massage and who is it for", cluster: "buccal-modality", keywords: ["intraoral massage Miami", "intraoral facial work"] },
+  { topic: "Gua sha for jaw tension — does it actually work", cluster: "buccal-modality", keywords: ["gua sha jaw tension", "gua sha facial Miami"] },
+  { topic: "Face reflexology — what it is and what it misses", cluster: "buccal-modality", keywords: ["face reflexology Miami", "facial reflexology tension"] },
+  { topic: "Lymphatic facial drainage in Miami — what to expect", cluster: "buccal-modality", keywords: ["lymphatic facial drainage Miami", "facial lymphatic massage Miami"] },
+  { topic: "Why people seeking facial acupressure end up here", cluster: "buccal-modality", keywords: ["facial acupressure Miami", "acupressure jaw tension"] },
+  { topic: "Natural alternatives to Botox for jaw tension in Miami", cluster: "buccal-modality", keywords: ["natural Botox alternative Miami", "Botox jaw tension alternative"] },
+  { topic: "What TMJ natural relief actually looks like in practice", cluster: "buccal-modality", keywords: ["TMJ natural relief Miami", "TMJ without medication"] },
+  { topic: "TMJ and face asymmetry — the facial tension connection", cluster: "buccal-modality", keywords: ["TMJ face asymmetry", "jaw tension facial asymmetry Miami"] },
+
+  // ── AFTER THE SESSION (5)
+  { topic: "What to expect after your first jaw tension release session", cluster: "after-session", keywords: ["after jaw tension release Miami", "first facial session results"] },
+  { topic: "Why you might feel emotional after a somatic facial session", cluster: "after-session", keywords: ["emotional after facial Miami", "somatic release emotions"] },
+  { topic: "Why your face looks different the day after a session", cluster: "after-session", keywords: ["face after session Miami", "facial results next day"] },
+  { topic: "How often should you get jaw tension release work done", cluster: "after-session", keywords: ["jaw tension release frequency Miami", "how often facial session"] },
+  { topic: "What to do between sessions to maintain results", cluster: "after-session", keywords: ["between sessions jaw tension", "maintain facial results Miami"] },
+
 ];
+
 
 // ============================================================
 // EXISTING POSTS TO ENHANCE
