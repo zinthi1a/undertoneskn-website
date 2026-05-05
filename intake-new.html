@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>New Client Intake — Undertone SKN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef;
+  --surface:#ffffff;
+  --surface-2:#ebe7df;
+  --border:#ddd9d2;
+  --border-strong:#c9c4ba;
+  --gold:#a07840;
+  --gold-soft:rgba(160,120,64,0.08);
+  --gold-medium:rgba(160,120,64,0.18);
+  --text:#1c1b18;
+  --text-soft:#3a3935;
+  --muted:#8a8580;
+  --success:#4a7a58;
+  --error:#a05050;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--text);min-height:100vh;}
+body{
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ── HEADER */
+.shell{max-width:560px;margin:0 auto;padding:32px 24px 64px;}
+.brand{text-align:center;margin-bottom:32px;}
+.brand-mark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;
+  font-weight:300;
+  letter-spacing:0.14em;
+}
+.brand-sub{
+  font-size:9px;
+  letter-spacing:0.32em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-top:6px;
+}
+
+/* ── PROGRESS */
+.progress{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:8px;
+}
+.progress-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--border-strong);
+  transition:all 0.3s ease;
+}
+.progress-dot.complete{background:var(--gold);}
+.progress-dot.current{
+  background:var(--gold);
+  transform:scale(1.4);
+  box-shadow:0 0 0 4px var(--gold-soft);
+}
+.progress-label{
+  text-align:center;
+  font-size:9px;
+  letter-spacing:0.28em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:36px;
+}
+
+/* ── CARD */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:3px;
+  padding:36px 28px 32px;
+  box-shadow:0 1px 0 rgba(28,27,24,0.02);
+}
+
+.step{display:none;animation:fadeUp 0.4s ease;}
+.step.active{display:block;}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.step-eyebrow{
+  font-size:9px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.step-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;
+  font-weight:300;
+  line-height:1.15;
+  margin-bottom:8px;
+  letter-spacing:0.01em;
+}
+.step-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:28px;
+  line-height:1.6;
+}
+
+/* ── FIELDS */
+.field{margin-bottom:22px;}
+.field-label{
+  display:block;
+  font-size:10px;
+  letter-spacing:0.22em;
+  color:var(--text-soft);
+  text-transform:uppercase;
+  margin-bottom:9px;
+  font-weight:400;
+}
+.field-label .req{color:var(--gold);margin-left:2px;}
+.field-help{
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:9px;
+  margin-top:-4px;
+  font-style:italic;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+  font-size:14px;
+  padding:13px 14px;
+  border-radius:2px;
+  outline:none;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+input::placeholder,textarea::placeholder{color:var(--muted);}
+textarea{
+  resize:vertical;
+  min-height:88px;
+  line-height:1.6;
+}
+
+select{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='%23a07840' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  background-size:10px;
+  padding-right:36px;
+}
+
+input.error,select.error,textarea.error{border-color:var(--error);}
+.field-error{
+  font-size:11px;
+  color:var(--error);
+  margin-top:6px;
+  display:none;
+}
+.field-error.show{display:block;}
+
+/* Pre-filled (from URL) */
+input[readonly]{
+  background:var(--surface-2);
+  color:var(--muted);
+  cursor:not-allowed;
+}
+
+/* ── PILLS (single-select buttons) */
+.pill-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.pill{
+  flex:1;
+  min-width:auto;
+  padding:11px 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text-soft);
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+  font-size:12px;
+  cursor:pointer;
+  border-radius:2px;
+  text-align:center;
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill:active{transform:scale(0.98);}
+.pill.selected{
+  background:var(--gold-soft);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* ── CHIPS (multi-select) */
+.chip-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.chip{
+  padding:9px 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text-soft);
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+  font-size:12px;
+  cursor:pointer;
+  border-radius:24px;
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.chip:active{transform:scale(0.96);}
+.chip.selected{
+  background:var(--gold-soft);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* ── CHECKBOXES (consent) */
+.consent-list{display:flex;flex-direction:column;gap:14px;}
+.consent-item{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:2px;
+  cursor:pointer;
+  transition:border-color 0.15s;
+}
+.consent-item:hover{border-color:var(--border-strong);}
+.consent-item.required-mark{border-left:2px solid var(--gold);}
+.consent-item input[type=checkbox]{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.consent-box{
+  width:18px;
+  height:18px;
+  border:1.5px solid var(--border-strong);
+  border-radius:2px;
+  flex-shrink:0;
+  margin-top:1px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--surface);
+  transition:all 0.15s;
+}
+.consent-item.checked .consent-box{
+  background:var(--gold);
+  border-color:var(--gold);
+}
+.consent-box::after{
+  content:'';
+  width:5px;
+  height:9px;
+  border-right:2px solid var(--surface);
+  border-bottom:2px solid var(--surface);
+  transform:rotate(45deg) translate(-1px,-1px);
+  opacity:0;
+  transition:opacity 0.15s;
+}
+.consent-item.checked .consent-box::after{opacity:1;}
+.consent-text{flex:1;font-size:12px;line-height:1.6;color:var(--text);}
+.consent-text strong{font-weight:400;color:var(--text);}
+.consent-text .small{font-size:10px;color:var(--muted);display:block;margin-top:3px;line-height:1.5;}
+
+/* ── NAVIGATION */
+.nav-row{
+  display:flex;
+  gap:10px;
+  margin-top:32px;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+}
+.btn{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  padding:15px 24px;
+  border-radius:2px;
+  cursor:pointer;
+  border:none;
+  transition:opacity 0.2s,background 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{
+  flex:1;
+  background:var(--gold);
+  color:#fff;
+}
+.btn-primary:hover{opacity:0.88;}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-secondary{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--border);
+  padding:15px 20px;
+}
+.btn-secondary:hover{color:var(--text);border-color:var(--border-strong);}
+
+/* ── SUCCESS */
+.success{
+  display:none;
+  text-align:center;
+  padding:40px 20px;
+}
+.success.show{display:block;animation:fadeUp 0.5s ease;}
+.success-mark{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:var(--gold-soft);
+  border:1px solid var(--gold);
+  margin:0 auto 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.success-mark svg{width:24px;height:24px;}
+.success-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;
+  font-weight:300;
+  margin-bottom:14px;
+  letter-spacing:0.01em;
+}
+.success-body{
+  font-size:13px;
+  line-height:1.7;
+  color:var(--text-soft);
+  max-width:380px;
+  margin:0 auto;
+}
+
+/* ── FOOTER */
+.footer-note{
+  text-align:center;
+  font-size:10px;
+  letter-spacing:0.18em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-top:32px;
+}
+
+/* ── MOBILE refinements */
+@media (max-width:480px){
+  .shell{padding:24px 18px 40px;}
+  .card{padding:28px 20px 24px;}
+  .step-title{font-size:26px;}
+  .pill{font-size:11px;padding:10px 10px;}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="brand">
+    <div class="brand-mark">Undertone SKN</div>
+    <div class="brand-sub">New Client Intake</div>
+  </div>
+
+  <div class="progress" id="progress">
+    <div class="progress-dot current" data-dot="1"></div>
+    <div class="progress-dot" data-dot="2"></div>
+    <div class="progress-dot" data-dot="3"></div>
+    <div class="progress-dot" data-dot="4"></div>
+    <div class="progress-dot" data-dot="5"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">Step 1 of 5</div>
+
+  <div class="card">
+
+    <!-- ════════════════════════════════════════ STEP 1 ════════════════════════════════════════ -->
+    <section class="step active" data-step="1">
+      <div class="step-eyebrow">Section 1</div>
+      <h1 class="step-title">Welcome.<br>Let's start with the basics.</h1>
+      <p class="step-sub">A few details so we can prepare for your session and keep your file private to you.</p>
+
+      <div class="field">
+        <label class="field-label" for="name">Full name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" autocomplete="name" required>
+        <div class="field-error" data-error-for="name">Please enter your name.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="email">Email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required>
+        <div class="field-error" data-error-for="email">Please enter a valid email.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="phone">Phone <span class="req">*</span></label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="(305) 555-1234" required>
+        <div class="field-error" data-error-for="phone">Please enter a valid phone number.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="dob">Date of birth <span class="req">*</span></label>
+        <input type="date" id="dob" name="dob" required>
+        <div class="field-error" data-error-for="dob">Please enter your date of birth.</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ STEP 2 ════════════════════════════════════════ -->
+    <section class="step" data-step="2">
+      <div class="step-eyebrow">Section 2</div>
+      <h1 class="step-title">About you<br>and your skin.</h1>
+      <p class="step-sub">Tap all that apply.</p>
+
+      <div class="field">
+        <label class="field-label" for="source">How did you hear about Undertone? <span class="req">*</span></label>
+        <select id="source" name="source" required>
+          <option value="">Select one</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Google search">Google search</option>
+          <option value="Friend / referral">Friend or referral</option>
+          <option value="Walk-by (Edgewater)">Walked by — Edgewater</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Yelp">Yelp</option>
+          <option value="Other">Other</option>
+        </select>
+        <div class="field-error" data-error-for="source">Please choose one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">What's going on with your skin right now? <span class="req">*</span></label>
+        <div class="field-help">Tap all that apply</div>
+        <div class="chip-grid" id="concernsGrid" data-multi="concerns">
+          <div class="chip" data-value="Dehydrated">Dehydrated</div>
+          <div class="chip" data-value="Inflamed">Inflamed</div>
+          <div class="chip" data-value="Congested">Congested</div>
+          <div class="chip" data-value="Barrier compromised">Barrier compromised</div>
+          <div class="chip" data-value="Reactive">Reactive</div>
+          <div class="chip" data-value="Dull">Dull</div>
+          <div class="chip" data-value="Puffiness">Puffiness</div>
+          <div class="chip" data-value="Redness">Redness</div>
+          <div class="chip" data-value="Aging concerns">Aging concerns</div>
+          <div class="chip" data-value="Acne / breakouts">Acne / breakouts</div>
+          <div class="chip" data-value="Hyperpigmentation">Hyperpigmentation</div>
+          <div class="chip" data-value="Sensitivity">Sensitivity</div>
+        </div>
+        <div class="field-error" data-error-for="concerns">Please choose at least one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="goals">What would you love to see change? <span class="req">*</span></label>
+        <textarea id="goals" name="goals" placeholder="What are you hoping to feel or see after a few sessions?" required></textarea>
+        <div class="field-error" data-error-for="goals">Please share your goals.</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ STEP 3 ════════════════════════════════════════ -->
+    <section class="step" data-step="3">
+      <div class="step-eyebrow">Section 3</div>
+      <h1 class="step-title">Body<br>and nervous system.</h1>
+      <p class="step-sub">Skin reflects what's happening inside. These help us tailor your session.</p>
+
+      <div class="field">
+        <label class="field-label">Current stress level <span class="req">*</span></label>
+        <div class="pill-row" data-single="stress">
+          <div class="pill" data-value="Low">Low</div>
+          <div class="pill" data-value="Moderate">Moderate</div>
+          <div class="pill" data-value="High">High</div>
+          <div class="pill" data-value="Overwhelmed">Overwhelmed</div>
+        </div>
+        <div class="field-error" data-error-for="stress">Please choose one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Sleep quality lately <span class="req">*</span></label>
+        <div class="pill-row" data-single="sleep">
+          <div class="pill" data-value="Good">Good</div>
+          <div class="pill" data-value="Okay">Okay</div>
+          <div class="pill" data-value="Poor">Poor</div>
+        </div>
+        <div class="field-error" data-error-for="sleep">Please choose one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Do you clench your jaw or grind your teeth? <span class="req">*</span></label>
+        <div class="pill-row" data-single="clench">
+          <div class="pill" data-value="Often">Often</div>
+          <div class="pill" data-value="Sometimes">Sometimes</div>
+          <div class="pill" data-value="Never">Never</div>
+        </div>
+        <div class="field-error" data-error-for="clench">Please choose one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="tension">Any chronic tension areas? <span style="color:var(--muted);font-weight:300;">(optional)</span></label>
+        <textarea id="tension" name="tension" placeholder="Jaw, neck, shoulders, eye area, scalp..."></textarea>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ STEP 4 ════════════════════════════════════════ -->
+    <section class="step" data-step="4">
+      <div class="step-eyebrow">Section 4</div>
+      <h1 class="step-title">Safety<br>and history.</h1>
+      <p class="step-sub">This stays in your private file. It's how we work safely with your skin.</p>
+
+      <div class="field">
+        <label class="field-label" for="allergies">Allergies or sensitivities <span class="req">*</span></label>
+        <div class="field-help">Products, ingredients, latex, fragrance, etc. Type "none" if none.</div>
+        <textarea id="allergies" name="allergies" required></textarea>
+        <div class="field-error" data-error-for="allergies">Please tell us — or type "none".</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="products">What are you using on your skin right now? <span class="req">*</span></label>
+        <div class="field-help">Cleansers, serums, retinol, acids, SPF, prescriptions...</div>
+        <textarea id="products" name="products" required></textarea>
+        <div class="field-error" data-error-for="products">Please share what you're using.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="treatments">Recent treatments (last 6 months) <span class="req">*</span></label>
+        <div class="field-help">Botox, filler, peels, lasers, microneedling. Type "none" if none.</div>
+        <textarea id="treatments" name="treatments" required></textarea>
+        <div class="field-error" data-error-for="treatments">Please share — or type "none".</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="medical">Medical conditions or medications relevant to facial work <span class="req">*</span></label>
+        <div class="field-help">Autoimmune, hormonal, blood thinners, accutane history, etc. Type "none" if none.</div>
+        <textarea id="medical" name="medical" required></textarea>
+        <div class="field-error" data-error-for="medical">Please share — or type "none".</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Currently pregnant or nursing? <span class="req">*</span></label>
+        <div class="pill-row" data-single="pregnancy">
+          <div class="pill" data-value="Yes">Yes</div>
+          <div class="pill" data-value="No">No</div>
+          <div class="pill" data-value="Prefer not to say">Prefer not to say</div>
+        </div>
+        <div class="field-error" data-error-for="pregnancy">Please choose one.</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ STEP 5 ════════════════════════════════════════ -->
+    <section class="step" data-step="5">
+      <div class="step-eyebrow">Section 5 · Final</div>
+      <h1 class="step-title">Almost done.<br>A few consents.</h1>
+      <p class="step-sub">Your file stays private to Zinthia and Undertone SKN.</p>
+
+      <div class="consent-list">
+
+        <label class="consent-item required-mark" data-consent="photoPrivate">
+          <input type="checkbox" id="photoPrivate" name="photoPrivate" required>
+          <span class="consent-box"></span>
+          <span class="consent-text">
+            <strong>Before/after photos for my private file</strong>
+            <span class="small">Used internally to track your progress over time. Never shared without separate permission.</span>
+          </span>
+        </label>
+
+        <label class="consent-item" data-consent="photoMarketing">
+          <input type="checkbox" id="photoMarketing" name="photoMarketing">
+          <span class="consent-box"></span>
+          <span class="consent-text">
+            <strong>Anonymous before/after for Undertone's marketing <span style="color:var(--muted);font-weight:300;">(optional)</span></strong>
+            <span class="small">Photos cropped to the treatment area only. Never your full face. You can withdraw consent anytime.</span>
+          </span>
+        </label>
+
+        <label class="consent-item required-mark" data-consent="cancelPolicy">
+          <input type="checkbox" id="cancelPolicy" name="cancelPolicy" required>
+          <span class="consent-box"></span>
+          <span class="consent-text">
+            <strong>Cancellation policy</strong>
+            <span class="small">15-min grace period. Late arrivals after 15 min are treated as no-shows and charged 100% of the service. Cancellations within 24 hours forfeit the deposit. Deposits are non-transferable.</span>
+          </span>
+        </label>
+
+        <label class="consent-item required-mark" data-consent="dataPrivacy">
+          <input type="checkbox" id="dataPrivacy" name="dataPrivacy" required>
+          <span class="consent-box"></span>
+          <span class="consent-text">
+            <strong>Data privacy</strong>
+            <span class="small">I understand this information will be stored securely in Undertone's private client system, used only to provide my care, and never shared or sold.</span>
+          </span>
+        </label>
+
+      </div>
+
+      <div class="field" style="margin-top:24px;">
+        <label class="field-label" for="anythingElse">Anything else Zinthia should know? <span style="color:var(--muted);font-weight:300;">(optional)</span></label>
+        <textarea id="anythingElse" name="anythingElse" placeholder="Anything that would help your session land better."></textarea>
+      </div>
+
+      <div class="field-error" id="step5Error" style="margin-top:8px;">Please check the required boxes.</div>
+    </section>
+
+    <!-- ════════════════════════════════════════ SUCCESS ════════════════════════════════════════ -->
+    <div class="success" id="success">
+      <div class="success-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#a07840" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="success-title">Thank you.</div>
+      <div class="success-body">Your intake is on the way to Zinthia. She'll review it before your session so the time you spend together is fully focused on you.</div>
+    </div>
+
+    <!-- ════════════════════════════════════════ NAV ════════════════════════════════════════ -->
+    <div class="nav-row" id="navRow">
+      <button type="button" class="btn btn-secondary" id="backBtn" style="display:none;">← Back</button>
+      <button type="button" class="btn btn-primary" id="nextBtn">Continue</button>
+    </div>
+
+  </div>
+
+  <div class="footer-note">Undertone SKN · Edgewater Miami</div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════
+const TOTAL_STEPS = 5;
+let currentStep = 1;
+const formData = {
+  name:'', email:'', phone:'', dob:'',
+  source:'', concerns:[], goals:'',
+  stress:'', sleep:'', clench:'', tension:'',
+  allergies:'', products:'', treatments:'', medical:'', pregnancy:'',
+  photoPrivate:false, photoMarketing:false, cancelPolicy:false, dataPrivacy:false,
+  anythingElse:''
+};
+
+// ══════════════════════════════════════════════════════════════════════
+// PRE-FILL FROM URL (?email=...&phone=...)
+// ══════════════════════════════════════════════════════════════════════
+(function prefillFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get('email');
+  const phone = params.get('phone');
+  if(email){
+    const el = document.getElementById('email');
+    el.value = email;
+    el.setAttribute('readonly', 'true');
+    formData.email = email;
+  }
+  if(phone){
+    const el = document.getElementById('phone');
+    el.value = phone;
+    el.setAttribute('readonly', 'true');
+    formData.phone = phone;
+  }
+})();
+
+// ══════════════════════════════════════════════════════════════════════
+// PILL (single-select) HANDLERS
+// ══════════════════════════════════════════════════════════════════════
+document.querySelectorAll('[data-single]').forEach(group => {
+  const fieldName = group.dataset.single;
+  group.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      group.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+      pill.classList.add('selected');
+      formData[fieldName] = pill.dataset.value;
+      hideError(fieldName);
+    });
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// CHIP (multi-select) HANDLERS
+// ══════════════════════════════════════════════════════════════════════
+document.querySelectorAll('[data-multi]').forEach(grid => {
+  const fieldName = grid.dataset.multi;
+  grid.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('selected');
+      const selected = [...grid.querySelectorAll('.chip.selected')].map(c => c.dataset.value);
+      formData[fieldName] = selected;
+      if(selected.length > 0) hideError(fieldName);
+    });
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// CONSENT (checkbox) HANDLERS
+// ══════════════════════════════════════════════════════════════════════
+document.querySelectorAll('[data-consent]').forEach(item => {
+  const fieldName = item.dataset.consent;
+  const cb = item.querySelector('input[type=checkbox]');
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    cb.checked = !cb.checked;
+    item.classList.toggle('checked', cb.checked);
+    formData[fieldName] = cb.checked;
+    document.getElementById('step5Error').classList.remove('show');
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// VALIDATION
+// ══════════════════════════════════════════════════════════════════════
+function showError(fieldName){
+  const errEl = document.querySelector(`[data-error-for="${fieldName}"]`);
+  if(errEl) errEl.classList.add('show');
+  const inputEl = document.getElementById(fieldName);
+  if(inputEl) inputEl.classList.add('error');
+}
+
+function hideError(fieldName){
+  const errEl = document.querySelector(`[data-error-for="${fieldName}"]`);
+  if(errEl) errEl.classList.remove('show');
+  const inputEl = document.getElementById(fieldName);
+  if(inputEl) inputEl.classList.remove('error');
+}
+
+function validateEmail(v){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+function validatePhone(v){
+  // Allow various formats — must have at least 10 digits
+  const digits = v.replace(/\D/g, '');
+  return digits.length >= 10;
+}
+
+function validateStep(step){
+  let ok = true;
+
+  if(step === 1){
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const dob = document.getElementById('dob').value.trim();
+
+    if(!name){showError('name');ok=false;} else {formData.name = name;hideError('name');}
+    if(!validateEmail(email)){showError('email');ok=false;} else {formData.email = email;hideError('email');}
+    if(!validatePhone(phone)){showError('phone');ok=false;} else {formData.phone = phone;hideError('phone');}
+    if(!dob){showError('dob');ok=false;} else {formData.dob = dob;hideError('dob');}
+  }
+
+  if(step === 2){
+    const source = document.getElementById('source').value;
+    const concerns = formData.concerns;
+    const goals = document.getElementById('goals').value.trim();
+
+    if(!source){showError('source');ok=false;} else {formData.source = source;hideError('source');}
+    if(!concerns || concerns.length === 0){showError('concerns');ok=false;}
+    if(!goals){showError('goals');ok=false;} else {formData.goals = goals;hideError('goals');}
+  }
+
+  if(step === 3){
+    if(!formData.stress){showError('stress');ok=false;}
+    if(!formData.sleep){showError('sleep');ok=false;}
+    if(!formData.clench){showError('clench');ok=false;}
+    formData.tension = document.getElementById('tension').value.trim();
+  }
+
+  if(step === 4){
+    const allergies = document.getElementById('allergies').value.trim();
+    const products = document.getElementById('products').value.trim();
+    const treatments = document.getElementById('treatments').value.trim();
+    const medical = document.getElementById('medical').value.trim();
+
+    if(!allergies){showError('allergies');ok=false;} else {formData.allergies=allergies;hideError('allergies');}
+    if(!products){showError('products');ok=false;} else {formData.products=products;hideError('products');}
+    if(!treatments){showError('treatments');ok=false;} else {formData.treatments=treatments;hideError('treatments');}
+    if(!medical){showError('medical');ok=false;} else {formData.medical=medical;hideError('medical');}
+    if(!formData.pregnancy){showError('pregnancy');ok=false;}
+  }
+
+  if(step === 5){
+    if(!formData.photoPrivate || !formData.cancelPolicy || !formData.dataPrivacy){
+      document.getElementById('step5Error').classList.add('show');
+      ok = false;
+    }
+    formData.anythingElse = document.getElementById('anythingElse').value.trim();
+  }
+
+  return ok;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════════════
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`.step[data-step="${n}"]`);
+  if(target) target.classList.add('active');
+
+  // Progress dots
+  document.querySelectorAll('.progress-dot').forEach(dot => {
+    const num = parseInt(dot.dataset.dot);
+    dot.classList.remove('current','complete');
+    if(num < n) dot.classList.add('complete');
+    if(num === n) dot.classList.add('current');
+  });
+
+  document.getElementById('progressLabel').textContent = `Step ${n} of ${TOTAL_STEPS}`;
+
+  // Buttons
+  document.getElementById('backBtn').style.display = n > 1 ? 'block' : 'none';
+  document.getElementById('nextBtn').textContent = n === TOTAL_STEPS ? 'Submit' : 'Continue';
+
+  window.scrollTo({top:0, behavior:'smooth'});
+  currentStep = n;
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if(!validateStep(currentStep)) return;
+  if(currentStep < TOTAL_STEPS){
+    showStep(currentStep + 1);
+  } else {
+    submit();
+  }
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if(currentStep > 1) showStep(currentStep - 1);
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════════════════════════════
+async function submit(){
+  const btn = document.getElementById('nextBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  // Build payload for CRM
+  const payload = {
+    formType: 'new_client',
+    submittedAt: new Date().toISOString(),
+    ...formData
+  };
+
+  try {
+    // POST to CRM intake endpoint (placeholder — wire up next)
+    const response = await fetch('/api/intake-submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    // For preview/dev: succeed even if endpoint doesn't exist yet
+    if(!response.ok && response.status !== 404){
+      throw new Error('Submission failed');
+    }
+  } catch(e){
+    console.warn('Intake submission (will be wired to CRM):', e.message);
+    console.log('Payload:', payload);
+  }
+
+  // Show success regardless (during preview phase)
+  showSuccess();
+}
+
+function showSuccess(){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('navRow').style.display = 'none';
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('progressLabel').style.display = 'none';
+  document.getElementById('success').classList.add('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════════
+showStep(1);
+</script>
+
+</body>
+</html>
