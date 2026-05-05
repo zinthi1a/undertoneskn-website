@@ -4,7 +4,6 @@
 // Runs automatically 3x per week (Mon, Wed, Fri)
 // ============================================================
 
-const fetch = require('node-fetch');
 const { getNextTopic, savePost, slugify, getAllPosts, EXISTING_POSTS, getPostImage } = require('./blog-engine');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
