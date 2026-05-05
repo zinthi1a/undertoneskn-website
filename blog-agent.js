@@ -112,16 +112,29 @@ async function uploadToCloudinary(base64Image) {
 
 // ============================================================
 // PUBMED CITATION SEARCH — finds real relevant studies
-// Uses free NCBI E-utilities API — no key needed
 // ============================================================
-async function searchPubMedCitations(topic, count = 2) {
+async function searchPubMedCitations(topic, keywords, count = 2) {
   try {
-    console.log(`[PUBMED] Searching for citations on: ${topic}`);
+    // Build a focused search query from keywords first, fall back to topic words
+    const searchTerms = keywords && keywords.length > 0
+      ? keywords[0].replace(/miami|edgewater|florida/gi, '').trim()
+      : topic.split(' ').filter(w => w.length > 4).slice(0, 4).join(' ');
 
-    // Build search query from topic
-    const query = encodeURIComponent(topic.replace(/['"]/g, ''));
+    // Clean up the query
+    const cleanQuery = searchTerms
+      .replace(/['"?!]/g, '')
+      .replace(/\b(what|why|how|does|your|when|even|just|about|that|this|with|from|have|they|their|than|into|more|some|been|will|also|would|could|should|after|first|every)\b/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim();
 
-    // Step 1 — Search for article IDs
+    if (!cleanQuery || cleanQuery.length < 4) {
+      console.log('[PUBMED] Query too short, skipping');
+      return [];
+    }
+
+    console.log(`[PUBMED] Searching: "${cleanQuery}"`);
+    const query = encodeURIComponent(cleanQuery);
+
     const searchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${query}&retmax=${count * 3}&retmode=json&sort=relevance`;
     const searchRes = await fetch(searchUrl);
     const searchData = await searchRes.json();
@@ -132,7 +145,6 @@ async function searchPubMedCitations(topic, count = 2) {
       return [];
     }
 
-    // Step 2 — Fetch article details
     const summaryUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.slice(0, count * 2).join(',')}&retmode=json`;
     const summaryRes = await fetch(summaryUrl);
     const summaryData = await summaryRes.json();
@@ -143,7 +155,6 @@ async function searchPubMedCitations(topic, count = 2) {
     for (const id of ids.slice(0, count * 2)) {
       const article = articles[id];
       if (!article || !article.title) continue;
-
       const title = article.title.replace(/<[^>]*>/g, '').trim();
       const authors = article.authors?.slice(0, 2).map(a => a.name).join(', ') || 'et al';
       const year = article.pubdate?.split(' ')[0] || '';
@@ -152,15 +163,12 @@ async function searchPubMedCitations(topic, count = 2) {
       const url = pmcid
         ? `https://pmc.ncbi.nlm.nih.gov/articles/${pmcid}/`
         : `https://pubmed.ncbi.nlm.nih.gov/${id}/`;
-
       citations.push({ title, authors, year, journal, url, pmid: id });
-
       if (citations.length >= count) break;
     }
 
     console.log(`[PUBMED] ✅ Found ${citations.length} citations`);
     return citations;
-
   } catch (error) {
     console.error('[PUBMED] Search error:', error.message);
     return [];
@@ -174,7 +182,7 @@ async function generateBlogPost(topicData) {
   console.log(`[BLOG AGENT] Generating post: ${topicData.topic}`);
 
   // Search for real PubMed citations first
-  const citations = await searchPubMedCitations(topicData.topic, 2);
+  const citations = await searchPubMedCitations(topicData.topic, topicData.keywords, 2);
 
   const citationContext = citations.length > 0
     ? `Use these REAL citations in the post — link to these exact URLs:
