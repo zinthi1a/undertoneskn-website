@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { getAllPosts, getPostBySlug, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
+const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
 
 let getWeeklyGBPPost;
@@ -54,14 +54,7 @@ app.post('/api/update-post', async (req, res) => {
   const { slug, secret, title, metaDescription, content, excerpt } = req.body;
   if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
   try {
-    const { Client } = require('pg');
-    const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: false });
-    await client.connect();
-    await client.query(
-      'UPDATE blog_posts SET title=$1, meta_description=$2, content=$3, excerpt=$4 WHERE slug=$5',
-      [title, metaDescription, content, excerpt, slug]
-    );
-    await client.end();
+    await updatePost(slug, { title, metaDescription, content, excerpt });
     res.json({ success: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
@@ -71,11 +64,7 @@ app.post('/api/delete-post', async (req, res) => {
   const { slug, secret } = req.body;
   if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
   try {
-    const { Client } = require('pg');
-    const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: false });
-    await client.connect();
-    await client.query('DELETE FROM blog_posts WHERE slug=$1', [slug]);
-    await client.end();
+    await deletePost(slug);
     res.json({ success: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
