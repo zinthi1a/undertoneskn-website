@@ -449,12 +449,14 @@ app.get('/api/post/:slug', async (req, res) => {
 // GBP JSON endpoint — for CRM integration
 app.get('/admin/gbp-json', async (req, res) => {
   const secret = req.query.secret;
+  const slug = req.query.slug;
   if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
   if (!getWeeklyGBPPost) return res.status(500).json({ error: 'GBP agent not available' });
   try {
     const posts = await getAllPosts();
     if (posts.length === 0) return res.status(404).json({ error: 'No posts' });
-    const gbpPost = await getWeeklyGBPPost(posts[0]);
+    const post = slug ? posts.find(p => p.slug === slug) || posts[0] : posts[0];
+    const gbpPost = await getWeeklyGBPPost(post);
     res.json(gbpPost);
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
