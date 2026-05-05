@@ -2,26 +2,44 @@
 // UNDERTONE SKN — BLOG ENGINE (PostgreSQL)
 // ============================================================
 
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:OYSKYoNCScLVMKivGWSHExrmwcydTxNl@postgres.railway.internal:5432/railway';
 
 // ============================================================
-// DATABASE CONNECTION
+// CONNECTION POOL — single shared pool, persistent across requests
 // ============================================================
-async function getClient() {
-  const client = new Client({ connectionString: DATABASE_URL, ssl: false });
-  await client.connect();
-  return client;
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: false,
+  max: 10,                       // max concurrent connections
+  idleTimeoutMillis: 30000,      // close idle connections after 30s
+  connectionTimeoutMillis: 5000  // fail fast if Postgres is unreachable
+});
+
+pool.on('error', (err) => {
+  console.error('[DB] Unexpected pool error:', err.message);
+});
+
+// ============================================================
+// HTML ESCAPE — prevents broken pages from special chars in titles/excerpts
+// ============================================================
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ============================================================
 // INITIALIZE DATABASE — creates table if not exists
 // ============================================================
 async function initDB() {
-  const client = await getClient();
   try {
-    await client.query(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS blog_posts (
         id SERIAL PRIMARY KEY,
         slug VARCHAR(255) UNIQUE NOT NULL,
@@ -42,77 +60,61 @@ async function initDB() {
     console.log('[DB] ✅ Database initialized');
   } catch (err) {
     console.error('[DB] Init error:', err.message);
-  } finally {
-    await client.end();
   }
+}
+
+// ============================================================
+// ROW MAPPING HELPER
+// ============================================================
+function mapRow(row) {
+  return {
+    slug: row.slug,
+    title: row.title,
+    metaDescription: row.meta_description,
+    content: row.content,
+    excerpt: row.excerpt,
+    topic: row.topic,
+    cluster: row.cluster,
+    keywords: row.keywords,
+    image: row.image,
+    date: row.date ? row.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+    published: row.published,
+    enhanced: row.enhanced
+  };
 }
 
 // ============================================================
 // BLOG POST FUNCTIONS
 // ============================================================
 async function getAllPosts() {
-  const client = await getClient();
   try {
-    const result = await client.query(
+    const result = await pool.query(
       'SELECT * FROM blog_posts WHERE published = true ORDER BY date DESC, created_at DESC'
     );
-    return result.rows.map(row => ({
-      slug: row.slug,
-      title: row.title,
-      metaDescription: row.meta_description,
-      content: row.content,
-      excerpt: row.excerpt,
-      topic: row.topic,
-      cluster: row.cluster,
-      keywords: row.keywords,
-      image: row.image,
-      date: row.date ? row.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-      published: row.published,
-      enhanced: row.enhanced
-    }));
+    return result.rows.map(mapRow);
   } catch (err) {
     console.error('[DB] getAllPosts error:', err.message);
     return [];
-  } finally {
-    await client.end();
   }
 }
 
 async function getPostBySlug(slug) {
-  const client = await getClient();
   try {
-    const result = await client.query(
+    const result = await pool.query(
       'SELECT * FROM blog_posts WHERE slug = $1 AND published = true',
       [slug]
     );
     if (result.rows.length === 0) return null;
-    const row = result.rows[0];
-    return {
-      slug: row.slug,
-      title: row.title,
-      metaDescription: row.meta_description,
-      content: row.content,
-      excerpt: row.excerpt,
-      topic: row.topic,
-      cluster: row.cluster,
-      keywords: row.keywords,
-      image: row.image,
-      date: row.date ? row.date.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-      published: row.published,
-      enhanced: row.enhanced
-    };
+    return mapRow(result.rows[0]);
   } catch (err) {
     console.error('[DB] getPostBySlug error:', err.message);
     return null;
-  } finally {
-    await client.end();
   }
 }
 
 async function savePost(post) {
-  const client = await getClient();
   try {
-    await client.query(`
+    await pool.query(`
       INSERT INTO blog_posts (slug, title, meta_description, content, excerpt, topic, cluster, keywords, image, date, published, enhanced)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       ON CONFLICT (slug) DO UPDATE SET
@@ -132,8 +134,31 @@ async function savePost(post) {
   } catch (err) {
     console.error('[DB] savePost error:', err.message);
     throw err;
-  } finally {
-    await client.end();
+  }
+}
+
+// Update post — called by CRM Blog editor
+async function updatePost(slug, fields) {
+  try {
+    await pool.query(
+      'UPDATE blog_posts SET title=$1, meta_description=$2, content=$3, excerpt=$4 WHERE slug=$5',
+      [fields.title, fields.metaDescription, fields.content, fields.excerpt, slug]
+    );
+    return { success: true };
+  } catch (err) {
+    console.error('[DB] updatePost error:', err.message);
+    throw err;
+  }
+}
+
+// Delete post — called by CRM Blog editor
+async function deletePost(slug) {
+  try {
+    await pool.query('DELETE FROM blog_posts WHERE slug=$1', [slug]);
+    return { success: true };
+  } catch (err) {
+    console.error('[DB] deletePost error:', err.message);
+    throw err;
   }
 }
 
@@ -316,23 +341,30 @@ const EXISTING_POSTS = [
 ];
 
 // ============================================================
-// BLOG HTML RENDERERS
+// BLOG HTML RENDERERS — with HTML escaping for safety
 // ============================================================
 function renderPostHTML(post) {
+  const safeTitle = escapeHtml(post.title);
+  const safeMeta = escapeHtml(post.metaDescription);
+  const safeCluster = escapeHtml(post.cluster || 'Wellness');
+  const safeImage = escapeHtml(post.image || 'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg');
+  const safeSlug = escapeHtml(post.slug);
+  // post.content is intentional HTML from Claude — NOT escaped
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${post.title} | Undertone SKN Miami</title>
-<meta name="description" content="${post.metaDescription}">
-<meta property="og:title" content="${post.title}">
-<meta property="og:description" content="${post.metaDescription}">
-<meta property="og:image" content="${post.image || 'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg'}">
-<meta property="og:url" content="https://www.undertoneskn.com/blog/${post.slug}">
+<title>${safeTitle} | Undertone SKN Miami</title>
+<meta name="description" content="${safeMeta}">
+<meta property="og:title" content="${safeTitle}">
+<meta property="og:description" content="${safeMeta}">
+<meta property="og:image" content="${safeImage}">
+<meta property="og:url" content="https://www.undertoneskn.com/blog/${safeSlug}">
 <meta property="og:type" content="article">
-<link rel="canonical" href="https://www.undertoneskn.com/blog/${post.slug}">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${post.title}","datePublished":"${post.date}","author":{"@type":"Person","name":"Zinthia Garcia"},"publisher":{"@type":"Organization","name":"Undertone SKN"},"description":"${post.metaDescription}","image":"${post.image || ''}"}</script>
+<link rel="canonical" href="https://www.undertoneskn.com/blog/${safeSlug}">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":${JSON.stringify(post.title || '')},"datePublished":"${post.date}","author":{"@type":"Person","name":"Zinthia Garcia"},"publisher":{"@type":"Organization","name":"Undertone SKN"},"description":${JSON.stringify(post.metaDescription || '')},"image":${JSON.stringify(post.image || '')}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Epilogue:wght@300;400;500&family=Syne+Mono&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -342,7 +374,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--cream-1);bo
 .nav-logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-primary);text-decoration:none}
 .nav-back{font-family:'Syne Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--text-secondary);text-decoration:none}
 .post-hero{background:var(--brown-darkest);padding:100px 60px 60px;margin-top:56px}
-${post.image ? `.post-hero{background-image:linear-gradient(rgba(54,48,42,0.85),rgba(54,48,42,0.95)),url('${post.image}');background-size:cover;background-position:center}` : ''}
+${post.image ? `.post-hero{background-image:linear-gradient(rgba(54,48,42,0.85),rgba(54,48,42,0.95)),url('${encodeURI(post.image)}');background-size:cover;background-position:center}` : ''}
 .post-category{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--taupe);text-transform:uppercase;margin-bottom:16px}
 .post-title{font-family:'Lato',sans-serif;font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--cream-1);line-height:1.2;max-width:800px;margin-bottom:20px}
 .post-meta{font-family:'Syne Mono',monospace;font-size:11px;color:var(--taupe);letter-spacing:1px}
@@ -369,11 +401,11 @@ footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
   <a href="/blog" class="nav-back">← Journal</a>
 </nav>
 <div class="post-hero">
-  <p class="post-category">${post.cluster || 'Wellness'}</p>
-  <h1 class="post-title">${post.title}</h1>
+  <p class="post-category">${safeCluster}</p>
+  <h1 class="post-title">${safeTitle}</h1>
   <p class="post-meta">${new Date(post.date).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})} · By Zinthia Garcia · Undertone SKN, Edgewater Miami</p>
 </div>
-<div class="post-body">${post.content}</div>
+<div class="post-body">${post.content || ''}</div>
 <div class="post-author">
   <div class="author-info">
     <p>Zinthia Garcia</p>
@@ -393,19 +425,24 @@ footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
 }
 
 function renderBlogListHTML(posts) {
-  const postCards = posts.map((post, i) => `
-    <a href="/blog/${post.slug}" class="blog-card ${i === 0 ? 'blog-card-featured' : ''}">
-      <div class="blog-card-img" style="background-image:url('${post.image || getPostImage(post.cluster)}');background-size:cover;background-position:center;">
+  const postCards = posts.map((post, i) => {
+    const safeTitle = escapeHtml(post.title);
+    const safeCluster = escapeHtml((post.cluster || 'wellness').replace(/-/g, ' '));
+    const safeImage = encodeURI(post.image || getPostImage(post.cluster));
+    const safeSlug = escapeHtml(post.slug);
+    return `
+    <a href="/blog/${safeSlug}" class="blog-card ${i === 0 ? 'blog-card-featured' : ''}">
+      <div class="blog-card-img" style="background-image:url('${safeImage}');background-size:cover;background-position:center;">
         <div class="blog-card-overlay"></div>
         <div class="blog-card-content">
-          <p class="blog-card-cat">${(post.cluster || 'wellness').replace(/-/g, ' ')}</p>
-          <h3 class="blog-card-title">${post.title}</h3>
+          <p class="blog-card-cat">${safeCluster}</p>
+          <h3 class="blog-card-title">${safeTitle}</h3>
           <p class="blog-card-date">${new Date(post.date).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}</p>
           <span class="blog-card-link">Read →</span>
         </div>
       </div>
-    </a>
-  `).join('');
+    </a>`;
+  }).join('');
 
   const emptyState = `
     <div style="grid-column:1/-1;text-align:center;padding:80px 24px;">
@@ -535,7 +572,7 @@ footer a:hover{color:var(--cream-1)}
 }
 
 module.exports = {
-  getAllPosts, getPostBySlug, savePost, getNextTopic,
+  getAllPosts, getPostBySlug, savePost, updatePost, deletePost, getNextTopic,
   slugify, renderPostHTML, renderBlogListHTML, getPostImage,
   initDB, TOPIC_CLUSTERS, EXISTING_POSTS
 };
