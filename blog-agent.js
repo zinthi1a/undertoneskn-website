@@ -55,7 +55,7 @@ async function generateBlogImage(title, cluster) {
     }
     body += `--${boundary}--\r\n`;
 
-    const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
+    const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/ultra', {
       method: 'POST',
       headers: {
         'authorization': `Bearer ${STABILITY_API_KEY}`,
