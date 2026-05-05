@@ -1013,105 +1013,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
   }
 
-  /* ===================== BLOG PAGE ===================== */
+  /* ===================== SPA PAGES (home/services/faq) ===================== */
   .page { display: none; }
   .page.active { display: block; }
-
-  .blog-hero {
-    background: var(--cream-2);
-    padding: 80px 60px 60px;
-    margin-top: 56px;
-  }
-
-  .blog-hero h1 {
-    font-family: 'Lato', sans-serif;
-    font-size: clamp(36px, 5vw, 60px);
-    font-weight: 300;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-  }
-
-  .blog-hero p {
-    font-family: 'Epilogue', sans-serif;
-    font-size: 14px;
-    color: var(--text-secondary);
-  }
-
-  .blog-grid {
-    background: var(--cream-1);
-    padding: 60px;
-  }
-
-  .blog-posts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-    max-width: 1080px;
-    margin: 0 auto;
-  }
-
-  .blog-card {
-    background: var(--cream-2);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .blog-card:hover { transform: translateY(-3px); }
-
-  .blog-card-image {
-    width: 100%;
-    height: 200px;
-    background: var(--brown-dark);
-    object-fit: cover;
-  }
-
-  .blog-card-image-placeholder {
-    width: 100%;
-    height: 200px;
-    background: var(--brown-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .blog-card-body { padding: 24px; }
-
-  .blog-card-date {
-    font-family: 'Syne Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-light);
-    margin-bottom: 8px;
-  }
-
-  .blog-card-title {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--text-primary);
-    line-height: 1.4;
-    margin-bottom: 12px;
-  }
-
-  .blog-card-link {
-    font-family: 'Syne Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-bottom: 1px solid var(--taupe);
-    padding-bottom: 1px;
-  }
-
-  @media (max-width: 900px) {
-    .blog-posts { grid-template-columns: 1fr 1fr; }
-    .blog-grid, .blog-hero { padding: 48px 24px; }
-  }
-
-  @media (max-width: 600px) {
-    .blog-posts { grid-template-columns: 1fr; }
-  }
 
   /* ===================== FAQ PAGE ===================== */
   .faq-hero {
@@ -1836,7 +1740,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- SECTION 8: GALLERY -->
   <section class="section-gallery">
     <div class="gallery-strip">
-      <!-- Replace placeholders with actual images -->
       <div class="gallery-item"><img src="https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/1.jpg_xvd3oj.webp" alt="Undertone SKN" style="width:100%;height:100%;object-fit:cover;"></div>
       <div class="gallery-item"><img src="https://res.cloudinary.com/dera3kj2v/image/upload/v1777428424/2.jpeg_vbx2mu.webp" alt="Undertone SKN" style="width:100%;height:100%;object-fit:cover;"></div>
       <div class="gallery-item"><img src="https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg" alt="Undertone SKN" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -1949,19 +1852,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </div>
 
-<!-- =================== BLOG PAGE =================== -->
-<div id="page-blog" class="page">
-  <div class="blog-hero" style="margin-top: 56px;">
-    <h1>Journal</h1>
-    <p>Insights on jaw tension, nervous system regulation, and functional beauty.</p>
-  </div>
-  <div class="blog-grid">
-    <div class="blog-posts" id="blogPosts">
-      <!-- Posts rendered by JS -->
-    </div>
-  </div>
-</div>
-
 <!-- =================== FAQ PAGE =================== -->
 <div id="page-faq" class="page">
   <div class="faq-hero">
@@ -2022,21 +1912,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
   // =================== DATA ===================
-  const blogPosts = [
-    { date: "Jan 9, 2025", title: "How Face Sculpting Transforms Your Skin: A Complete Guide", slug: "how-face-sculpting-transforms-your-skin" },
-    { date: "Jan 9, 2025", title: "Why Face Sculpting is the Ultimate Cheat Code for a Sculpted Look", slug: "why-face-sculpting-is-the-ultimate-cheat-code" },
-    { date: "Jan 9, 2025", title: "Who Needs Botox When You Have Face Sculpting?", slug: "who-needs-botox-when-you-have-face-sculpting" },
-    { date: "Jan 9, 2025", title: "Who Benefits Most from Buccal Massage? Spoiler: It's Not Just Celebs – It's You Too", slug: "who-benefits-most-from-buccal-massage" },
-    { date: "Jan 9, 2025", title: "Why You're Seriously Missing Out If You Haven't Tried Buccal Massage Yet", slug: "why-youre-seriously-missing-out-if-you-havent-tried-buccal-massage-yet" },
-    { date: "Jan 9, 2025", title: "Unlock the Secret to a Natural Facelift with Buccal Massage", slug: "unlock-the-secret-to-a-natural-facelift-with-buccal-massage" },
-    { date: "Jan 9, 2025", title: "Discover Miami's Finest Facial Experience at Undertone Skn Facial Studio", slug: "undertone-skn-miami-facial-sculpting-studio" },
-    { date: "Apr 25, 2024", title: "How a professional facial can remove blackheads!", slug: "how-do-facials-help-with-blackheads" },
-    { date: "Apr 18, 2024", title: "Top 3 Benefits of DMK Enzyme Therapy for Acne Management", slug: "top-3-benefits-of-dmk-enzyme-therapy-for-acne-management" },
-    { date: "Apr 8, 2024", title: "Why Facial Peels Are Safe?", slug: "why-facial-peels-are-safe" },
-    { date: "Apr 3, 2024", title: "Overcoming Acne with Consistency and Targeted Treatments", slug: "overcoming-acne-with-consistency-and-targeted-treatments" },
-    { date: "Mar 6, 2024", title: "My Journey Beyond Acne Treatments", slug: "my-journey-beyond-acne-treatments" }
-  ];
-
   const faqs = [
     { q: "What services do you offer?", a: "Sessions focus on jaw tension release, facial sculpting, and nervous system regulation through hands-on fascia release work. Every session is tailored to what your face and nervous system needs that day." },
     { q: "How often should I come in?", a: "We recommend once a month for maintenance, but many clients come more frequently when working through chronic tension. During your first session Zinthia will recommend a personalized cadence." },
@@ -2056,21 +1931,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     { q: "What if I have specific skin concerns or allergies?", a: "Let us know before your session. We work with what your skin needs — no pressure, no products that don't serve you." },
     { q: "Do you work with people experiencing jaw tension or chronic facial holding?", a: "Yes. Many people who come to Undertone SKN carry chronic jaw tightness, facial holding patterns, stress-related facial pressure, and nervous system overload. This work is designed to support the face and nervous system — not replace medical care. We always recommend working alongside your healthcare provider." }
   ];
-
-  // =================== RENDER BLOG ===================
-  function renderBlog() {
-    const container = document.getElementById('blogPosts');
-    container.innerHTML = blogPosts.map(post => `
-      <div class="blog-card">
-        <div class="blog-card-image-placeholder"></div>
-        <div class="blog-card-body">
-          <p class="blog-card-date">${post.date}</p>
-          <h3 class="blog-card-title">${post.title}</h3>
-          <a href="https://www.undertoneskn.com/blog/${post.slug}" target="_blank" class="blog-card-link">Read More</a>
-        </div>
-      </div>
-    `).join('');
-  }
 
   // =================== RENDER FAQ ===================
   function renderFAQ() {
@@ -2093,7 +1953,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
     window.scrollTo(0, 0);
-    if (page === 'blog') renderBlog();
     if (page === 'faq') renderFAQ();
   }
 
