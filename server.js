@@ -10,7 +10,13 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
-app.use((req, res, next) => { res.setHeader('Access-Control-Allow-Origin', '*'); next(); });
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
 app.use(express.static(path.join(__dirname)));
 
 // SITEMAP — dynamic
@@ -240,17 +246,61 @@ app.post('/api/delete-post', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// GBP ADMIN PAGE
+// GBP ADMIN PAGE — select post + generate content
 app.get('/admin/gbp', async (req, res) => {
   const secret = req.query.secret;
+  const selectedSlug = req.query.slug;
   if (secret !== process.env.ADMIN_SECRET) return res.status(401).send('<h1>Unauthorized</h1>');
-  if (!getWeeklyGBPPost) return res.status(500).send('<h1>GBP agent not available. Upload gbp-agent.js</h1>');
+  if (!getWeeklyGBPPost) return res.status(500).send('<h1>GBP agent not available</h1>');
+
   try {
     const posts = await getAllPosts();
     if (posts.length === 0) return res.send('<h1>No blog posts yet</h1>');
-    const latestPost = posts[0];
-    const gbpPost = await getWeeklyGBPPost(latestPost);
-    const jpegUrl = gbpPost.image ? gbpPost.image.replace('/upload/', '/upload/f_jpg,q_90/') : null;
+
+    // If no slug selected, show post picker
+    if (!selectedSlug) {
+      const postList = posts.map(p => `
+        <a href="/admin/gbp?secret=${secret}&slug=${p.slug}" class="post-pick">
+          <div class="post-pick-title">${p.title}</div>
+          <div class="post-pick-meta">${(p.cluster||'wellness').replace(/-/g,' ')} · ${new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+        </a>
+      `).join('');
+
+      return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBP Admin — Undertone SKN</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#F6F3EC;font-family:'Lato',sans-serif;padding:40px 24px;min-height:100vh}
+.container{max-width:680px;margin:0 auto}
+.label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:#B9A590;text-transform:uppercase;margin-bottom:8px}
+h1{font-family:'Lato',sans-serif;font-size:32px;font-weight:300;color:#F6F3EC;margin-bottom:4px}
+.sub{font-size:13px;color:#444;margin-bottom:32px}
+.post-pick{display:block;padding:16px 20px;border-bottom:1px solid #1a1a1a;text-decoration:none;transition:background 0.15s}
+.post-pick:hover{background:#111}
+.post-pick-title{font-size:14px;color:#ECE4DA;margin-bottom:4px}
+.post-pick-meta{font-family:'Syne Mono',monospace;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="container">
+  <p class="label">Admin · GBP Content</p>
+  <h1>Pick a Blog Post</h1>
+  <p class="sub">Select which post to generate Google Business Profile content from</p>
+  ${postList}
+</div>
+</body>
+</html>`);
+    }
+
+    // Generate GBP content for selected post
+    const selectedPost = posts.find(p => p.slug === selectedSlug) || posts[0];
+    const gbpPost = await getWeeklyGBPPost(selectedPost);
+
     res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -264,55 +314,102 @@ body{background:#0a0a0a;color:#F6F3EC;font-family:'Lato',sans-serif;padding:40px
 .container{max-width:680px;margin:0 auto}
 .label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:#B9A590;text-transform:uppercase;margin-bottom:8px}
 h1{font-family:'Lato',sans-serif;font-size:32px;font-weight:300;color:#F6F3EC;margin-bottom:4px}
-.sub{font-size:13px;color:#444;margin-bottom:40px}
-.card{background:#111;border:1px solid #1e1e1e;padding:28px;margin-bottom:20px}
+.sub{font-size:13px;color:#444;margin-bottom:32px}
+.card{background:#111;border:1px solid #1e1e1e;padding:24px;margin-bottom:16px}
 .card-label{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:3px;color:#B9A590;text-transform:uppercase;margin-bottom:12px}
-.headline{font-size:20px;font-weight:400;color:#D4AF37}
-.body-text{font-size:14px;line-height:1.8;color:#ECE4DA;white-space:pre-wrap}
-.btn{display:block;width:100%;background:#B9A590;color:#0a0a0a;border:none;padding:13px;font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:12px;transition:background 0.2s;text-align:center;text-decoration:none}
+.headline{font-size:20px;font-weight:400;color:#D4AF37;margin-bottom:6px}
+.body-text{font-size:14px;line-height:1.8;color:#ECE4DA;white-space:pre-wrap;margin-bottom:12px}
+.char-count{font-family:'Syne Mono',monospace;font-size:10px;color:#333;margin-bottom:12px}
+.btn{display:block;width:100%;background:#B9A590;color:#0a0a0a;border:none;padding:12px;font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:background 0.2s;text-align:center;text-decoration:none}
 .btn:hover{background:#D4AF37}
-.btn.copied{background:#1e1e1e;color:#B9A590}
-.btn-outline{background:transparent;color:#B9A590;border:1px solid #333;margin-top:8px}
-.btn-outline:hover{border-color:#B9A590;color:#F6F3EC;background:transparent}
+.btn-dl{display:block;width:100%;background:#222;color:#B9A590;border:1px solid #333;padding:12px;font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px;text-align:center;text-decoration:none;transition:border-color 0.2s}
+.btn-dl:hover{border-color:#B9A590;color:#F6F3EC}
 .img-preview{width:100%;height:200px;object-fit:cover;display:block;margin-bottom:12px}
-.from-blog{font-size:11px;color:#333;margin-top:6px;font-family:'Syne Mono',monospace}
-.gbp-open{display:block;text-align:center;font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:#B9A590;text-decoration:none;border:1px solid #1e1e1e;padding:14px;margin-top:8px;transition:border-color 0.2s}
-.gbp-open:hover{border-color:#B9A590;color:#F6F3EC}
+.nav-links{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap}
+.nav-link{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:2px;color:#B9A590;text-decoration:none;border:1px solid #222;padding:8px 16px;transition:border-color 0.2s}
+.nav-link:hover{border-color:#B9A590;color:#F6F3EC}
+textarea.copy-area{width:100%;background:#0a0a0a;border:1px solid #222;color:#B9A590;padding:10px;font-family:'Syne Mono',monospace;font-size:11px;resize:none;margin-top:8px;line-height:1.6}
 </style>
 </head>
 <body>
 <div class="container">
-  <p class="label">Admin · Weekly Content</p>
+  <p class="label">Admin · GBP Content</p>
   <h1>Google Business Profile</h1>
-  <p class="sub">${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · From: ${gbpPost.blogTitle}</p>
+  <p class="sub">From: ${gbpPost.blogTitle}</p>
+
+  <div class="nav-links">
+    <a href="/admin/gbp?secret=${secret}" class="nav-link">← Pick Different Post</a>
+    <a href="/admin/gbp?secret=${secret}&slug=${selectedSlug}" class="nav-link">↻ Regenerate</a>
+    <a href="https://business.google.com/dashboard" target="_blank" class="nav-link">→ Open GBP</a>
+  </div>
+
   <div class="card">
     <p class="card-label">Headline</p>
     <p class="headline">${gbpPost.headline}</p>
-    <p class="from-blog">${gbpPost.headline.length}/58 characters</p>
-    <button class="btn" onclick="copyText('${gbpPost.headline.replace(/'/g,"\\'")}',this)">Copy Headline</button>
+    <p class="char-count">${gbpPost.headline.length}/58 characters</p>
+    <textarea class="copy-area" rows="2" id="headlineText" readonly>${gbpPost.headline}</textarea>
+    <button class="btn" onclick="copyField('headlineText',this)">Copy Headline</button>
   </div>
+
   <div class="card">
     <p class="card-label">Post Body</p>
     <p class="body-text">${gbpPost.body}</p>
-    <button class="btn" onclick="copyText(\`${gbpPost.body.replace(/`/g,'\\`')}\`,this)">Copy Post Body</button>
+    <textarea class="copy-area" rows="8" id="bodyText" readonly>${gbpPost.body}</textarea>
+    <button class="btn" onclick="copyField('bodyText',this)">Copy Post Body</button>
   </div>
+
   <div class="card">
     <p class="card-label">Button</p>
-    <p style="font-size:13px;color:#B9A590;margin-bottom:6px;">Label: <span style="color:#F6F3EC;">${gbpPost.buttonLabel}</span></p>
-    <p style="font-size:13px;color:#B9A590;">URL: <span style="color:#F6F3EC;word-break:break-all;">${gbpPost.buttonUrl}</span></p>
-    <button class="btn" onclick="copyText('${gbpPost.buttonUrl}',this)" style="margin-top:12px;">Copy Button URL</button>
+    <p style="font-size:13px;color:#B9A590;margin-bottom:4px;">Label: <span style="color:#F6F3EC;">${gbpPost.buttonLabel}</span></p>
+    <textarea class="copy-area" rows="2" id="buttonText" readonly>${gbpPost.buttonUrl}</textarea>
+    <button class="btn" onclick="copyField('buttonText',this)">Copy Button URL</button>
   </div>
+
+  ${gbpPost.image ? `
   <div class="card">
     <p class="card-label">Image</p>
-    ${gbpPost.image ? `<img src="${gbpPost.image}" class="img-preview" alt="Post image">` : '<p style="color:#444;font-size:13px;margin-bottom:12px;">No image available</p>'}
-    ${jpegUrl ? `<a href="${jpegUrl}" download="undertone-skn-gbp.jpg" class="btn">⬇ Download as JPEG</a>` : ''}
-    ${gbpPost.image ? `<button class="btn btn-outline" onclick="copyText('${gbpPost.image}',this)">Copy Image URL</button>` : ''}
-  </div>
-  <a href="https://business.google.com/dashboard" target="_blank" class="gbp-open">→ Open Google Business Profile</a>
-  <a href="/admin/gbp?secret=${secret}" class="gbp-open">↻ Regenerate Post</a>
+    <img src="${gbpPost.image}" class="img-preview" alt="Post image">
+    <button class="btn-dl" onclick="downloadImage('${gbpPost.image}')">⬇ Download Image</button>
+  </div>` : ''}
+
 </div>
 <script>
-function copyText(text,btn){navigator.clipboard.writeText(text).then(()=>{const orig=btn.textContent;btn.textContent='✓ Copied';btn.classList.add('copied');setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied')},2000)});}
+function copyField(id, btn) {
+  const el = document.getElementById(id);
+  el.select();
+  el.setSelectionRange(0, 99999);
+  try {
+    document.execCommand('copy');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.style.background = '#2a4a2a';
+    btn.style.color = '#4aaa4a';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '#B9A590';
+      btn.style.color = '#0a0a0a';
+    }, 2000);
+  } catch(e) {
+    navigator.clipboard.writeText(el.value).catch(() => alert('Copy failed — select text manually'));
+  }
+}
+
+async function downloadImage(url) {
+  try {
+    const jpegUrl = url.replace('/upload/', '/upload/f_jpg,q_90/');
+    const response = await fetch(jpegUrl);
+    const blob = await response.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'undertone-skn-gbp.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  } catch(e) {
+    alert('Download failed — try right-clicking the image and saving manually');
+  }
+}
 </script>
 </body>
 </html>`);
@@ -389,14 +486,28 @@ async function start() {
   await initDB();
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Undertone SKN running on port ${PORT}`);
+
+    let lastPublishDate = '';
     setInterval(async () => {
-      const hour = new Date().getHours();
-      if (hour === 8) {
-        try { await runScheduledAgent(); }
-        catch (e) { console.error('[SCHEDULER] Error:', e.message); }
-      }
-    }, 6 * 60 * 60 * 1000);
-    console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM');
+      try {
+        const now = new Date();
+        const estTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const hour = estTime.getHours();
+        const day = estTime.getDay(); // 0=Sun, 1=Mon, 3=Wed, 5=Fri
+        const dateStr = estTime.toDateString();
+        const isPublishDay = [1, 3, 5].includes(day);
+        const isPublishHour = hour === 8;
+        const alreadyPublished = lastPublishDate === dateStr;
+
+        if (isPublishDay && isPublishHour && !alreadyPublished) {
+          console.log('[SCHEDULER] Publishing day — running blog agent...');
+          lastPublishDate = dateStr;
+          await runScheduledAgent();
+        }
+      } catch (e) { console.error('[SCHEDULER] Error:', e.message); }
+    }, 30 * 60 * 1000); // Check every 30 minutes
+
+    console.log('📝 Blog agent scheduled — Mon/Wed/Fri at 8AM EST');
   });
 }
 
