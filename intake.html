@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Intake — Undertone SKN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#d4cdb8;
+  --surface:#ffffff;
+  --border:#ddd9d2;
+  --border-strong:#a89e85;
+  --gold:#a07840;
+  --gold-soft:rgba(160,120,64,0.08);
+  --text:#1c1b18;
+  --text-soft:#3a3935;
+  --muted:#8a8580;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--text);min-height:100vh;}
+body{
+  background:radial-gradient(ellipse at top, #dfd7c0 0%, #c8bfa4 100%);
+  background-attachment:fixed;
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:48px 24px;
+}
+
+.shell{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+}
+
+/* ── HEADER */
+.brand{text-align:center;margin-bottom:48px;}
+.brand-mark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:300;
+  letter-spacing:0.14em;
+}
+.brand-sub{
+  font-size:9px;
+  letter-spacing:0.32em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-top:6px;
+}
+
+/* ── INTRO */
+.intro{text-align:center;margin-bottom:48px;}
+.intro-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;
+  font-weight:300;
+  line-height:1.4;
+  letter-spacing:0.01em;
+  margin-bottom:14px;
+  color:var(--text-soft);
+}
+.intro-title em{
+  font-style:italic;
+  color:var(--gold);
+}
+.intro-divider{
+  width:36px;
+  height:1px;
+  background:var(--gold);
+  margin:0 auto 14px;
+  opacity:0.4;
+}
+.intro-sub{
+  font-size:12px;
+  color:var(--muted);
+  max-width:380px;
+  margin:0 auto;
+  line-height:1.7;
+  letter-spacing:0.02em;
+}
+.intro-sub{
+  font-size:13px;
+  color:var(--text-soft);
+  max-width:440px;
+  margin:0 auto;
+  line-height:1.7;
+}
+
+/* ── CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-bottom:48px;
+}
+@media (min-width:640px){
+  .cards{grid-template-columns:1fr 1fr;gap:18px;}
+}
+
+.card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  background:linear-gradient(135deg, #fbf5e6 0%, #f5ecd2 100%);
+  border:1px solid rgba(160,120,64,0.18);
+  border-radius:3px;
+  padding:36px 28px 28px;
+  box-shadow:0 14px 44px -16px rgba(60,45,20,0.22), 0 2px 6px rgba(60,45,20,0.05);
+  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg, transparent 0%, var(--gold) 35%, var(--gold) 65%, transparent 100%);
+  opacity:0.7;
+  transition:opacity 0.35s ease, height 0.35s ease;
+}
+
+.card::after{
+  content:'';
+  position:absolute;
+  bottom:-30%;right:-30%;
+  width:60%;height:60%;
+  background:radial-gradient(circle, rgba(160,120,64,0.06) 0%, transparent 70%);
+  pointer-events:none;
+  transition:opacity 0.35s ease;
+  opacity:0.4;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 22px 56px -16px rgba(60,45,20,0.3), 0 2px 6px rgba(60,45,20,0.06);
+  border-color:rgba(160,120,64,0.35);
+}
+.card:hover::before{opacity:1;height:3px;}
+.card:hover::after{opacity:1;}
+
+.card-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:46px;
+  font-weight:400;
+  line-height:1.0;
+  letter-spacing:0.005em;
+  margin-bottom:10px;
+  color:var(--gold);
+  position:relative;
+  z-index:1;
+}
+
+.card-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;
+  font-style:italic;
+  font-weight:300;
+  color:var(--muted);
+  margin-bottom:26px;
+  letter-spacing:0.01em;
+  position:relative;
+  z-index:1;
+}
+
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;
+  font-weight:300;
+  line-height:1.1;
+  margin-bottom:10px;
+  letter-spacing:0.005em;
+}
+
+.card-desc{
+  font-size:13px;
+  color:var(--text-soft);
+  line-height:1.8;
+  margin-bottom:26px;
+  position:relative;
+  z-index:1;
+  letter-spacing:0.01em;
+}
+
+.card-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1px solid rgba(160,120,64,0.2);
+  padding-top:18px;
+  position:relative;
+  z-index:1;
+}
+
+.card-time{
+  font-size:9px;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:400;
+  opacity:0.85;
+}
+
+.card-arrow{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;
+  color:var(--gold);
+  transition:transform 0.3s ease;
+  line-height:1;
+}
+.card:hover .card-arrow{transform:translateX(8px);}
+
+/* ── FOOTER */
+.footer{
+  text-align:center;
+  font-size:10px;
+  letter-spacing:0.18em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.footer-divider{
+  width:36px;
+  height:1px;
+  background:var(--border-strong);
+  margin:0 auto 14px;
+  opacity:0.6;
+}
+
+/* ── MOBILE refinements */
+@media (max-width:480px){
+  body{padding:32px 18px;}
+  .brand{margin-bottom:32px;}
+  .intro{margin-bottom:36px;}
+  .intro-title{font-size:20px;}
+  .card{padding:30px 24px 24px;}
+  .card-name{font-size:38px;}
+  .card-subtitle{font-size:14px;margin-bottom:22px;}
+  .cards{margin-bottom:36px;}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <div class="brand">
+    <div class="brand-mark">Undertone SKN</div>
+    <div class="brand-sub">Pre-Session Intake</div>
+  </div>
+
+  <div class="intro">
+    <h1 class="intro-title">Welcome — <em>let's get<br>you ready.</em></h1>
+    <div class="intro-divider"></div>
+    <p class="intro-sub">A few minutes here means our time together is fully focused on you.</p>
+  </div>
+
+  <div class="cards">
+
+    <a href="intake-new.html" class="card" id="cardNew">
+      <div class="card-name">New Client</div>
+      <div class="card-subtitle">First time with us</div>
+      <div class="card-desc">Tell Zinthia about your skin, your body, and what you're hoping for. Sets the foundation for every session that follows.</div>
+      <div class="card-meta">
+        <div class="card-time">~3 minutes</div>
+        <div class="card-arrow">→</div>
+      </div>
+    </a>
+
+    <a href="intake-checkin.html" class="card" id="cardReturning">
+      <div class="card-name">Returning Client</div>
+      <div class="card-subtitle">Pre-session check-in</div>
+      <div class="card-desc">What's changed since last time — your skin today, your stress, anything new on your mind before your session.</div>
+      <div class="card-meta">
+        <div class="card-time">~60 seconds</div>
+        <div class="card-arrow">→</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-divider"></div>
+    Undertone SKN · Edgewater Miami
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// Pass URL params (email, phone) through to whichever form they choose
+// So /intake?email=x&phone=y → tap card → /intake-new.html?email=x&phone=y
+// ══════════════════════════════════════════════════════════════════════
+(function passthroughParams(){
+  const params = window.location.search;
+  if(!params) return;
+  document.getElementById('cardNew').href = 'intake-new.html' + params;
+  document.getElementById('cardReturning').href = 'intake-checkin.html' + params;
+})();
+</script>
+
+</body>
+</html>

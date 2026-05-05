@@ -10,11 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f5f3ef;
+  --bg:#1c1b18;
   --surface:#ffffff;
   --surface-2:#ebe7df;
   --border:#ddd9d2;
-  --border-strong:#c9c4ba;
+  --border-strong:#a89e85;
+  --on-dark:#f0ede8;
+  --on-dark-muted:#a89e85;
   --gold:#a07840;
   --gold-soft:rgba(160,120,64,0.08);
   --gold-medium:rgba(160,120,64,0.18);
@@ -43,11 +45,12 @@ body{
   font-size:24px;
   font-weight:300;
   letter-spacing:0.14em;
+  color:var(--on-dark);
 }
 .brand-sub{
   font-size:9px;
   letter-spacing:0.32em;
-  color:var(--muted);
+  color:var(--on-dark-muted);
   text-transform:uppercase;
   margin-top:6px;
 }
@@ -64,20 +67,20 @@ body{
   width:8px;
   height:8px;
   border-radius:50%;
-  background:var(--border-strong);
+  background:rgba(255,255,255,0.2);
   transition:all 0.3s ease;
 }
 .progress-dot.complete{background:var(--gold);}
 .progress-dot.current{
   background:var(--gold);
   transform:scale(1.4);
-  box-shadow:0 0 0 4px var(--gold-soft);
+  box-shadow:0 0 0 4px rgba(160,120,64,0.25);
 }
 .progress-label{
   text-align:center;
   font-size:9px;
   letter-spacing:0.28em;
-  color:var(--muted);
+  color:var(--on-dark-muted);
   text-transform:uppercase;
   margin-bottom:36px;
 }
@@ -85,10 +88,10 @@ body{
 /* ── CARD */
 .card{
   background:var(--surface);
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,0.08);
   border-radius:3px;
   padding:36px 28px 32px;
-  box-shadow:0 1px 0 rgba(28,27,24,0.02);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .step{display:none;animation:fadeUp 0.4s ease;}
@@ -375,7 +378,7 @@ input[readonly]{
   text-align:center;
   font-size:10px;
   letter-spacing:0.18em;
-  color:var(--muted);
+  color:var(--on-dark-muted);
   text-transform:uppercase;
   margin-top:32px;
 }
