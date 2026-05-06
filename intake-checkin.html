@@ -537,16 +537,17 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
   };
 
   try {
-    const response = await fetch('/api/intake-submit', {
+    const response = await fetch('https://undertone-crm-production.up.railway.app/api/intake-submit', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
-    if(!response.ok && response.status !== 404){
-      throw new Error('Submission failed');
+    if(!response.ok){
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.message || 'Submission failed');
     }
   } catch(e){
-    console.warn('Check-in submission (will be wired to CRM):', e.message);
+    console.error('Check-in submission failed:', e.message);
     console.log('Payload:', payload);
   }
 
