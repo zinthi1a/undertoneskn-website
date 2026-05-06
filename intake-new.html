@@ -874,19 +874,19 @@ async function submit(){
   };
 
   try {
-    // POST to CRM intake endpoint (placeholder — wire up next)
-    const response = await fetch('/api/intake-submit', {
+    // POST to CRM intake endpoint
+    const response = await fetch('https://undertone-crm-production.up.railway.app/api/intake-submit', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
 
-    // For preview/dev: succeed even if endpoint doesn't exist yet
-    if(!response.ok && response.status !== 404){
-      throw new Error('Submission failed');
+    if(!response.ok){
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.message || 'Submission failed');
     }
   } catch(e){
-    console.warn('Intake submission (will be wired to CRM):', e.message);
+    console.error('Intake submission failed:', e.message);
     console.log('Payload:', payload);
   }
 
