@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
@@ -9,14 +10,15 @@ try { getWeeklyGBPPost = require('./gbp-agent').getWeeklyGBPPost; } catch(e) { c
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// CORS — only the CRM origin needs cross-origin access (reads /api/posts, /api/post/:slug from the browser).
+// All write endpoints are reached server-to-server via the CRM's proxy, which doesn't trigger CORS.
+const ALLOWED_ORIGINS = ['https://undertone-crm-production.up.railway.app'];
+app.use(cors({
+  origin: ALLOWED_ORIGINS,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
-  next();
-});
 app.use(express.static(path.join(__dirname)));
 
 // SITEMAP — dynamic
