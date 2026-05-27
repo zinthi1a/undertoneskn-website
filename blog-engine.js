@@ -4,7 +4,10 @@
 
 const { Pool } = require('pg');
 
-const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:OYSKYoNCScLVMKivGWSHExrmwcydTxNl@postgres.railway.internal:5432/railway';
+if (!process.env.DATABASE_URL) {
+  throw new Error('[DB] DATABASE_URL is required. Set it in the environment before starting the server.');
+}
+const DATABASE_URL = process.env.DATABASE_URL;
 
 // ============================================================
 // CONNECTION POOL — single shared pool, persistent across requests
