@@ -76,6 +76,15 @@ app.get('/thank-you', (req, res) => {
   res.sendFile(path.join(__dirname, 'thank-you.html'));
 });
 
+// LEGAL PAGES — clean URLs without .html extension
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'privacy.html'));
+});
+
+app.get('/terms', (req, res) => {
+  res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
 // BLOG ROUTES
 app.get('/blog', async (req, res) => {
   const posts = await getAllPosts();
