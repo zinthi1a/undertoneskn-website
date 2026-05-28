@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
+const { renderServicesHTML, renderFaqHTML } = require('./pages');
 
 let getWeeklyGBPPost;
 try { getWeeklyGBPPost = require('./gbp-agent').getWeeklyGBPPost; } catch(e) { console.log('[GBP] gbp-agent not loaded'); }
@@ -32,12 +33,17 @@ app.get('/sitemap.xml', async (req, res) => {
     <priority>0.8</priority>
   </url>`).join('');
 
+  // lastmod for the hand-built static pages (services/faq/privacy/terms)
+  const PAGES_LASTMOD = '2026-05-28';
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.undertoneskn.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.undertoneskn.com/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.undertoneskn.com/services</loc><lastmod>${PAGES_LASTMOD}</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.undertoneskn.com/blog</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.undertoneskn.com/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.undertoneskn.com/faq</loc><lastmod>${PAGES_LASTMOD}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.undertoneskn.com/privacy</loc><lastmod>${PAGES_LASTMOD}</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.undertoneskn.com/terms</loc><lastmod>${PAGES_LASTMOD}</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   ${postUrls}
 </urlset>`;
 
@@ -83,6 +89,16 @@ app.get('/privacy', (req, res) => {
 
 app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
+// SERVICES — real server-rendered page (unique title/meta/canonical + Service schema)
+app.get('/services', (req, res) => {
+  res.send(renderServicesHTML());
+});
+
+// FAQ — real server-rendered page (server-rendered Q&A + FAQPage schema)
+app.get('/faq', (req, res) => {
+  res.send(renderFaqHTML());
 });
 
 // BLOG ROUTES
