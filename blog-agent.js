@@ -351,7 +351,7 @@ async function publishPost(topicData, isNew = true) {
 // SEED EXISTING POSTS (run once on startup if no posts exist)
 // ============================================================
 async function seedExistingPosts() {
-  const existing = getAllPosts();
+  const existing = await getAllPosts();
   if (existing.length > 0) {
     console.log(`[BLOG AGENT] ${existing.length} posts already exist. Skipping seed.`);
     return;
