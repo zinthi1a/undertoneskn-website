@@ -3,11 +3,50 @@
 // ============================================================
 
 const { Pool } = require('pg');
+const sanitizeHtml = require('sanitize-html');
 
 if (!process.env.DATABASE_URL) {
   throw new Error('[DB] DATABASE_URL is required. Set it in the environment before starting the server.');
 }
 const DATABASE_URL = process.env.DATABASE_URL;
+
+// ============================================================
+// HTML SANITIZATION — runs on every blog write to prevent stored XSS.
+// Allowlist intentionally narrow: structural tags + safe links only.
+// All inline styles, event handlers, scripts, iframes, etc. are stripped.
+// ============================================================
+const CONTENT_SANITIZE_CONFIG = {
+  allowedTags: ['h2', 'h3', 'p', 'ul', 'ol', 'li', 'a', 'strong', 'em', 'blockquote', 'br'],
+  allowedAttributes: {
+    a: ['href', 'target', 'rel']
+  },
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+  allowProtocolRelative: false
+};
+
+const PLAIN_TEXT_SANITIZE_CONFIG = {
+  allowedTags: [],
+  allowedAttributes: {}
+};
+
+function sanitizeContentHtml(html) {
+  if (!html || typeof html !== 'string') return '';
+  const cleaned = sanitizeHtml(html, CONTENT_SANITIZE_CONFIG);
+  // Warn loudly if the sanitizer stripped more than 30% — that's a signal of
+  // either malformed input or an attempted injection. Doesn't block the save.
+  if (html.length > 0) {
+    const removedPct = (html.length - cleaned.length) / html.length;
+    if (removedPct > 0.3) {
+      console.warn(`[SANITIZE] ⚠ Content sanitization removed ${(removedPct * 100).toFixed(1)}% (${html.length}b → ${cleaned.length}b). Investigate the input.`);
+    }
+  }
+  return cleaned;
+}
+
+function sanitizePlainText(text) {
+  if (!text || typeof text !== 'string') return '';
+  return sanitizeHtml(text, PLAIN_TEXT_SANITIZE_CONFIG);
+}
 
 // ============================================================
 // CONNECTION POOL — single shared pool, persistent across requests
@@ -143,9 +182,12 @@ async function savePost(post) {
 // Update post — called by CRM Blog editor
 async function updatePost(slug, fields) {
   try {
+    const cleanTitle = sanitizePlainText(fields.title);
+    const cleanMeta = sanitizePlainText(fields.metaDescription);
+    const cleanContent = sanitizeContentHtml(fields.content);
     await pool.query(
       'UPDATE blog_posts SET title=$1, meta_description=$2, content=$3, excerpt=$4 WHERE slug=$5',
-      [fields.title, fields.metaDescription, fields.content, fields.excerpt, slug]
+      [cleanTitle, cleanMeta, cleanContent, fields.excerpt, slug]
     );
     return { success: true };
   } catch (err) {
