@@ -338,7 +338,7 @@ async function publishPost(topicData, isNew = true) {
       enhanced: !isNew
     };
 
-    savePost(post);
+    await savePost(post);
     console.log(`[BLOG AGENT] ✅ Published: ${post.title}`);
     return post;
   } catch (error) {
