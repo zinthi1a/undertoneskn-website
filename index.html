@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!--
+  BOOKING URL — canonical source of truth is the BOOKING_URL env var (set in Railway),
+  which the server-rendered pages use (blog-engine.js, pages.js, gbp-agent.js).
+  This is a STATIC file and cannot read env vars, so the Acuity booking URL is hardcoded
+  below in several places (the "Book"/"Book This Session" links). If the booking URL ever
+  changes, update the BOOKING_URL env var AND every occurrence in this file.
+  Current value: https://undertoneskn.as.me/schedule/80fd8a11
+-->
+
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

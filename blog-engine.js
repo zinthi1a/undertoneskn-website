@@ -10,6 +10,10 @@ if (!process.env.DATABASE_URL) {
 }
 const DATABASE_URL = process.env.DATABASE_URL;
 
+// Booking URL — canonical source is the BOOKING_URL env var (set in Railway).
+// Falls back to the current Acuity link so local/dev rendering still works.
+const BOOKING_URL = process.env.BOOKING_URL || 'https://undertoneskn.as.me/schedule/80fd8a11';
+
 // ============================================================
 // HTML SANITIZATION — runs on every blog write to prevent stored XSS.
 // Allowlist intentionally narrow: structural tags + safe links only.
@@ -99,6 +103,20 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT NOW()
       )
     `);
+
+    // Indexes — safe to run repeatedly (IF NOT EXISTS).
+    // Partial index matching the published-posts query: WHERE published = true ORDER BY date DESC, created_at DESC
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_blog_posts_published_date
+      ON blog_posts (date DESC, created_at DESC)
+      WHERE published = true
+    `);
+    // GIN index on keywords array — for future related-post discovery via keyword overlap.
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_blog_posts_keywords
+      ON blog_posts USING GIN (keywords)
+    `);
+
     console.log('[DB] ✅ Database initialized');
   } catch (err) {
     console.error('[DB] Init error:', err.message);
@@ -508,7 +526,7 @@ ${complianceBanner}
 </div>
 <div class="post-cta">
   <p>Ready to release what your face is holding?</p>
-  <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank">Book a Session</a>
+  <a href="${BOOKING_URL}" target="_blank">Book a Session</a>
 </div>
 ${relatedSection}
 <footer>

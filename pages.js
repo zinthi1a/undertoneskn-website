@@ -2,7 +2,9 @@
 // Rendered as full HTML (not SPA / JS-injected) so Google crawls real, unique URLs.
 // Visual aesthetic mirrors index.html exactly — shared nav, footer, fonts, colors, components.
 
-const ACUITY = 'https://undertoneskn.as.me/schedule/80fd8a11';
+// Booking URL — canonical source is the BOOKING_URL env var (set in Railway).
+// Falls back to the current Acuity link so local/dev rendering still works.
+const ACUITY = process.env.BOOKING_URL || 'https://undertoneskn.as.me/schedule/80fd8a11';
 const PHONE = '3059650145';
 const SMS = `sms:${PHONE}`;
 const OG_IMAGE = 'https://res.cloudinary.com/dera3kj2v/image/upload/v1777428668/7_p4nlnv.jpg';

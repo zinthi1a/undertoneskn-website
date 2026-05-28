@@ -6,6 +6,10 @@
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
+// Booking URL — canonical source is the BOOKING_URL env var (set in Railway).
+// Falls back to the current Acuity link.
+const BOOKING_URL = process.env.BOOKING_URL || 'https://undertoneskn.as.me/schedule/80fd8a11';
+
 // ============================================================
 // COMPLIANCE GATE — paused during FL Massage Therapy license review.
 // Any post whose cluster is buccal-modality or whose slug includes "buccal" is excluded
@@ -45,7 +49,7 @@ OUTPUT FORMAT — return valid JSON only, no markdown, no backticks:
   "headline": "Short headline under 58 characters",
   "body": "Full post text 150-250 words",
   "buttonLabel": "Book" or "Learn more",
-  "buttonUrl": "https://undertoneskn.as.me/schedule/80fd8a11 or blog URL",
+  "buttonUrl": "${BOOKING_URL} or blog URL",
   "imageNote": "Which image to use — AI generated from blog or specific studio photo"
 }`;
   const response = await fetch('https://api.anthropic.com/v1/messages', {
