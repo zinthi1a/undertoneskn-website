@@ -393,7 +393,7 @@ const EXISTING_POSTS = [
 // ============================================================
 // BLOG HTML RENDERERS — with HTML escaping for safety
 // ============================================================
-function renderPostHTML(post) {
+function renderPostHTML(post, allPosts = []) {
   const safeTitle = escapeHtml(post.title);
   const safeMeta = escapeHtml(post.metaDescription);
   const safeCluster = escapeHtml(post.cluster || 'Wellness');
@@ -407,6 +407,27 @@ function renderPostHTML(post) {
     (post.slug && post.slug.toLowerCase().includes('buccal'));
   const complianceBanner = isBuccalPost ? `<div class="compliance-banner">
   <strong>A note on buccal work.</strong> Buccal intraoral massage is currently paused while Zinthia completes her Florida Massage Therapy license. Returning late 2026. In the meantime, <a href="https://www.undertoneskn.com/#services">explore our current services</a>.
+</div>` : '';
+
+  // Related posts — same cluster first, then most-recent fill. Never surface gated buccal content.
+  const isGated = (p) => p.cluster === 'buccal-modality' || (p.slug && p.slug.toLowerCase().includes('buccal'));
+  const candidates = (Array.isArray(allPosts) ? allPosts : []).filter(p => p.slug !== post.slug && !isGated(p));
+  const related = [];
+  candidates.filter(p => p.cluster === post.cluster).forEach(p => { if (related.length < 3) related.push(p); });
+  if (related.length < 3) {
+    candidates.forEach(p => { if (related.length < 3 && !related.some(r => r.slug === p.slug)) related.push(p); });
+  }
+  const relatedSection = related.length ? `<div class="post-related">
+  <p class="post-related-label">Keep Reading</p>
+  <div class="related-grid">
+    ${related.map(p => `<a href="/blog/${escapeHtml(p.slug)}" class="related-card">
+      <div class="related-card-img" style="background-image:url('${encodeURI(p.image || getPostImage(p.cluster))}')"></div>
+      <div class="related-card-body">
+        <p class="related-card-cat">${escapeHtml((p.cluster || 'wellness').replace(/-/g, ' '))}</p>
+        <p class="related-card-title">${escapeHtml(p.title)}</p>
+      </div>
+    </a>`).join('')}
+  </div>
 </div>` : '';
 
   return `<!DOCTYPE html>
@@ -455,7 +476,16 @@ ${post.image ? `.post-hero{background-image:linear-gradient(rgba(54,48,42,0.85),
 footer{background:var(--brown-darkest);padding:40px 60px;text-align:center}
 footer p{font-family:'Epilogue',sans-serif;font-size:12px;color:var(--taupe)}
 footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
-@media(max-width:768px){.post-hero,.post-body,.post-cta,.post-author,footer{padding:48px 24px}nav{padding:0 24px}}
+.post-related{max-width:720px;margin:0 auto;padding:48px 60px 60px;border-top:1px solid rgba(185,165,144,0.2)}
+.post-related-label{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--taupe);text-transform:uppercase;margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.related-card{display:block;text-decoration:none;background:var(--cream-2);border:1px solid rgba(185,165,144,0.25);overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.related-card:hover{border-color:var(--taupe);transform:translateY(-2px)}
+.related-card-img{height:120px;background-size:cover;background-position:center}
+.related-card-body{padding:14px 16px}
+.related-card-cat{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--taupe);text-transform:uppercase;margin-bottom:6px}
+.related-card-title{font-family:'Lato',sans-serif;font-size:15px;font-weight:400;color:var(--text-primary);line-height:1.3}
+@media(max-width:768px){.post-hero,.post-body,.post-cta,.post-author,footer{padding:48px 24px}nav{padding:0 24px}.post-related{padding:40px 24px}.related-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="${isBuccalPost ? 'compliance-active' : ''}">
@@ -480,6 +510,7 @@ ${complianceBanner}
   <p>Ready to release what your face is holding?</p>
   <a href="https://undertoneskn.as.me/schedule/80fd8a11" target="_blank">Book a Session</a>
 </div>
+${relatedSection}
 <footer>
   <p><a href="/">Home</a><a href="/blog">Journal</a><a href="/services">Services</a><a href="sms:3059650145">Text Us</a></p>
   <p style="margin-top:16px;">© 2026 Undertone SKN · 2915 Biscayne Blvd Suite 200-29, Edgewater Miami FL 33137</p>

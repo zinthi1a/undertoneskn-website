@@ -110,7 +110,8 @@ app.get('/blog', async (req, res) => {
 app.get('/blog/:slug', async (req, res) => {
   const post = await getPostBySlug(req.params.slug);
   if (!post) return res.status(404).send('<html><body style="font-family:sans-serif;padding:60px;"><h1>Post not found</h1><a href="/blog">Back to Journal</a></body></html>');
-  res.send(renderPostHTML(post));
+  const allPosts = await getAllPosts();
+  res.send(renderPostHTML(post, allPosts));
 });
 
 // API — get all posts (called by CRM Blog tab + GBP picker)
