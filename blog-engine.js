@@ -302,7 +302,11 @@ const TOPIC_CLUSTERS = [
   { topic: "Why does my jaw click or pop", cluster: "symptoms", keywords: ["jaw clicking popping", "jaw click release Miami"] },
   { topic: "Why do I get headaches that start in my jaw", cluster: "symptoms", keywords: ["jaw headaches", "headaches from jaw tension Miami"] },
 
-  // ── BUCCAL & MODALITY KEYWORDS (11)
+  // ── BUCCAL & MODALITY KEYWORDS (11) — PAUSED 2026-05-27 during FL Massage Therapy license review.
+  // Re-enable by uncommenting the block below when buccal/intraoral work returns to the menu.
+  // Note: this also halts non-buccal topics that were grouped here (gua sha, TMJ, reflexology,
+  // acupressure, Botox-alternative). Move those to another cluster if you want them back sooner.
+  /*
   { topic: "What is buccal massage and how does jaw tension release compare", cluster: "buccal-modality", keywords: ["buccal massage Miami", "buccal facial Miami", "buccal massage vs jaw release"] },
   { topic: "Buccal facial in Miami — what to know before you book", cluster: "buccal-modality", keywords: ["buccal facial Miami", "buccal massage Edgewater"] },
   { topic: "Why people searching for buccal massage end up choosing somatic work", cluster: "buccal-modality", keywords: ["buccal massage alternative Miami", "somatic vs buccal facial"] },
@@ -314,6 +318,7 @@ const TOPIC_CLUSTERS = [
   { topic: "Natural alternatives to Botox for jaw tension in Miami", cluster: "buccal-modality", keywords: ["natural Botox alternative Miami", "Botox jaw tension alternative"] },
   { topic: "What TMJ natural relief actually looks like in practice", cluster: "buccal-modality", keywords: ["TMJ natural relief Miami", "TMJ without medication"] },
   { topic: "TMJ and face asymmetry — the facial tension connection", cluster: "buccal-modality", keywords: ["TMJ face asymmetry", "jaw tension facial asymmetry Miami"] },
+  */
 
   // ── AFTER THE SESSION (5)
   { topic: "What to expect after your first jaw tension release session", cluster: "after-session", keywords: ["after jaw tension release Miami", "first facial session results"] },
@@ -354,6 +359,14 @@ function renderPostHTML(post) {
   const safeSlug = escapeHtml(post.slug);
   // post.content is intentional HTML from Claude — NOT escaped
 
+  // Compliance gate during FL Massage Therapy license review — surfaces a disclaimer
+  // on any post whose cluster is buccal-modality OR whose slug includes "buccal".
+  const isBuccalPost = post.cluster === 'buccal-modality' ||
+    (post.slug && post.slug.toLowerCase().includes('buccal'));
+  const complianceBanner = isBuccalPost ? `<div class="compliance-banner">
+  <strong>A note on buccal work.</strong> Buccal intraoral massage is currently paused while Zinthia completes her Florida Massage Therapy license. Returning late 2026. In the meantime, <a href="https://www.undertoneskn.com/#services">explore our current services</a>.
+</div>` : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -377,6 +390,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--cream-1);bo
 .nav-logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-primary);text-decoration:none}
 .nav-back{font-family:'Syne Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--text-secondary);text-decoration:none}
 .post-hero{background:var(--brown-darkest);padding:100px 60px 60px;margin-top:56px}
+.compliance-banner{background:var(--cream-2);border-left:4px solid var(--taupe);padding:20px 32px;margin-top:56px;font-family:'Epilogue',sans-serif;font-size:14px;color:var(--text-secondary);line-height:1.6}
+.compliance-banner strong{color:var(--text-primary);font-weight:500;margin-right:4px}
+.compliance-banner a{color:var(--text-primary);text-decoration:underline;text-underline-offset:2px}
+body.compliance-active .post-hero{margin-top:0}
+@media(max-width:768px){.compliance-banner{padding:16px 24px;font-size:13px}}
 ${post.image ? `.post-hero{background-image:linear-gradient(rgba(54,48,42,0.85),rgba(54,48,42,0.95)),url('${encodeURI(post.image)}');background-size:cover;background-position:center}` : ''}
 .post-category{font-family:'Syne Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--taupe);text-transform:uppercase;margin-bottom:16px}
 .post-title{font-family:'Lato',sans-serif;font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--cream-1);line-height:1.2;max-width:800px;margin-bottom:20px}
@@ -398,11 +416,12 @@ footer a{color:var(--cream-2);text-decoration:none;margin:0 12px}
 @media(max-width:768px){.post-hero,.post-body,.post-cta,.post-author,footer{padding:48px 24px}nav{padding:0 24px}}
 </style>
 </head>
-<body>
+<body class="${isBuccalPost ? 'compliance-active' : ''}">
 <nav>
   <a href="/" class="nav-logo">UNDERTONE SKN</a>
   <a href="/blog" class="nav-back">← Journal</a>
 </nav>
+${complianceBanner}
 <div class="post-hero">
   <p class="post-category">${safeCluster}</p>
   <h1 class="post-title">${safeTitle}</h1>

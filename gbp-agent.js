@@ -7,6 +7,18 @@
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 // ============================================================
+// COMPLIANCE GATE — paused during FL Massage Therapy license review.
+// Any post whose cluster is buccal-modality or whose slug includes "buccal" is excluded
+// from GBP generation. Remove the gate once the license is received.
+// ============================================================
+function isBuccalPost(post) {
+  if (!post) return false;
+  if (post.cluster === 'buccal-modality') return true;
+  if (post.slug && String(post.slug).toLowerCase().includes('buccal')) return true;
+  return false;
+}
+
+// ============================================================
 // GENERATE GBP POST FROM BLOG POST
 // ============================================================
 async function generateGBPPost(blogPost) {
@@ -59,6 +71,11 @@ OUTPUT FORMAT — return valid JSON only, no markdown, no backticks:
 // GET THIS WEEK'S GBP POST
 // ============================================================
 async function getWeeklyGBPPost(latestPost) {
+  if (isBuccalPost(latestPost)) {
+    // Refuse to generate — buccal content is paused during the FL license review.
+    // Caller should pick a different post or surface this message to Zinthia.
+    throw new Error('GBP generation skipped: buccal content is paused during the FL Massage Therapy license review. Pick a non-buccal post.');
+  }
   try {
     const gbpContent = await generateGBPPost(latestPost);
     return {
@@ -74,4 +91,4 @@ async function getWeeklyGBPPost(latestPost) {
   }
 }
 
-module.exports = { getWeeklyGBPPost };
+module.exports = { getWeeklyGBPPost, isBuccalPost };
