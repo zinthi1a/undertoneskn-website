@@ -291,14 +291,14 @@ const SERVICES = [
     serviceType: 'Facial Tension Release & Skin Treatment',
     schemaDesc: 'Extended jaw and facial tension release plus skin work in Edgewater Miami. Adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress alongside the tension.',
     desc: [
-      'Everything in the Unclench — plus skin. This extended session adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress too. Dullness, puffiness, sensitivity, heaviness — addressed alongside the tension work.',
+      'Full tension release — plus skin. This extended session adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress too. Dullness, puffiness, sensitivity, heaviness — addressed alongside the tension work.',
       'The extra twenty minutes is where the skin catches up to the nervous system.'
     ],
     whoFor: [
       'Burnout states where the whole face feels depleted',
       'Skin that looks tired alongside a face that feels tense',
       'Anyone whose muscle and skin both need to reset in one visit',
-      'Clients ready to go a layer deeper than the Unclench'
+      'Clients ready to go a layer deeper than release alone'
     ],
     whatChanges: [
       'Tension release plus a visibly calmer, brighter complexion',
