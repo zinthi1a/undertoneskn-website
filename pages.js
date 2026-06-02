@@ -260,6 +260,10 @@ document.querySelectorAll('img').forEach(function(img) {
 
 // ===================== SERVICES DATA =====================
 const SERVICES = [
+  // TEMPORARILY HIDDEN - Unclench service paused from public menu. Re-enable when ready.
+  // (Commenting out this entry removes both the service card AND its JSON-LD schema,
+  //  since both are generated from the SERVICES array below.)
+  /*
   {
     num: '01', theme: 'light', name: 'Unclench', price: '185', duration: '1 hour',
     serviceType: 'Jaw Tension Release',
@@ -281,6 +285,7 @@ const SERVICES = [
       'That feeling of relief that finally lands'
     ]
   },
+  */
   {
     num: '02', theme: 'light', name: 'Facial Alchemy | Deep Reset', price: '235', duration: '1 hour 20 minutes',
     serviceType: 'Facial Tension Release & Skin Treatment',
@@ -468,7 +473,7 @@ function serviceSchema(s) {
 
 function renderServicesHTML() {
   const title = 'Facial Sculpting, Jaw Tension Release & Skin Services | Undertone SKN Edgewater Miami';
-  const desc = "Explore Undertone SKN's facial sculpting, jaw tension release, and skin services in Edgewater Miami — Unclench, Facial Alchemy, the Sculpt Method, and monthly barrier + circulation. By appointment only.";
+  const desc = "Explore Undertone SKN's facial sculpting, jaw tension release, and skin services in Edgewater Miami — Facial Alchemy, the Sculpt Method, and monthly barrier + circulation. By appointment only.";
   const canonical = 'https://www.undertoneskn.com/services';
 
   const release = SERVICES.filter((s) => s.theme === 'light');
