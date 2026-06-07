@@ -261,12 +261,14 @@ document.querySelectorAll('img').forEach(function(img) {
 // ===================== SERVICES DATA =====================
 const SERVICES = [
   {
-    num: '01', theme: 'light', name: 'Unclench', price: '185', duration: '1 hour',
+    num: '01', theme: 'light', name: 'UNCLENCH | Facial Tension Release', price: '185', duration: '1 hour',
     serviceType: 'Jaw Tension Release',
     schemaDesc: 'Focused jaw and facial tension release in Edgewater Miami. Works the jaw, face, and the holding patterns that keep the face tight, heavy, and locked. No skincare — pure, intentional release of where stress physically lives.',
+    descIntro: 'Your maintenance session.',
     desc: [
-      'Pure tension release. This session works the jaw, face, and the holding patterns that make your face feel tight, heavy, and locked. No skincare. No fluff. Just focused, intentional work on where stress physically lives.',
-      'If you clench, grind, carry your stress in your face, or feel like your jaw never fully relaxes — this is where you start. It is the foundation every other session builds on.'
+      'A focused facial designed for clients who carry stress in their face.',
+      'Using facial sculpting, reflexology, and circulation-enhancing techniques, this session helps soften visible tension patterns while encouraging movement, softness, and facial definition.',
+      'Perfect as a monthly reset or ongoing maintenance.'
     ],
     whoFor: [
       'First-timers who want to understand what their face has been holding',
@@ -282,18 +284,20 @@ const SERVICES = [
     ]
   },
   {
-    num: '02', theme: 'light', name: 'Facial Alchemy | Deep Reset', price: '235', duration: '1 hour 20 minutes',
+    num: '02', theme: 'light', name: 'FACIAL ALCHEMY | Deep Reset', price: '235', duration: '1 hour 20 minutes',
     serviceType: 'Facial Tension Release & Skin Treatment',
     schemaDesc: 'Extended jaw and facial tension release plus skin work in Edgewater Miami. Adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress alongside the tension.',
+    descIntro: 'Your signature experience.',
     desc: [
-      'Everything in the Unclench — plus skin. This extended session adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress too. Dullness, puffiness, sensitivity, heaviness — addressed alongside the tension work.',
-      'The extra twenty minutes is where the skin catches up to the nervous system.'
+      'A deeper facial tension release session paired with customized skin support.',
+      'Designed for clients experiencing persistent facial tension, visible holding patterns, dullness, or congestion, this extended treatment combines facial sculpting, reflexology, and skin-focused care to restore softness, movement, and vitality.',
+      'Leave looking refreshed, defined, and deeply reset.'
     ],
     whoFor: [
       'Burnout states where the whole face feels depleted',
       'Skin that looks tired alongside a face that feels tense',
       'Anyone whose muscle and skin both need to reset in one visit',
-      'Clients ready to go a layer deeper than the Unclench'
+      'Clients ready to go a layer deeper than release alone'
     ],
     whatChanges: [
       'Tension release plus a visibly calmer, brighter complexion',
@@ -430,7 +434,7 @@ function serviceCardHTML(s) {
         <p class="service-meta">${escapeHtml(s.duration)}</p>
       </div>
       <div class="${descCls}">
-        ${s.desc.map((p) => `<p>${escapeHtml(p)}</p>`).join('\n        ')}
+        ${s.descIntro ? `<p><strong>${escapeHtml(s.descIntro)}</strong></p>\n        ` : ''}${s.desc.map((p) => `<p>${escapeHtml(p)}</p>`).join('\n        ')}
       </div>
       <div class="service-details">
         <div class="service-detail">
