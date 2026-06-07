@@ -174,6 +174,11 @@ async function getPostBySlug(slug) {
 
 async function savePost(post) {
   try {
+    // Defense-in-depth against prompt injection of the AI blog agent: sanitize on write the
+    // same way updatePost does — title/metaDescription as plain text, content as allowlisted HTML.
+    const cleanTitle = sanitizePlainText(post.title);
+    const cleanMeta = sanitizePlainText(post.metaDescription);
+    const cleanContent = sanitizeContentHtml(post.content);
     await pool.query(`
       INSERT INTO blog_posts (slug, title, meta_description, content, excerpt, topic, cluster, keywords, image, date, published, enhanced)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
@@ -184,12 +189,12 @@ async function savePost(post) {
         excerpt = EXCLUDED.excerpt,
         image = EXCLUDED.image
     `, [
-      post.slug, post.title, post.metaDescription, post.content,
+      post.slug, cleanTitle, cleanMeta, cleanContent,
       post.excerpt, post.topic, post.cluster,
       post.keywords || [], post.image, post.date || new Date().toISOString().split('T')[0],
       post.published !== false, post.enhanced || false
     ]);
-    console.log(`[DB] ✅ Saved post: ${post.title}`);
+    console.log(`[DB] ✅ Saved post: ${cleanTitle}`);
     return post;
   } catch (err) {
     console.error('[DB] savePost error:', err.message);
