@@ -427,9 +427,12 @@ function normalizeDbService(r) {
   };
 }
 
-// Fetch visible services from the CRM, server-side. Returns a normalized array on
+// Fetch visible services from the CRM, server-side. Returns the RAW CRM rows on
 // success, or null on ANY failure (network, timeout, non-200, empty, bad shape) —
 // the caller then falls back to the hardcoded array. Never throws.
+// NOTE: do NOT normalize here. renderServicesHTML is the single normalization point
+// (it maps DB rows via normalizeDbService); normalizing here too would double-map and
+// drop every content field on the second pass.
 async function fetchServicesFromCRM() {
   try {
     const res = await fetch(`${CRM_API}/api/services?visible=true`, {
@@ -439,7 +442,7 @@ async function fetchServicesFromCRM() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (!Array.isArray(data) || data.length === 0) return null;
-    return data.map(normalizeDbService);
+    return data;
   } catch (e) {
     console.warn(`[SERVICES] CRM fetch failed, using hardcoded fallback: ${e.message}`);
     return null;
