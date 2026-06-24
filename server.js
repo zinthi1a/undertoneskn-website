@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
-const { renderServicesHTML, renderFaqHTML } = require('./pages');
+const { renderServicesHTML, renderFaqHTML, fetchServicesFromCRM } = require('./pages');
 
 let getWeeklyGBPPost;
 try { getWeeklyGBPPost = require('./gbp-agent').getWeeklyGBPPost; } catch(e) { console.log('[GBP] gbp-agent not loaded'); }
@@ -91,9 +91,13 @@ app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'terms.html'));
 });
 
-// SERVICES — real server-rendered page (unique title/meta/canonical + Service schema)
-app.get('/services', (req, res) => {
-  res.send(renderServicesHTML());
+// SERVICES — real server-rendered page (unique title/meta/canonical + Service schema).
+// Pulls live services from the CRM server-side (SSR, so it's SEO-crawlable). If the CRM
+// is unreachable/slow/empty, fetchServicesFromCRM returns null and we render from the
+// hardcoded fallback inside renderServicesHTML — the page can never break.
+app.get('/services', async (req, res) => {
+  const services = await fetchServicesFromCRM();
+  res.send(renderServicesHTML(services));
 });
 
 // FAQ — real server-rendered page (server-rendered Q&A + FAQPage schema)

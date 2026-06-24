@@ -261,7 +261,7 @@ document.querySelectorAll('img').forEach(function(img) {
 // ===================== SERVICES DATA =====================
 const SERVICES = [
   {
-    num: '01', theme: 'light', name: 'UNCLENCH | Facial Tension Release', price: '185', duration: '1 hour',
+    num: '01', theme: 'light', category: 'Release', name: 'UNCLENCH | Facial Tension Release', price: '185', duration: '1 hour',
     serviceType: 'Jaw Tension Release',
     schemaDesc: 'Focused jaw and facial tension release in Edgewater Miami. Works the jaw, face, and the holding patterns that keep the face tight, heavy, and locked. No skincare — pure, intentional release of where stress physically lives.',
     descIntro: 'Your maintenance session.',
@@ -284,7 +284,7 @@ const SERVICES = [
     ]
   },
   {
-    num: '02', theme: 'light', name: 'FACIAL ALCHEMY | Deep Reset', price: '235', duration: '1 hour 20 minutes',
+    num: '02', theme: 'light', category: 'Release', name: 'FACIAL ALCHEMY | Deep Reset', price: '235', duration: '1 hour 20 minutes',
     serviceType: 'Facial Tension Release & Skin Treatment',
     schemaDesc: 'Extended jaw and facial tension release plus skin work in Edgewater Miami. Adds barrier restoration, circulation activation, and fluid-movement support for clients whose skin is showing the stress alongside the tension.',
     descIntro: 'Your signature experience.',
@@ -307,7 +307,7 @@ const SERVICES = [
     ]
   },
   {
-    num: '03', theme: 'dark', name: 'Contour + Define | Sculpt Method', price: '245', duration: '1 hour 30 minutes',
+    num: '03', theme: 'dark', category: 'Sculpt', name: 'Contour + Define | Sculpt Method', price: '245', duration: '1 hour 30 minutes',
     serviceType: 'Facial Sculpting',
     schemaDesc: 'A precision facial sculpting session in Edgewater Miami designed to enhance facial structure, lift definition, and improve visible contour through fascia release and circulation activation.',
     desc: [
@@ -328,7 +328,7 @@ const SERVICES = [
     ]
   },
   {
-    num: '04', theme: 'mid', name: 'Monthly | Barrier + Circulation', price: '235', duration: '1 hour 30 minutes',
+    num: '04', theme: 'mid', category: 'Skin', name: 'Monthly | Barrier + Circulation', price: '235', duration: '1 hour 30 minutes',
     serviceType: 'Skin Barrier & Circulation Treatment',
     schemaDesc: 'A monthly maintenance treatment in Edgewater Miami supporting barrier repair, skin resilience, circulation, and lymphatic detoxification to keep skin calm, balanced, and performing between advanced sessions.',
     desc: [
@@ -349,6 +349,102 @@ const SERVICES = [
     ]
   }
 ];
+
+// ===================== SERVICES: DATA SOURCE + NORMALIZATION =====================
+// The CRM is the source of truth (DB-driven). The /services route fetches services
+// from it server-side; if that fetch fails/times out/returns empty, we fall back to
+// the hardcoded SERVICES array above so the page NEVER breaks.
+
+// CRM public API base (overridable via env for staging/local).
+const CRM_API = process.env.CRM_API_URL || 'https://undertone-crm-production.up.railway.app';
+
+// Category → visual theme. Drives which section style + card style a service renders
+// with, so the DB only needs to store the human-facing category label.
+const CATEGORY_THEME = {
+  'Release': 'light',
+  'Sculpt': 'dark',
+  'Skin': 'mid',
+  'Improve Texture': 'dark'
+};
+function themeForCategory(category) {
+  return CATEGORY_THEME[category] || 'mid';
+}
+
+// Category → schema.org serviceType (JSON-LD only; not user-visible). Falls back to
+// the category label itself for any new category added later in the CRM.
+const CATEGORY_SERVICE_TYPE = {
+  'Release': 'Facial Tension Release',
+  'Sculpt': 'Facial Sculpting',
+  'Skin': 'Skin Barrier & Circulation Treatment',
+  'Improve Texture': 'Microchanneling & Skin Texture Treatment'
+};
+function serviceTypeForCategory(category) {
+  return CATEGORY_SERVICE_TYPE[category] || category || 'Facial Treatment';
+}
+
+// pg returns NUMERIC as a string like "185.00". Render whole dollars without the
+// trailing ".00" (matching the original hardcoded "185"), keep cents otherwise.
+function formatPrice(price) {
+  const n = Number(price);
+  if (!Number.isFinite(n)) return String(price == null ? '' : price);
+  return Number.isInteger(n) ? String(n) : n.toFixed(2);
+}
+
+// Both sources normalize to ONE canonical shape consumed by serviceCardHTML +
+// serviceSchema, so there is a single rendering path regardless of data source.
+function normalizeFallbackService(s) {
+  return {
+    num: s.num || '',
+    name: s.name,
+    category: s.category || '',
+    theme: s.theme || themeForCategory(s.category),
+    serviceType: s.serviceType || serviceTypeForCategory(s.category),
+    descIntro: s.descIntro || '',
+    desc: Array.isArray(s.desc) ? s.desc : [],
+    whoFor: Array.isArray(s.whoFor) ? s.whoFor : [],
+    whatChanges: Array.isArray(s.whatChanges) ? s.whatChanges : [],
+    price: String(s.price),
+    duration: s.duration || '',
+    bookingUrl: ACUITY,
+    schemaDesc: s.schemaDesc || ''
+  };
+}
+function normalizeDbService(r) {
+  return {
+    num: r.num || '',
+    name: r.name,
+    category: r.category || '',
+    theme: themeForCategory(r.category),
+    serviceType: serviceTypeForCategory(r.category),
+    descIntro: r.desc_intro || '',
+    desc: Array.isArray(r.description) ? r.description : [],
+    whoFor: Array.isArray(r.who_for) ? r.who_for : [],
+    whatChanges: Array.isArray(r.what_changes) ? r.what_changes : [],
+    price: formatPrice(r.price),
+    duration: r.duration || '',
+    bookingUrl: r.booking_url || ACUITY,
+    schemaDesc: r.schema_desc || ''
+  };
+}
+
+// Fetch visible services from the CRM, server-side. Returns a normalized array on
+// success, or null on ANY failure (network, timeout, non-200, empty, bad shape) —
+// the caller then falls back to the hardcoded array. Never throws.
+async function fetchServicesFromCRM() {
+  try {
+    const res = await fetch(`${CRM_API}/api/services?visible=true`, {
+      headers: { 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(4000)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return null;
+    return data.map(normalizeDbService);
+  } catch (e) {
+    console.warn(`[SERVICES] CRM fetch failed, using hardcoded fallback: ${e.message}`);
+    return null;
+  }
+}
 
 // ===================== SERVICES PAGE CSS =====================
 const SERVICES_CSS = `
@@ -446,7 +542,7 @@ function serviceCardHTML(s) {
           <ul>${li(s.whatChanges)}</ul>
         </div>
       </div>
-      <a href="${ACUITY}" target="_blank" rel="noopener" class="${btnCls}">Book This Session</a>
+      <a href="${s.bookingUrl || ACUITY}" target="_blank" rel="noopener" class="${btnCls}">Book This Session</a>
     </div>`;
 }
 
@@ -465,21 +561,52 @@ function serviceSchema(s) {
       price: s.price,
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
-      url: ACUITY
+      url: s.bookingUrl || ACUITY
     }
   };
 }
 
-function renderServicesHTML() {
+// Section wrapper for one category group — reproduces the exact markup the page
+// used before (theme → section class + card style), just driven by data.
+function serviceSectionHTML(group) {
+  const sectionCls = group.theme === 'dark'
+    ? 'services-section-dark'
+    : (group.theme === 'mid' ? 'services-section-mid' : 'services-section-light');
+  return `<div class="${sectionCls}">
+  <div class="services-inner">
+    <div class="services-category-header"><p class="services-category-label">${escapeHtml(group.category)}</p></div>
+${group.items.map(serviceCardHTML).join('\n')}
+  </div>
+</div>`;
+}
+
+// dbServices: a raw array of CRM service rows (server-fetched), or null/undefined to
+// use the hardcoded fallback. Either way we normalize to one shape, regenerate the
+// JSON-LD from that same data, and group by category (in first-appearance order) into
+// the page's themed sections.
+function renderServicesHTML(dbServices) {
   const title = 'Facial Sculpting, Jaw Tension Release & Skin Services | Undertone SKN Edgewater Miami';
-  const desc = "Explore Undertone SKN's facial sculpting, jaw tension release, and skin services in Edgewater Miami — the Unclench, Facial Alchemy, the Sculpt Method, and monthly barrier + circulation. By appointment only.";
+  const desc = "Explore Undertone SKN's facial sculpting, jaw tension release, and skin services in Edgewater Miami — the Unclench, the Deep Reset, the Sculpt Method, microchanneling, and monthly barrier + circulation. By appointment only.";
   const canonical = 'https://www.undertoneskn.com/services';
 
-  const release = SERVICES.filter((s) => s.theme === 'light');
-  const sculpt = SERVICES.filter((s) => s.theme === 'dark');
-  const skin = SERVICES.filter((s) => s.theme === 'mid');
+  const services = (Array.isArray(dbServices) && dbServices.length)
+    ? dbServices.map(normalizeDbService)
+    : SERVICES.map(normalizeFallbackService);
 
-  const schemaScripts = SERVICES
+  // Group by category, preserving first-appearance order (services arrive sorted).
+  const groups = [];
+  const byCategory = new Map();
+  for (const s of services) {
+    if (!byCategory.has(s.category)) {
+      const g = { category: s.category, theme: s.theme, items: [] };
+      byCategory.set(s.category, g);
+      groups.push(g);
+    }
+    byCategory.get(s.category).items.push(s);
+  }
+  const sectionsHTML = groups.map(serviceSectionHTML).join('\n\n');
+
+  const schemaScripts = services
     .map((s) => `<script type="application/ld+json">${JSON.stringify(serviceSchema(s))}</script>`)
     .join('\n');
 
@@ -521,26 +648,7 @@ ${navHTML('services')}
   <p>Every session is designed around one principle &mdash; release what the face is holding, restore what it has been missing. Jaw tension release, facial sculpting, and skin work, by appointment only in Edgewater Miami.</p>
 </div>
 
-<div class="services-section-light">
-  <div class="services-inner">
-    <div class="services-category-header"><p class="services-category-label">Release</p></div>
-${release.map(serviceCardHTML).join('\n')}
-  </div>
-</div>
-
-<div class="services-section-dark">
-  <div class="services-inner">
-    <div class="services-category-header"><p class="services-category-label">Sculpt</p></div>
-${sculpt.map(serviceCardHTML).join('\n')}
-  </div>
-</div>
-
-<div class="services-section-mid">
-  <div class="services-inner">
-    <div class="services-category-header"><p class="services-category-label">Skin</p></div>
-${skin.map(serviceCardHTML).join('\n')}
-  </div>
-</div>
+${sectionsHTML}
 
 <div class="services-bottom-cta">
   <div class="services-inner">
@@ -688,4 +796,4 @@ ${FLOATING_HTML}
 </html>`;
 }
 
-module.exports = { renderServicesHTML, renderFaqHTML };
+module.exports = { renderServicesHTML, renderFaqHTML, fetchServicesFromCRM };
