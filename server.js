@@ -165,6 +165,11 @@ app.post('/api/seed-posts', async (req, res) => {
   seedExistingPosts();
 });
 
+// TIKTOK LANDING PAGE — unlisted, not in sitemap, not linked from nav
+app.get('/tiktok', (req, res) => {
+  res.sendFile(path.join(__dirname, 'tiktok.html'));
+});
+
 // ALL OTHER ROUTES → home page
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
