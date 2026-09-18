@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TTZ4VVK');</script>
+<!-- End Google Tag Manager -->
 <title>TikTok Offer | Undertone SKN</title>
 
 <!--
@@ -65,16 +73,6 @@
     z-index: 100;
   }
 
-  .mockup-banner {
-    background: #B9433D;
-    color: #fff;
-    text-align: center;
-    font-family: 'Syne Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
-    padding: 8px 16px;
-  }
-
   /* ===================== MINIMAL NAV ===================== */
   nav.tt-nav {
     background: var(--cream-1);
@@ -96,7 +94,28 @@
     text-decoration: none;
   }
 
-  .tt-page-top-spacer { height: 86px; }
+  .tt-page-top-spacer { height: 56px; }
+
+  /* ===================== TRUST STRIP ===================== */
+  .tt-trust-strip {
+    background: var(--brown-darkest);
+    padding: 12px 16px;
+    text-align: center;
+  }
+
+  .tt-trust-strip p {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cream-1);
+  }
+
+  .tt-trust-strip .stars {
+    color: var(--taupe);
+    letter-spacing: 1px;
+    margin-right: 2px;
+  }
 
   /* ===================== SHARED BUTTONS ===================== */
   .btn-outline {
@@ -152,7 +171,26 @@
     color: var(--brown-dark);
     border: 1px solid var(--taupe);
     padding: 7px 16px;
+  }
+
+  .tt-tags-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 24px;
+  }
+
+  .tt-urgency-tag {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream-1);
+    background: var(--brown-dark);
+    padding: 7px 16px;
   }
 
   .tt-hero h1 {
@@ -162,7 +200,40 @@
     color: var(--text-primary);
     line-height: 1.2;
     max-width: 560px;
+    margin: 0 auto 16px;
+  }
+
+  .tt-hero h1 strong { color: var(--brown-dark); font-weight: 500; }
+
+  .tt-hero-subhead {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    max-width: 460px;
     margin: 0 auto 28px;
+  }
+
+  .tt-savings {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cream-1);
+    background: var(--brown-dark);
+    padding: 6px 14px;
+    margin-bottom: 10px;
+  }
+
+  .tt-why-cheap {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto 32px;
   }
 
   .tt-price-row {
@@ -399,6 +470,17 @@
 
   .tt-step p strong { color: var(--text-primary); font-weight: 500; }
 
+  /* ===================== WHO IT'S FOR ===================== */
+  .tt-who-for {
+    background: var(--cream-1);
+    padding: 64px 24px;
+  }
+
+  .tt-who-for .tt-offer-card {
+    max-width: 480px;
+    margin: 24px auto 0;
+  }
+
   /* ===================== BEFORE / AFTER GALLERY ===================== */
   .tt-gallery {
     background: var(--cream-2);
@@ -471,6 +553,12 @@
   }
 
   .tt-explainer p strong { color: var(--cream-2); font-weight: 400; }
+
+  /* ===================== WHAT HAPPENS IN YOUR SESSION ===================== */
+  .tt-session-steps {
+    background: var(--cream-2);
+    padding: 64px 24px;
+  }
 
   /* ===================== FAQ (reuses index.html faq patterns) ===================== */
   .tt-faq {
@@ -641,6 +729,45 @@
     margin-top: 32px;
   }
 
+  /* ===================== STICKY MOBILE CTA ===================== */
+  .tt-sticky-cta {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    background: var(--brown-darkest);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -6px 20px rgba(0,0,0,0.18);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .tt-sticky-cta.tt-sticky-hidden {
+    transform: translateY(120%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .tt-sticky-cta a {
+    display: block;
+    text-align: center;
+    font-family: 'Syne Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cream-1);
+    text-decoration: none;
+    background: var(--brown-dark);
+    padding: 14px 0;
+  }
+
+  @media (max-width: 768px) {
+    .tt-sticky-cta { display: block; }
+  }
+
   /* ===================== SCROLL REVEAL ===================== */
   .fade-up {
     opacity: 0;
@@ -653,8 +780,12 @@
 </head>
 <body>
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTZ4VVK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
 <div class="tt-mockup-header">
-  <div class="mockup-banner">MOCKUP PREVIEW — not live, no routes added, do not share as a real link</div>
   <!-- MINIMAL NAV — logo only, no menu, to keep visitors focused on the offer -->
   <nav class="tt-nav">
     <span class="nav-logo">UNDERTONE SKN</span>
@@ -662,16 +793,30 @@
 </div>
 <div class="tt-page-top-spacer"></div>
 
+<!-- TRUST STRIP — placed immediately below the fixed nav so it's the first thing
+     seen, guaranteeing it's visible above the fold on mobile without scrolling -->
+<div class="tt-trust-strip fade-up">
+  <p><span class="stars">★★★★★</span> 5.0 · 110+ Google Reviews · Edgewater Miami</p>
+</div>
+
 <!-- ============ 1. HERO ============ -->
 <section class="tt-hero fade-up">
-  <span class="tt-tag">TikTok Exclusive · First-Time Clients</span>
-  <h1>Nervous System Alignment Through Facial Sculpting</h1>
+  <div class="tt-tags-row">
+    <span class="tt-tag">TikTok Exclusive · First-Time Clients</span>
+    <span class="tt-urgency-tag">Limited-Time Offer</span>
+  </div>
+
+  <h1>Facials clean the face.<br><strong>This drains, sculpts, and revives it.</strong></h1>
+  <p class="tt-hero-subhead">Nervous System Alignment Through Facial Sculpting</p>
 
   <div class="tt-price-row">
     <span class="tt-price-now">$135</span>
     <span class="tt-price-was">$235</span>
   </div>
+  <p class="tt-savings">Save $100 on your first session</p>
   <p class="tt-price-sub">Valued at $235 · First session only</p>
+
+  <p class="tt-why-cheap">We're new to TikTok and still building our before/after portfolio — this founding rate is reserved for first-time clients willing to be part of that record, in exchange for real photos and an honest review.</p>
 
   <!-- PLACEHOLDER: swap this whole block for the real Cloudinary video embed,
        same treatment as the homepage hero (autoplay muted loop, vertical fill) -->
@@ -680,12 +825,24 @@
     <p class="tt-video-label">Intro Video — Placeholder</p>
   </div>
 
-  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary">Claim Your Session</a>
+  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+  <p class="tt-consent">First time? Most of my clients are — and it doesn't hurt.</p>
 </section>
 
 <!-- ============ 2. THE HOOK LINE ============ -->
 <section class="tt-hook fade-up">
   <p>Facials clean the face.<br><strong>This drains, sculpts, and revives it.</strong></p>
+</section>
+
+<!-- ============ 2B. WHO IT'S FOR ============ -->
+<section class="tt-who-for fade-up">
+  <p class="tt-label">This Is For You If...</p>
+  <div class="tt-offer-card">
+    <p>You carry tension in your jaw or face</p>
+    <p>You catch yourself clenching without noticing</p>
+    <p>You've never tried facial sculpting before</p>
+    <p>You want a real reset — not just a spa moment</p>
+  </div>
 </section>
 
 <!-- ============ 3. THE OFFER ============ -->
@@ -704,11 +861,11 @@
       <p>A face that looks and feels genuinely revived</p>
     </div>
     <div class="tt-offer-card">
-      <h3>What We Ask</h3>
-      <p>Before & after photos</p>
-      <p>An honest Google review after your session</p>
+      <h3>What I Ask In Return</h3>
+      <p>All I ask: let me capture your before and after, and leave an honest review if you love it</p>
     </div>
   </div>
+  <p class="tt-consent">By booking, you're okay with Undertone using your before &amp; after photos for marketing — nothing without you knowing first.</p>
 </section>
 
 <!-- ============ 4. HOW IT WORKS ============ -->
@@ -763,6 +920,29 @@
   </div>
 </section>
 
+<!-- ============ 6B. WHAT HAPPENS IN YOUR SESSION ============ -->
+<section class="tt-session-steps fade-up">
+  <p class="tt-label">What Happens In Your Session</p>
+  <div class="tt-steps-list">
+    <div class="tt-step">
+      <div class="tt-step-num">1</div>
+      <p>A short check-in — how you're feeling, where you're holding tension</p>
+    </div>
+    <div class="tt-step">
+      <div class="tt-step-num">2</div>
+      <p>Drainage work to move fluid and de-puff</p>
+    </div>
+    <div class="tt-step">
+      <div class="tt-step-num">3</div>
+      <p><strong>Sculpting + fascia release</strong> — the deep part, still relaxing, never painful</p>
+    </div>
+    <div class="tt-step">
+      <div class="tt-step-num">4</div>
+      <p>A slow cool-down so your nervous system actually downshifts before you leave</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 7. FAQ ============ -->
 <section class="tt-faq fade-up">
   <p class="tt-label" style="color:var(--text-secondary);">FAQ</p>
@@ -786,17 +966,20 @@
 <!-- ============ 9. FINAL CTA ============ -->
 <section class="tt-final-cta fade-up">
   <p class="tt-label">Ready When You Are</p>
+  <span class="tt-urgency-tag" style="margin-bottom:24px;">Limited-Time Offer</span>
   <div class="tt-price-row">
     <span class="tt-price-now">$135</span>
     <span class="tt-price-was">$235</span>
   </div>
+  <p class="tt-savings">Save $100 on your first session</p>
   <p class="tt-price-sub">Valued at $235 · First-time clients only</p>
-  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary">Claim Your Session</a>
-  <p class="tt-consent">By booking, you agree to share before/after photos and a Google review.</p>
+  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+  <p class="tt-consent">First time? Most of my clients are — and it doesn't hurt.</p>
+  <p class="tt-consent">By booking, you agree to share before/after photos and a Google review, and you're okay with Undertone using them for marketing.</p>
 </section>
 
 <!-- ============ 10. MINIMAL FOOTER ============ -->
-<footer class="tt-footer">
+<footer class="tt-footer" id="ttFooter">
   <h3>Undertone Skn</h3>
   <div class="tt-footer-address">
     <p>2915 Biscayne Blvd Suite 200-29</p>
@@ -805,6 +988,11 @@
   <a href="sms:3059650145" class="footer-cta">TEXT ME</a>
   <p class="tt-footer-fine">© 2026 Undertone SKN. All rights reserved.</p>
 </footer>
+
+<!-- ============ STICKY MOBILE CTA ============ -->
+<div class="tt-sticky-cta" id="ttStickyCta">
+  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-book-link">Claim your $135 session →</a>
+</div>
 
 <script>
   // =================== FAQ DATA ===================
@@ -848,6 +1036,26 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // =================== STICKY MOBILE CTA — hide once footer is in view ===================
+  const stickyCta = document.getElementById('ttStickyCta');
+  const footerEl = document.getElementById('ttFooter');
+  if (stickyCta && footerEl) {
+    const footerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        stickyCta.classList.toggle('tt-sticky-hidden', entry.isIntersecting);
+      });
+    }, { threshold: 0.01 });
+    footerObserver.observe(footerEl);
+  }
+
+  // =================== BOOKING CLICK TRACKING (GTM) ===================
+  document.querySelectorAll('.tt-book-link').forEach(link => {
+    link.addEventListener('click', () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'booking_click', offer: 'tiktok_135' });
+    });
+  });
 </script>
 </body>
 </html>
