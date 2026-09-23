@@ -23,9 +23,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   component patterns) so this feels native to the site.
 
   PLACEHOLDERS TO SWAP BEFORE PROMOTING THIS PAGE (search for "PLACEHOLDER"):
-    1. Intro video       — .tt-video-box   (Cloudinary video embed)
-    2. Before/after pairs — DONE, real photos wired from /tiktok-images/
-    3. Zinthia photo      — currently reusing the existing homepage Cloudinary
+    1. Before/after pairs — DONE, real photos wired from /tiktok-images/
+    2. Zinthia photo      — currently reusing the existing homepage Cloudinary
                             photo as a stand-in; swap if a better shot exists
   ============================================================================
 -->
@@ -267,48 +266,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     text-transform: uppercase;
     color: var(--text-secondary);
     margin-bottom: 36px;
-  }
-
-  /* video placeholder — same treatment as homepage hero, contained/vertical */
-  .tt-video-box {
-    position: relative;
-    width: 100%;
-    max-width: 340px;
-    aspect-ratio: 9 / 16;
-    margin: 0 auto 36px;
-    background: var(--brown-darkest);
-    border: 1px solid rgba(185,165,144,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .tt-video-box .tt-play-btn {
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    border: 1px solid var(--taupe);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--cream-1);
-    font-size: 18px;
-    z-index: 2;
-  }
-
-  .tt-video-box .tt-video-label {
-    position: absolute;
-    bottom: 18px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-family: 'Syne Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--taupe);
-    text-transform: uppercase;
-    opacity: 0.7;
   }
 
   @media (min-width: 640px) {
@@ -831,13 +788,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="tt-price-sub">Valued at $235 · First session only</p>
 
   <p class="tt-why-cheap"><strong>The honest reason.</strong><br>My clients pay for their privacy — so the work I'm proudest of almost never gets seen. This is how I change that. I'm opening a few spots each week at this rate for anyone willing to let me capture their before and after — so I can finally build the book of results this work deserves. You get the session. I get to show the world what facial sculpting really does.</p>
-
-  <!-- PLACEHOLDER: swap this whole block for the real Cloudinary video embed,
-       same treatment as the homepage hero (autoplay muted loop, vertical fill) -->
-  <div class="tt-video-box">
-    <div class="tt-play-btn">▶</div>
-    <p class="tt-video-label">Intro Video — Placeholder</p>
-  </div>
 
   <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
   <p class="tt-consent">First time? Most of my clients are — and it doesn't hurt.</p>
