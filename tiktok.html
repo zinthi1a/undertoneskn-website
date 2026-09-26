@@ -540,6 +540,70 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-right: auto;
   }
 
+  /* ===================== GETTING HERE / PARKING ===================== */
+  .tt-parking {
+    background: var(--cream-1);
+    padding: 64px 24px;
+    text-align: center;
+  }
+
+  .tt-parking h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(26px, 5vw, 34px);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+
+  .tt-parking-copy {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto 28px;
+  }
+
+  .tt-parking-img-wrap {
+    max-width: 480px;
+    margin: 0 auto 20px;
+    border: 1px solid rgba(87,76,63,0.15);
+    cursor: pointer;
+  }
+
+  .tt-parking-img-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .tt-parking-address {
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .tt-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(54,48,42,0.94);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+  }
+
+  .tt-lightbox.tt-lightbox-open { display: flex; }
+
+  .tt-lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
   /* ===================== FOOTER ===================== */
   footer.tt-footer {
     background: var(--brown-darkest);
@@ -810,6 +874,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="tt-consent">By booking, you agree to share before/after photos and a Google review, and you're okay with Undertone using them for marketing.</p>
 </section>
 
+<!-- ============ 7B. GETTING HERE / PARKING ============ -->
+<section class="tt-parking fade-up">
+  <p class="tt-label">Getting Here</p>
+  <h2>Where to park</h2>
+  <p class="tt-parking-copy">We're inside the Spaces building in Edgewater (the pink one). Follow the guide and pull right into our reserved spot.</p>
+  <div class="tt-parking-img-wrap" onclick="openLightbox(this)">
+    <img src="/tiktok-images/parking-guide.jpg" alt="Parking guide for Undertone SKN: drive into the Spaces building parking area, turn left, and park in the 4th spot by the first column on the left — reserved for Undertone SKN" loading="lazy">
+  </div>
+  <p class="tt-parking-address">2915 Biscayne Blvd, Suite 200-29 · Edgewater Miami, FL 33137</p>
+</section>
+
+<!-- Lightbox overlay — tap the parking guide to enlarge, tap again to close -->
+<div class="tt-lightbox" id="ttLightbox" onclick="closeLightbox()">
+  <img id="ttLightboxImg" src="" alt="Parking guide enlarged">
+</div>
+
 <!-- ============ 8. FOOTER ============ -->
 <footer class="tt-footer" id="ttFooter">
   <h3>Undertone Skn</h3>
@@ -829,6 +909,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   function toggleFaq(btn) {
     btn.parentElement.classList.toggle('open');
+  }
+
+  // =================== PARKING GUIDE LIGHTBOX (tap to enlarge) ===================
+  function openLightbox(wrap) {
+    document.getElementById('ttLightboxImg').src = wrap.querySelector('img').src;
+    document.getElementById('ttLightbox').classList.add('tt-lightbox-open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('ttLightbox').classList.remove('tt-lightbox-open');
   }
 
   // =================== SCROLL REVEAL ===================
