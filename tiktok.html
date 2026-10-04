@@ -686,6 +686,179 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .tt-sticky-cta { display: block; }
   }
 
+  /* ===================== WAITLIST (trigger + modal) ===================== */
+  .tt-waitlist-trigger-wrap { margin-top: 16px; }
+
+  .tt-waitlist-trigger {
+    background: none;
+    border: none;
+    padding: 4px 0 3px;
+    cursor: pointer;
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: #94795C;
+    border-bottom: 1px solid rgba(185,165,144,0.6);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tt-waitlist-trigger:hover { color: var(--brown-dark); border-color: var(--brown-dark); }
+
+  .tt-waitlist {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(54,48,42,0.94);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .tt-waitlist.tt-waitlist-open { display: flex; }
+
+  body.tt-modal-lock { overflow: hidden; }
+
+  .tt-waitlist-panel {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    margin: auto;
+    background: var(--cream-1);
+    padding: 44px 24px 32px;
+    text-align: center;
+  }
+
+  .tt-waitlist-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--text-secondary);
+  }
+
+  .tt-waitlist-close:hover { color: var(--text-primary); }
+
+  .tt-waitlist h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(26px, 6vw, 32px);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .tt-waitlist-msg {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .tt-waitlist-form { text-align: left; }
+
+  .tt-field { margin-bottom: 16px; }
+
+  .tt-field label,
+  .tt-field legend {
+    display: block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .tt-field input {
+    width: 100%;
+    font-family: 'Epilogue', sans-serif;
+    font-size: 16px;
+    color: var(--text-primary);
+    background: #fff;
+    border: 1px solid rgba(87,76,63,0.25);
+    border-radius: 0;
+    padding: 13px 14px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .tt-field input:focus { outline: none; border-color: var(--brown-dark); }
+
+  .tt-field fieldset { border: none; }
+
+  .tt-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .tt-chip {
+    flex: 1 1 auto;
+    font-family: 'Syne Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid rgba(87,76,63,0.3);
+    padding: 12px 10px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .tt-chip:hover { border-color: var(--text-primary); }
+
+  .tt-chip[aria-checked="true"] {
+    background: var(--brown-darkest);
+    border-color: var(--brown-darkest);
+    color: var(--cream-1);
+  }
+
+  .tt-waitlist-error {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px;
+    color: #9B3B2E;
+    min-height: 0;
+    margin: 4px 0 12px;
+  }
+
+  .tt-waitlist-error:empty { display: none; }
+
+  .tt-waitlist-submit {
+    display: block;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    padding: 18px 20px;
+  }
+
+  .tt-waitlist-submit:disabled { opacity: 0.6; cursor: wait; }
+
+  .tt-waitlist-fine {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  .tt-waitlist-check {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--taupe);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brown-dark);
+  }
+
   /* ===================== SCROLL REVEAL ===================== */
   .fade-up {
     opacity: 0;
@@ -735,6 +908,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+  <p class="tt-waitlist-trigger-wrap"><button type="button" class="tt-waitlist-trigger" onclick="openWaitlist(this)">Fully booked for your time? Join the waitlist →</button></p>
   <p class="tt-consent">Don't see a time that works? Text me and we'll find one.</p>
   <a href="sms:3059650145" class="btn-outline" style="margin-top:14px;">Text Zinthia</a>
 
@@ -869,6 +1043,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="tt-savings">Save $100 on your first session</p>
   <p class="tt-price-sub">Valued at $235 · First-time clients only</p>
   <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+  <p class="tt-waitlist-trigger-wrap"><button type="button" class="tt-waitlist-trigger" onclick="openWaitlist(this)">Fully booked for your time? Join the waitlist →</button></p>
   <p class="tt-consent">Don't see a time that works? Text me and we'll find one.</p>
   <a href="sms:3059650145" class="btn-outline" style="margin-top:14px;">Text Zinthia</a>
   <p class="tt-consent">By booking, you agree to share before/after photos and a Google review, and you're okay with Undertone using them for marketing.</p>
@@ -888,6 +1063,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- Lightbox overlay — tap the parking guide to enlarge, tap again to close -->
 <div class="tt-lightbox" id="ttLightbox" onclick="closeLightbox()">
   <img id="ttLightboxImg" src="" alt="Parking guide enlarged">
+</div>
+
+<!-- Waitlist modal — opened from the "Join the waitlist" links under both booking CTAs -->
+<div class="tt-waitlist" id="ttWaitlist" role="dialog" aria-modal="true" aria-labelledby="ttWaitlistTitle">
+  <div class="tt-waitlist-panel">
+    <button type="button" class="tt-waitlist-close" aria-label="Close" onclick="closeWaitlist()">&times;</button>
+
+    <div id="ttWaitlistFormView">
+      <p class="tt-label">Waitlist</p>
+      <h2 id="ttWaitlistTitle">Get first access</h2>
+      <p class="tt-waitlist-msg">Due to high demand, you may not find an open time right now, but spots open up often from last-minute cancellations. Join the list and Zinthia will reach out the moment one does.</p>
+
+      <form class="tt-waitlist-form" id="ttWaitlistForm" novalidate>
+        <div class="tt-field">
+          <label for="wlFirstName">First name</label>
+          <input type="text" id="wlFirstName" name="first_name" autocomplete="given-name" required>
+        </div>
+        <div class="tt-field">
+          <label for="wlEmail">Email</label>
+          <input type="email" id="wlEmail" name="email" autocomplete="email" inputmode="email">
+        </div>
+        <div class="tt-field">
+          <label for="wlPhone">Phone</label>
+          <input type="tel" id="wlPhone" name="phone" autocomplete="tel" inputmode="tel">
+        </div>
+        <div class="tt-field">
+          <fieldset>
+            <legend id="wlPrefLabel">Preferred time</legend>
+            <div class="tt-chips" role="radiogroup" aria-labelledby="wlPrefLabel">
+              <button type="button" class="tt-chip" role="radio" aria-checked="false" data-value="morning">Morning (before 12pm)</button>
+              <button type="button" class="tt-chip" role="radio" aria-checked="false" data-value="afternoon">Afternoon (after 12pm)</button>
+              <button type="button" class="tt-chip" role="radio" aria-checked="false" data-value="either">Either</button>
+            </div>
+          </fieldset>
+        </div>
+
+        <p class="tt-waitlist-error" id="ttWaitlistError" role="alert" aria-live="polite"></p>
+
+        <button type="submit" class="tt-btn-primary tt-waitlist-submit" id="ttWaitlistSubmit">Join the waitlist</button>
+        <p class="tt-waitlist-fine">No spam. Just a text when a spot opens.</p>
+      </form>
+    </div>
+
+    <div id="ttWaitlistSuccessView" hidden>
+      <div class="tt-waitlist-check" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h2 tabindex="-1" id="ttWaitlistSuccessTitle">You're on the list</h2>
+      <p class="tt-waitlist-msg" id="ttWaitlistSuccessMsg" style="margin-bottom:0;"></p>
+    </div>
+  </div>
 </div>
 
 <!-- ============ 8. FOOTER ============ -->
@@ -948,6 +1174,92 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'booking_click', offer: 'tiktok_135' });
     });
+  });
+
+  // =================== WAITLIST MODAL (posts to CRM) ===================
+  const WAITLIST_ENDPOINT = 'https://undertone-crm-production.up.railway.app/api/waitlist';
+  const waitlistEl = document.getElementById('ttWaitlist');
+  const waitlistForm = document.getElementById('ttWaitlistForm');
+  const waitlistError = document.getElementById('ttWaitlistError');
+  const waitlistSubmit = document.getElementById('ttWaitlistSubmit');
+  const waitlistChips = waitlistEl.querySelectorAll('.tt-chip');
+  let waitlistPref = '';
+  let waitlistOpener = null;
+
+  function openWaitlist(opener) {
+    waitlistOpener = opener || null;
+    waitlistEl.classList.add('tt-waitlist-open');
+    document.body.classList.add('tt-modal-lock');
+    const successShown = !document.getElementById('ttWaitlistSuccessView').hidden;
+    (successShown ? waitlistEl.querySelector('.tt-waitlist-close') : document.getElementById('wlFirstName')).focus();
+  }
+
+  function closeWaitlist() {
+    waitlistEl.classList.remove('tt-waitlist-open');
+    document.body.classList.remove('tt-modal-lock');
+    if (waitlistOpener) waitlistOpener.focus();
+  }
+
+  // Close on backdrop tap or Escape; keep Tab focus inside the modal
+  waitlistEl.addEventListener('click', (e) => { if (e.target === waitlistEl) closeWaitlist(); });
+  document.addEventListener('keydown', (e) => {
+    if (!waitlistEl.classList.contains('tt-waitlist-open')) return;
+    if (e.key === 'Escape') { closeWaitlist(); return; }
+    if (e.key === 'Tab') {
+      const focusables = Array.from(waitlistEl.querySelectorAll('button, input')).filter(el => el.offsetParent !== null && !el.disabled);
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  waitlistChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      waitlistPref = chip.dataset.value;
+      waitlistChips.forEach(c => c.setAttribute('aria-checked', c === chip ? 'true' : 'false'));
+      waitlistError.textContent = '';
+    });
+  });
+
+  waitlistForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const firstName = document.getElementById('wlFirstName').value.trim();
+    const email = document.getElementById('wlEmail').value.trim();
+    const phone = document.getElementById('wlPhone').value.trim();
+
+    if (!firstName) { waitlistError.textContent = 'Please add your first name.'; return; }
+    if (!email && !phone) { waitlistError.textContent = 'Please add an email or phone so Zinthia can reach you.'; return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { waitlistError.textContent = 'That email doesn’t look quite right.'; return; }
+    if (phone && phone.replace(/\D/g, '').length < 10) { waitlistError.textContent = 'Please enter a full phone number.'; return; }
+    if (!waitlistPref) { waitlistError.textContent = 'Please pick a preferred time.'; return; }
+
+    waitlistError.textContent = '';
+    waitlistSubmit.disabled = true;
+    waitlistSubmit.textContent = 'Joining…';
+
+    try {
+      const res = await fetch(WAITLIST_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ first_name: firstName, email, phone, preference: waitlistPref })
+      });
+      if (!res.ok) throw new Error('Request failed: ' + res.status);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'waitlist_submit', offer: 'tiktok_135' });
+
+      const spot = waitlistPref === 'either' ? 'a' : 'a ' + waitlistPref;
+      document.getElementById('ttWaitlistSuccessMsg').textContent =
+        'Zinthia will reach out the moment ' + spot + ' spot opens. Keep an eye on your phone.';
+      document.getElementById('ttWaitlistFormView').hidden = true;
+      document.getElementById('ttWaitlistSuccessView').hidden = false;
+      waitlistEl.setAttribute('aria-labelledby', 'ttWaitlistSuccessTitle');
+      document.getElementById('ttWaitlistSuccessTitle').focus();
+    } catch (err) {
+      waitlistError.textContent = 'Something went wrong on our end. Please try again, or text Zinthia at (305) 965-0145.';
+      waitlistSubmit.disabled = false;
+      waitlistSubmit.textContent = 'Join the waitlist';
+    }
   });
 </script>
 </body>
