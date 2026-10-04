@@ -540,6 +540,73 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-right: auto;
   }
 
+  /* Final CTA: primary action → fallback options → consent fine print */
+  .tt-cta-stack {
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .tt-cta-stack .tt-btn-primary {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .tt-cta-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 32px 0 16px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #94795C;
+  }
+
+  .tt-cta-divider::before,
+  .tt-cta-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(185,165,144,0.5);
+  }
+
+  .tt-cta-fallback {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tt-cta-fallback .btn-outline {
+    flex: 1 1 0;
+    padding: 14px 12px;
+    text-align: center;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .tt-btn-gold {
+    color: #94795C;
+    border-color: #94795C;
+  }
+
+  .tt-cta-fallback .tt-btn-gold:hover { background: #94795C; color: var(--cream-1); }
+
+  @media (max-width: 400px) {
+    .tt-cta-fallback { flex-direction: column; }
+  }
+
+  .tt-cta-fine {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.6;
+    color: #94795C;
+    border-top: 1px solid rgba(185,165,144,0.35);
+    margin-top: 32px;
+    padding-top: 16px;
+  }
+
   /* ===================== GETTING HERE / PARKING ===================== */
   .tt-parking {
     background: var(--cream-1);
@@ -686,23 +753,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .tt-sticky-cta { display: block; }
   }
 
-  /* ===================== WAITLIST (trigger + modal) ===================== */
-  .tt-waitlist-trigger-wrap { margin-top: 16px; }
-
-  .tt-waitlist-trigger {
-    background: none;
-    border: none;
-    padding: 4px 0 3px;
-    cursor: pointer;
-    font-family: 'Epilogue', sans-serif;
-    font-size: 13px;
-    color: #94795C;
-    border-bottom: 1px solid rgba(185,165,144,0.6);
-    transition: color 0.2s, border-color 0.2s;
-  }
-
-  .tt-waitlist-trigger:hover { color: var(--brown-dark); border-color: var(--brown-dark); }
-
+  /* ===================== WAITLIST MODAL ===================== */
   .tt-waitlist {
     display: none;
     position: fixed;
@@ -907,10 +958,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="tt-ba-box"><img src="/tiktok-images/hero-after.jpg" alt="After facial sculpting session" loading="lazy"><span>After</span></div>
   </div>
 
-  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
-  <p class="tt-waitlist-trigger-wrap"><button type="button" class="tt-waitlist-trigger" onclick="openWaitlist(this)">Fully booked for your time? Join the waitlist →</button></p>
-  <p class="tt-consent">Don't see a time that works? Text me and we'll find one.</p>
-  <a href="sms:3059650145" class="btn-outline" style="margin-top:14px;">Text Zinthia</a>
+  <div class="tt-cta-stack">
+    <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+
+    <p class="tt-cta-divider"><span>Can't find a time?</span></p>
+    <div class="tt-cta-fallback">
+      <button type="button" class="btn-outline tt-btn-gold" onclick="openWaitlist(this)">Join waitlist →</button>
+      <a href="sms:3059650145" class="btn-outline tt-btn-gold">Text Zinthia</a>
+    </div>
+  </div>
 
   <p class="tt-why-cheap" style="margin-top:36px;"><strong>My purpose</strong><br>My clients pay for their privacy — so the work I'm proudest of almost never gets seen. This is how I change that. I'm opening a few spots each week at this rate for anyone willing to let me capture their before and after — so I can finally build the book of results this work deserves. You get the session. I get to show the world what facial sculpting really does.</p>
 </section>
@@ -1042,11 +1098,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <p class="tt-savings">Save $100 on your first session</p>
   <p class="tt-price-sub">Valued at $235 · First-time clients only</p>
-  <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
-  <p class="tt-waitlist-trigger-wrap"><button type="button" class="tt-waitlist-trigger" onclick="openWaitlist(this)">Fully booked for your time? Join the waitlist →</button></p>
-  <p class="tt-consent">Don't see a time that works? Text me and we'll find one.</p>
-  <a href="sms:3059650145" class="btn-outline" style="margin-top:14px;">Text Zinthia</a>
-  <p class="tt-consent">By booking, you agree to share before/after photos and a Google review, and you're okay with Undertone using them for marketing.</p>
+  <div class="tt-cta-stack">
+    <a href="https://undertoneskn.as.me/?appointmentType=85519940" class="tt-btn-primary tt-book-link">Claim Your Session</a>
+
+    <p class="tt-cta-divider"><span>Can't find a time?</span></p>
+    <div class="tt-cta-fallback">
+      <button type="button" class="btn-outline tt-btn-gold" onclick="openWaitlist(this)">Join waitlist →</button>
+      <a href="sms:3059650145" class="btn-outline tt-btn-gold">Text Zinthia</a>
+    </div>
+
+    <p class="tt-cta-fine">By booking, you agree to share before/after photos and a Google review, and you're okay with Undertone using them for marketing.</p>
+  </div>
 </section>
 
 <!-- ============ 7B. GETTING HERE / PARKING ============ -->
