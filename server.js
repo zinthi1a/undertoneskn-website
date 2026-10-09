@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
 const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
 const { renderServicesHTML, renderFaqHTML, fetchServicesFromCRM } = require('./pages');
@@ -21,6 +22,19 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+
+// ADMIN SECRET — fails closed: if ADMIN_SECRET is unset or too short, every admin call is
+// rejected (previously an unset env var let requests with no secret through, undefined === undefined).
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+if (ADMIN_SECRET.length < 16) {
+  console.error('[AUTH] ADMIN_SECRET is missing or shorter than 16 chars — all admin endpoints will return 401.');
+}
+function isAdmin(secret) {
+  if (ADMIN_SECRET.length < 16 || typeof secret !== 'string') return false;
+  const a = crypto.createHash('sha256').update(secret).digest();
+  const b = crypto.createHash('sha256').update(ADMIN_SECRET).digest();
+  return crypto.timingSafeEqual(a, b);
+}
 
 // SITEMAP — dynamic
 app.get('/sitemap.xml', async (req, res) => {
@@ -60,7 +74,7 @@ app.get('/robots.txt', (req, res) => {
 // API — update post (called by CRM Blog editor)
 app.post('/api/update-post', async (req, res) => {
   const { slug, secret, title, metaDescription, content, excerpt } = req.body;
-  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!isAdmin(secret)) return res.status(401).json({ error: 'Unauthorized' });
   try {
     await updatePost(slug, { title, metaDescription, content, excerpt });
     res.json({ success: true });
@@ -70,7 +84,7 @@ app.post('/api/update-post', async (req, res) => {
 // API — delete post (called by CRM Blog editor)
 app.post('/api/delete-post', async (req, res) => {
   const { slug, secret } = req.body;
-  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!isAdmin(secret)) return res.status(401).json({ error: 'Unauthorized' });
   try {
     await deletePost(slug);
     res.json({ success: true });
@@ -135,7 +149,7 @@ app.get('/api/post/:slug', async (req, res) => {
 app.get('/admin/gbp-json', async (req, res) => {
   const secret = req.query.secret;
   const slug = req.query.slug;
-  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!isAdmin(secret)) return res.status(401).json({ error: 'Unauthorized' });
   if (!getWeeklyGBPPost) return res.status(500).json({ error: 'GBP agent not available' });
   try {
     const posts = await getAllPosts();
@@ -149,7 +163,7 @@ app.get('/admin/gbp-json', async (req, res) => {
 // API — manually trigger blog post generation
 app.post('/api/generate-post', async (req, res) => {
   const { secret } = req.body;
-  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!isAdmin(secret)) return res.status(401).json({ error: 'Unauthorized' });
   try {
     const { generateNow } = require('./blog-agent');
     const post = await generateNow();
@@ -160,7 +174,7 @@ app.post('/api/generate-post', async (req, res) => {
 // API — seed existing posts
 app.post('/api/seed-posts', async (req, res) => {
   const { secret } = req.body;
-  if (secret !== process.env.ADMIN_SECRET) return res.status(401).json({ error: 'Unauthorized' });
+  if (!isAdmin(secret)) return res.status(401).json({ error: 'Unauthorized' });
   res.json({ success: true, message: 'Seeding started' });
   seedExistingPosts();
 });
