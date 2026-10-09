@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB } = require('./blog-engine');
+const { getAllPosts, getPostBySlug, updatePost, deletePost, renderPostHTML, renderBlogListHTML, initDB, pingDB } = require('./blog-engine');
 const { runScheduledAgent, seedExistingPosts } = require('./blog-agent');
 const { renderServicesHTML, renderFaqHTML, fetchServicesFromCRM } = require('./pages');
 
@@ -49,6 +49,20 @@ app.get('/sitemap.xml', async (req, res) => {
 
   res.setHeader('Content-Type', 'application/xml');
   res.send(sitemap);
+});
+
+// HEALTH — for uptime monitoring. Checks the blog database (3s cap); 503 if it's down.
+// Must stay above the catch-all, which would otherwise answer /health with index.html.
+app.get('/health', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const started = Date.now();
+  try {
+    await pingDB(3000);
+    res.json({ status: 'ok', service: 'Undertone SKN website', db: 'ok', db_ms: Date.now() - started });
+  } catch (e) {
+    console.error(`[HEALTH] DB check failed: ${e.message}`);
+    res.status(503).json({ status: 'error', service: 'Undertone SKN website', db: 'down' });
+  }
 });
 
 // ROBOTS

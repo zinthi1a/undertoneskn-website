@@ -124,6 +124,21 @@ async function initDB() {
 }
 
 // ============================================================
+// DB PING — used by /health. Rejects on error or after timeoutMs.
+// ============================================================
+async function pingDB(timeoutMs = 3000) {
+  let timer;
+  try {
+    await Promise.race([
+      pool.query('SELECT 1'),
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`timeout after ${timeoutMs}ms`)), timeoutMs); })
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ============================================================
 // ROW MAPPING HELPER
 // ============================================================
 function mapRow(row) {
@@ -692,5 +707,5 @@ footer a:hover{color:var(--cream-1)}
 module.exports = {
   getAllPosts, getPostBySlug, savePost, updatePost, deletePost, getNextTopic,
   slugify, renderPostHTML, renderBlogListHTML, getPostImage,
-  initDB, TOPIC_CLUSTERS, EXISTING_POSTS
+  initDB, pingDB, TOPIC_CLUSTERS, EXISTING_POSTS
 };
